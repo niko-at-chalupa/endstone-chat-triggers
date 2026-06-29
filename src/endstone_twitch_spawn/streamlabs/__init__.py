@@ -9,6 +9,11 @@ from .events import (
     AlertPlayingEvent,
     StreamLabelsEvent,
     StreamLabelsUnderlyingEvent,
+    TwitchFollowEvent,
+    TwitchSubscriptionEvent,
+    TwitchBitsEvent,
+    TwitchHostEvent,
+    TwitchRaidEvent,
     parse_streamlabs_event
 )
 
@@ -23,5 +28,10 @@ __all__ = [
     "AlertPlayingEvent",
     "StreamLabelsEvent",
     "StreamLabelsUnderlyingEvent",
+    "TwitchFollowEvent",
+    "TwitchSubscriptionEvent",
+    "TwitchBitsEvent",
+    "TwitchHostEvent",
+    "TwitchRaidEvent",
     "parse_streamlabs_event",
 ]

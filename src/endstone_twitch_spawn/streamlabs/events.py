@@ -264,6 +264,70 @@ class AlertPlayingMessage(BaseModel):
 class AlertPlayingEvent(StreamlabsBaseEvent):
     message: AlertPlayingMessage
 
+class TwitchFollowMessage(BaseModel):
+    id: Optional[Union[str, int]] = Field(default=None, alias="_id")
+    name: str
+    isTest: bool = False
+
+    class Config:
+        populate_by_name = True
+
+class TwitchFollowEvent(StreamlabsBaseEvent):
+    message: List[TwitchFollowMessage]
+
+class TwitchSubscriptionMessage(BaseModel):
+    id: Optional[Union[str, int]] = Field(default=None, alias="_id")
+    name: str
+    months: int = 1
+    sub_plan: str
+    message: Optional[str] = None
+    isTest: bool = False
+
+    class Config:
+        populate_by_name = True
+
+class TwitchSubscriptionEvent(StreamlabsBaseEvent):
+    message: List[TwitchSubscriptionMessage]
+
+class TwitchBitsMessage(BaseModel):
+    id: Optional[Union[str, int]] = Field(default=None, alias="_id")
+    name: str
+    amount: int
+    message: Optional[str] = None
+    emotes: Optional[Any] = None
+    isTest: bool = False
+
+    class Config:
+        populate_by_name = True
+
+class TwitchBitsEvent(StreamlabsBaseEvent):
+    message: List[TwitchBitsMessage]
+
+class TwitchHostMessage(BaseModel):
+    id: Optional[Union[str, int]] = Field(default=None, alias="_id")
+    name: str
+    viewers: int = 0
+    isTest: bool = False
+
+    class Config:
+        populate_by_name = True
+
+class TwitchHostEvent(StreamlabsBaseEvent):
+    message: List[TwitchHostMessage]
+
+class TwitchRaidMessage(BaseModel):
+    id: Optional[Union[str, int]] = Field(default=None, alias="_id")
+    name: str
+    raiders: int = 0
+    amount: int = 0
+    isTest: bool = False
+
+    class Config:
+        populate_by_name = True
+
+class TwitchRaidEvent(StreamlabsBaseEvent):
+    message: List[TwitchRaidMessage]
+
 def parse_streamlabs_event(data: dict) -> StreamlabsEvent:
     event_type = data.get("type")
     if event_type == "loyalty_store_redemption":
@@ -278,6 +342,16 @@ def parse_streamlabs_event(data: dict) -> StreamlabsEvent:
         return StreamLabelsEvent.model_validate(data)
     elif event_type == "streamlabels.underlying":
         return StreamLabelsUnderlyingEvent.model_validate(data)
+    elif event_type == "follow":
+        return TwitchFollowEvent.model_validate(data)
+    elif event_type == "subscription":
+        return TwitchSubscriptionEvent.model_validate(data)
+    elif event_type == "bits":
+        return TwitchBitsEvent.model_validate(data)
+    elif event_type == "host":
+        return TwitchHostEvent.model_validate(data)
+    elif event_type == "raid":
+        return TwitchRaidEvent.model_validate(data)
     else:
         raise ValueError(f"Unknown event type: {event_type}")
 
