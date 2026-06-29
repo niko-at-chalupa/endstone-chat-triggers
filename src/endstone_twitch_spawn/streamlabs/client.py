@@ -44,6 +44,9 @@ class StreamlabsClient:
         try:
             from .events import parse_streamlabs_event
             event = parse_streamlabs_event(data)
-            self._streamlabs_event_handler.call_event(event)
+            if event is not None:
+                self._streamlabs_event_handler.call_event(event)
+            else:
+                self._logger.debug(f"Ignored Streamlabs event of type: {event_type}")
         except Exception as e:
             self._logger.error(f"Failed to parse or dispatch Streamlabs event: {e}")

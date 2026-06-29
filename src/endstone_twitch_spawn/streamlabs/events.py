@@ -211,11 +211,11 @@ class StreamLabelsUnderlyingEvent(StreamlabsBaseEvent):
     message: StreamLabelsUnderlyingMessage
 
 class AlertPlayingMessage(BaseModel):
-    id: str = Field(alias="_id")
+    id: Optional[str] = Field(default=None, alias="_id")
     priority: int = 10
-    from_: str = Field(alias="from")
+    from_: Optional[str] = Field(default=None, alias="from")
     fromId: Optional[str] = None
-    to: Union[StreamlabsRecipient, str]
+    to: Optional[Union[StreamlabsRecipient, str]] = None
     message: Optional[str] = None
     payload: Dict[str, Any]
     imageHref: Optional[str] = None
@@ -328,7 +328,7 @@ class TwitchRaidMessage(BaseModel):
 class TwitchRaidEvent(StreamlabsBaseEvent):
     message: List[TwitchRaidMessage]
 
-def parse_streamlabs_event(data: dict) -> StreamlabsEvent:
+def parse_streamlabs_event(data: dict) -> Optional[StreamlabsEvent]:
     event_type = data.get("type")
     if event_type == "loyalty_store_redemption":
         return LoyaltyStoreRedemptionEvent.model_validate(data)
@@ -353,7 +353,7 @@ def parse_streamlabs_event(data: dict) -> StreamlabsEvent:
     elif event_type == "raid":
         return TwitchRaidEvent.model_validate(data)
     else:
-        raise ValueError(f"Unknown event type: {event_type}")
+        return None
 
 def streamlabs_event_handler(func=None, *, priority: EventPriority = EventPriority.NORMAL):
     """
