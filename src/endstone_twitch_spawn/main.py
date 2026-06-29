@@ -10,5 +10,8 @@ class TwitchSpawnPlugin(Plugin):
         # TODO: configs; we're not using that stupid config system we use EVERY other time anymore
         self._client = StreamlabsClient(self.logger, os.environ["STREAMLABS_SOCKET_TOKEN"], self._streamlabs_event_handler)
 
+        self.logger.info("Connecting to Streamlabs Socket API...")
+        self._client.start()
+
     def on_disable(self):
         self._client.stop()
