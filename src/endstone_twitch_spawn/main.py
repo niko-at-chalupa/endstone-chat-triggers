@@ -13,6 +13,11 @@ class TwitchSpawnPlugin(Plugin):
         self.logger.info("Connecting to Streamlabs Socket API...")
         self._client.start()
 
+        if os.environ["DEBUG"] == "1":
+            self.logger.set_level(self.logger.Level.DEBUG)
+            from .debug import TwitchDebugListener
+            self._streamlabs_event_handler.register_events(TwitchDebugListener(self.logger))
+
     def on_disable(self):
         try:
             self._client.stop()
