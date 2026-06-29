@@ -11,7 +11,7 @@ authors = [
 ]
 dependencies = [
     "endstone",
-    "streamlabsio",
+    "python-socketio",
 ]
 
 [project.entry-points."endstone"]
