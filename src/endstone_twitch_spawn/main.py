@@ -2,6 +2,7 @@ from .config import Config, load_config
 from endstone.plugin import Plugin
 from .streamlabs import StreamlabsClient, StreamlabsEventHandler
 from .actions import Workflow, WorkflowManager
+from endstone import ColorFormat as cf
 
 
 class TwitchSpawnPlugin(Plugin):
@@ -11,6 +12,12 @@ class TwitchSpawnPlugin(Plugin):
     def on_load(self):
         self.config: Config = load_config(self)
         self._workflow_manager = WorkflowManager(self.data_folder / "workflows", self.logger)
+        
+        self._workflow_manager.scan_for_workflows()
+        if len(self.workflows) > 0:
+            self.logger.info(f"Found {cf.BOLD}{len(self.workflows)}{cf.RESET} workflows in {self._workflow_manager.folder}.")
+        else:
+            self.logger.warning(f"No workflows were found in {self._workflow_manager.folder}.")
 
         if self.config.streamlabs_socket_token:
             self.logger.info("Connecting to Streamlabs Socket API...")
