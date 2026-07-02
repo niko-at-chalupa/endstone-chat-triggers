@@ -7,7 +7,7 @@ class TwitchSpawnPlugin(Plugin):
     api_version = "0.11"
     config = Config
 
-    def on_enable(self):
+    def on_load(self):
         self.config: Config = load_config(self)
 
         if self.config.streamlabs_socket_token:

@@ -17,6 +17,7 @@ from .events import (
     parse_streamlabs_event,
 )
 
+
 __all__ = [
     "StreamlabsClient",
     "StreamlabsEvent",
