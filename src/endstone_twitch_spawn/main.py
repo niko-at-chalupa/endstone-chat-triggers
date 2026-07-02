@@ -2,7 +2,7 @@ from .config import Config, load_config
 from endstone.plugin import Plugin
 from .streamlabs import StreamlabsClient, StreamlabsEventHandler
 import os
-from .actions import Workflow, run_workflow
+from .actions import Workflow, WorkflowExecutor
 
 
 class TwitchSpawnPlugin(Plugin):
@@ -36,9 +36,11 @@ class TwitchSpawnPlugin(Plugin):
             ]:
                 self._streamlabs_event_handler.register_events(listener)
 
+        self.logger.error("*"*40 + "\nREMEMBER TO REMOVE THE DEBUG CODE AFTER\n" + "*"*40)
         if os.environ.get("DEBUG_ACTIONS"):
             from .streamlabs.events import TwitchFollowEvent, streamlabs_event_handler
             workflow = Workflow(name="test", event_name="TwitchFollowEvent", conditions=[], steps=["execute as @e run summon lightning_bolt", "title @a title {username} donated", "say worked"])
+            workflow_executor = WorkflowExecutor(self)
 
             class TestingListenerForActions:
                 def __init__(self, plugin: Plugin):
@@ -46,7 +48,7 @@ class TwitchSpawnPlugin(Plugin):
 
                 @streamlabs_event_handler
                 def on_follow(self, event: TwitchFollowEvent):
-                    run_workflow(workflow, TwitchFollowEvent, self._plugin)
+                    workflow_executor.run_workflow(workflow, event)
 
             listener = TestingListenerForActions(self)
             self._streamlabs_event_handler.register_events(listener)
