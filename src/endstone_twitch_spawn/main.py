@@ -23,7 +23,7 @@ class TwitchSpawnPlugin(Plugin):
             self._client.start()
         else:
             self.logger.error(
-                "No streamlabs_socket_token set through config! endstone-twitch-spawn will NOT be functional!"
+                "*"*40 + f"\nNo streamlabs_socket_token set through config! endstone-twitch-spawn will NOT be functional!\n\nPlease check \n{self.data_folder / "config.yaml"}\nfor more info!\n" + "*"*40
             )
 
         if self.config.log_events:
