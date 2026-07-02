@@ -19,7 +19,7 @@ class ResolvedCondition(Condition):
 
 class Workflow(BaseModel):
 	name: str
-	event_name: str
+	event_names: List[str] = Field(default_factory=list)
 	conditions: List[Condition] = Field(default_factory=list)
 	steps: List[str] = Field(default_factory=list)
 	fail_steps: List[str] = Field(default_factory=list)
