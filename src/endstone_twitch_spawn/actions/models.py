@@ -22,6 +22,7 @@ class Workflow(BaseModel):
 	event_name: str
 	conditions: List[Condition] = Field(default_factory=list)
 	steps: List[str] = Field(default_factory=list)
+	fail_steps: List[str] = Field(default_factory=list)
 
 	source_file: Path | None = None
 	source_line: int | None = None
