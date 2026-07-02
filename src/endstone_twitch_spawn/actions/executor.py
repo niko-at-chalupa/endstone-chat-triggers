@@ -13,18 +13,23 @@ class _CommandExecutor:
         self._plugin = plugin
 
     def run(self, command_line: str) -> bool:
-        return self._plugin.server.dispatch_command(self._plugin.server.command_sender, command_line)
+        return self._plugin.server.dispatch_command(
+            self._plugin.server.command_sender, command_line
+        )
+
 
 class WorkflowExecutor:
     def __init__(self, plugin: Plugin):
         self._plugin = plugin
         self._command_executor = _CommandExecutor(self._plugin)
 
-    def run_workflow(self, workflow: Workflow, event: StreamlabsEvent) -> ExecutionResult:
+    def run_workflow(
+        self, workflow: Workflow, event: StreamlabsEvent
+    ) -> ExecutionResult:
         condition_results: list[ResolvedCondition] = []
 
         for condition in workflow.conditions:
-            command = condition.command # TODO: make module that resolves placeholders
+            command = condition.command  # TODO: make module that resolves placeholders
             actual = self._command_executor.run(command)
             condition_results.append(condition.resolve(actual))
             if actual != condition.expected:
@@ -36,7 +41,7 @@ class WorkflowExecutor:
 
         ran_steps: List[str] = []
         for step in workflow.steps:
-            command = step # TODO: make module that resolves placeholders
+            command = step  # TODO: make module that resolves placeholders
             self._command_executor.run(command)
             ran_steps.append(command)
 

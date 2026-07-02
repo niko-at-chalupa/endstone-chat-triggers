@@ -22,7 +22,9 @@ def _get_line(node: Any) -> int | None:
     return None
 
 
-def _parse_conditions(raw_conditions: CommentedSeq | None, source_file: Path | None = None) -> list[Condition]:
+def _parse_conditions(
+    raw_conditions: CommentedSeq | None, source_file: Path | None = None
+) -> list[Condition]:
     conditions: list[Condition] = []
     if not raw_conditions:
         return conditions
@@ -59,7 +61,7 @@ def parse_workflow(workflow: str, source_file: Path | None = None) -> Workflow:
     workflow_obj = Workflow(
         name=data.get("name", ""),
         event_names=list(raw_events),
-        conditions=_parse_conditions(raw_conditions), # type: ignore
+        conditions=_parse_conditions(raw_conditions),  # type: ignore
         steps=list(data.get("steps", [])),
         fail_steps=list(data.get("fail_steps", [])),
         source_file=source_file,
