@@ -36,36 +36,6 @@ class TwitchSpawnPlugin(Plugin):
             ]:
                 self._streamlabs_event_handler.register_events(listener)
 
-        self.logger.error(
-            "*" * 40 + "\nREMEMBER TO REMOVE THE DEBUG CODE AFTER\n" + "*" * 40
-        )
-        if os.environ.get("DEBUG_ACTIONS"):
-            from .streamlabs.events import TwitchFollowEvent, streamlabs_event_handler
-
-            workflow = Workflow(
-                name="test",
-                event_names=["TwitchFollowEvent"],
-                conditions=[],
-                steps=[
-                    "execute as @e run summon lightning_bolt",
-                    "title @a title {username} donated",
-                    "say worked",
-                ],
-                fail_steps=["say oh no fail!!"],
-            )
-            workflow_executor = WorkflowExecutor(self)
-
-            class TestingListenerForActions:
-                def __init__(self, plugin: Plugin):
-                    self._plugin = plugin
-
-                @streamlabs_event_handler
-                def on_follow(self, event: TwitchFollowEvent):
-                    workflow_executor.run_workflow(workflow, event)
-
-            listener = TestingListenerForActions(self)
-            self._streamlabs_event_handler.register_events(listener)
-
     def on_disable(self):
         try:
             self._client.stop()
