@@ -7,7 +7,7 @@ from .actions import Workflow, WorkflowExecutor
 
 class TwitchSpawnPlugin(Plugin):
     api_version = "0.11"
-    config = Config
+    config: Config
 
     def on_load(self):
         self.config: Config = load_config(self)
