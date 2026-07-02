@@ -1,8 +1,7 @@
 from .config import Config, load_config
 from endstone.plugin import Plugin
 from .streamlabs import StreamlabsClient, StreamlabsEventHandler
-import os
-from .actions import Workflow, WorkflowExecutor
+from .actions import Workflow, WorkflowManager
 
 
 class TwitchSpawnPlugin(Plugin):
@@ -11,6 +10,7 @@ class TwitchSpawnPlugin(Plugin):
 
     def on_load(self):
         self.config: Config = load_config(self)
+        self._workflow_manager = WorkflowManager(self.data_folder / "workflows", self.logger)
 
         if self.config.streamlabs_socket_token:
             self.logger.info("Connecting to Streamlabs Socket API...")
@@ -41,3 +41,7 @@ class TwitchSpawnPlugin(Plugin):
             self._client.stop()
         except AttributeError:
             pass
+
+    @property
+    def workflows(self) -> list[Workflow]:
+        return self._workflow_manager.workflows
