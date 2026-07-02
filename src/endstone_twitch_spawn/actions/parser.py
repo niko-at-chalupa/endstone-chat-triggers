@@ -1,5 +1,3 @@
-"""YAML workflow parser using ruamel.yaml."""
-
 from __future__ import annotations
 
 from pathlib import Path

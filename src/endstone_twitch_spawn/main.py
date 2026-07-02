@@ -44,7 +44,7 @@ class TwitchSpawnPlugin(Plugin):
 
             workflow = Workflow(
                 name="test",
-                event_name="TwitchFollowEvent",
+                event_names=["TwitchFollowEvent"],
                 conditions=[],
                 steps=[
                     "execute as @e run summon lightning_bolt",
