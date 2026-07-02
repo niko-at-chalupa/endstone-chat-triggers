@@ -1,6 +1,4 @@
-from typing import List, Any
-from pydantic import BaseModel, Field
-from .context import build_context, fill
+from typing import List
 from .models import Workflow, ResolvedCondition
 from endstone.plugin import Plugin
 from .models import ExecutionResult
@@ -23,11 +21,10 @@ class WorkflowExecutor:
         self._command_executor = _CommandExecutor(self._plugin)
 
     def run_workflow(self, workflow: Workflow, event: StreamlabsEvent) -> ExecutionResult:
-        context = build_context(event)
         condition_results: list[ResolvedCondition] = []
 
         for condition in workflow.conditions:
-            command = fill(condition.command, context)
+            command = condition.command # TODO: make module that resolves placeholders
             actual = self._command_executor.run(command)
             condition_results.append(condition.resolve(actual))
             if actual != condition.expected:
@@ -39,7 +36,7 @@ class WorkflowExecutor:
 
         ran_steps: List[str] = []
         for step in workflow.steps:
-            command = fill(step, context)
+            command = step # TODO: make module that resolves placeholders
             self._command_executor.run(command)
             ran_steps.append(command)
 
