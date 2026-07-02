@@ -16,6 +16,19 @@ from .events import (
     TwitchRaidEvent,
     parse_streamlabs_event,
 )
+from .models import (
+    LoyaltyStoreRedemptionMessage,
+    MerchMessage,
+    DonationMessage,
+    StreamLabelsMessage,
+    StreamLabelsUnderlyingMessage,
+    AlertPlayingMessage,
+    TwitchFollowMessage,
+    TwitchSubscriptionMessage,
+    TwitchBitsMessage,
+    TwitchHostMessage,
+    TwitchRaidMessage,
+)
 
 
 __all__ = [
@@ -35,4 +48,15 @@ __all__ = [
     "TwitchHostEvent",
     "TwitchRaidEvent",
     "parse_streamlabs_event",
+    "LoyaltyStoreRedemptionMessage",
+    "MerchMessage",
+    "DonationMessage",
+    "StreamLabelsMessage",
+    "StreamLabelsUnderlyingMessage",
+    "AlertPlayingMessage",
+    "TwitchFollowMessage",
+    "TwitchSubscriptionMessage",
+    "TwitchBitsMessage",
+    "TwitchHostMessage",
+    "TwitchRaidMessage",
 ]
