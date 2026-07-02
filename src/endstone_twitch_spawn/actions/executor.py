@@ -1,43 +1,51 @@
 from typing import List, Any
 from pydantic import BaseModel, Field
-
 from .context import build_context, fill
-from .models import Workflow
+from .models import Workflow, ResolvedCondition
 from endstone.plugin import Plugin
+from .models import ExecutionResult
+from ..streamlabs.events import StreamlabsEvent
 
 
-class ExecutionResult(BaseModel):
-    workflow_name: str
-    triggered: bool
-    ran_steps: List[str] = Field(default_factory=list)
-    condition_results: List[tuple[str, bool, bool]] = Field(default_factory=list)
-    # (command, expected, actual) for each condition checked
+class _CommandExecutor:
+    # Why do we need this? We're going to implement custom commands
+    # and stuff later on.
 
+    def __init__(self, plugin: Plugin):
+        self._plugin = plugin
 
-def run_workflow(workflow: Workflow, event: Any, plugin: Plugin) -> ExecutionResult:
-    context = build_context(event)
-    condition_results: List[tuple[str, bool, bool]] = []
+    def run(self, command_line: str) -> bool:
+        return self._plugin.server.dispatch_command(self._plugin.server.command_sender, command_line)
 
-    for condition in workflow.conditions:
-        command = fill(condition.command, context)
-        actual = plugin.server.dispatch_command(plugin.server.command_sender, command)
-        condition_results.append((command, condition.expected, actual))
-        if actual != condition.expected:
-            return ExecutionResult(
-                workflow_name=workflow.name,
-                triggered=False,
-                condition_results=condition_results,
-            )
+class WorkflowExecutor:
+    def __init__(self, plugin: Plugin):
+        self._plugin = plugin
+        self._command_executor = _CommandExecutor(self._plugin)
 
-    ran_steps: List[str] = []
-    for step in workflow.steps:
-        command = fill(step, context)
-        plugin.server.dispatch_command(plugin.server.command_sender, command)
-        ran_steps.append(command)
+    def run_workflow(self, workflow: Workflow, event: StreamlabsEvent) -> ExecutionResult:
+        context = build_context(event)
+        condition_results: list[ResolvedCondition] = []
 
-    return ExecutionResult(
-        workflow_name=workflow.name,
-        triggered=True,
-        ran_steps=ran_steps,
-        condition_results=condition_results,
-    )
+        for condition in workflow.conditions:
+            command = fill(condition.command, context)
+            actual = self._command_executor.run(command)
+            condition_results.append(condition.resolve(actual))
+            if actual != condition.expected:
+                return ExecutionResult(
+                    workflow_name=workflow.name,
+                    triggered=False,
+                    condition_results=condition_results,
+                )
+
+        ran_steps: List[str] = []
+        for step in workflow.steps:
+            command = fill(step, context)
+            self._command_executor.run(command)
+            ran_steps.append(command)
+
+        return ExecutionResult(
+            workflow_name=workflow.name,
+            triggered=True,
+            ran_steps=ran_steps,
+            condition_results=condition_results,
+        )
