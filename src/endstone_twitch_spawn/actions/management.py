@@ -4,7 +4,7 @@ from .models import Workflow
 from .parser import parse_workflow_file
 
 class WorkflowManager:
-    workflows: list[Workflow]
+    workflows: list[Workflow] = []
 
     def __init__(self, folder: Path, logger: Logger):
         self.folder = folder
