@@ -181,3 +181,10 @@ class StreamlabsEventHandler:
                             f"Error while calling streamlabs event handler {handler_name}: {e}"
                         )
                         self._logger.error(traceback.format_exc())
+
+EVENTS = [
+    TwitchFollowEvent, TwitchSubscriptionEvent, TwitchBitsEvent, 
+    TwitchHostEvent, TwitchRaidEvent, LoyaltyStoreRedemptionEvent, 
+    MerchEvent, DonationEvent, AlertPlayingEvent, 
+    StreamLabelsEvent, StreamLabelsUnderlyingEvent
+]

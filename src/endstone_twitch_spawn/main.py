@@ -1,7 +1,7 @@
 from .config import Config, load_config
 from endstone.plugin import Plugin
 from .streamlabs import StreamlabsClient, StreamlabsEventHandler
-from .actions import Workflow, WorkflowManager
+from .actions import Workflow, WorkflowManager, ActionsListener, WorkflowExecutor
 from endstone import ColorFormat as cf
 from endstone.command import Command, CommandSender
 from .commands import WorkflowSubcommands, Subcommands
@@ -67,6 +67,9 @@ class TwitchSpawnPlugin(Plugin):
                 GenericDebugListener(self.logger),
             ]:
                 self._streamlabs_event_handler.register_events(listener)
+
+        self.workflow_executor = WorkflowExecutor(self)
+        self._streamlabs_event_handler.register_events(ActionsListener(self.logger, self.workflow_executor, self.workflow_manager))
 
     def on_disable(self):
         try:
