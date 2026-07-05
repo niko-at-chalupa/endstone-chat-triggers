@@ -4,16 +4,15 @@ from .models import Workflow
 from .parser import parse_workflow_file
 
 class WorkflowManager:
-    workflows: list[Workflow] = []
-
     def __init__(self, folder: Path, logger: Logger):
         self.folder = folder
         self.folder.mkdir(parents=True, exist_ok=True)
         self._logger = logger
-        
+        self.workflows: list[Workflow] = []
+
     def scan_for_workflows(self):
         workflow_files = [
-            file for file in self.folder.iterdir() 
+            file for file in self.folder.iterdir()
             if file.suffix.lower() in [".yml", ".yaml"]
         ]
 
