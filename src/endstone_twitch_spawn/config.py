@@ -44,7 +44,7 @@ def load_config(plugin: Plugin) -> Config:
             "Shown when /twitch is used with an invalid subcommand",
         ),
         "messages.generic_error": (
-            "A technical error has occoured. Please contact a server admin or owner.",
+            "A technical error has occurred. Please contact a server admin or owner.",
             "Generic error for commands",
         ),
     }
