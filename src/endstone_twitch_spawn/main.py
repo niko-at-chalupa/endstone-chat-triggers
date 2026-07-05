@@ -17,8 +17,7 @@ class TwitchSpawnPlugin(Plugin):
             "description": "Greet the command sender.",
             "usages": [
                 "/twitch <subcommand: str> [args: message]",
-                "/twitch workflows reload",
-                "/twitch workflows"
+                "/twitch workflows [args: str]"
             ],
         }
     }
