@@ -182,9 +182,17 @@ class StreamlabsEventHandler:
                         )
                         self._logger.error(traceback.format_exc())
 
+
 EVENTS = [
-    TwitchFollowEvent, TwitchSubscriptionEvent, TwitchBitsEvent, 
-    TwitchHostEvent, TwitchRaidEvent, LoyaltyStoreRedemptionEvent, 
-    MerchEvent, DonationEvent, AlertPlayingEvent, 
-    StreamLabelsEvent, StreamLabelsUnderlyingEvent
+    TwitchFollowEvent,
+    TwitchSubscriptionEvent,
+    TwitchBitsEvent,
+    TwitchHostEvent,
+    TwitchRaidEvent,
+    LoyaltyStoreRedemptionEvent,
+    MerchEvent,
+    DonationEvent,
+    AlertPlayingEvent,
+    StreamLabelsEvent,
+    StreamLabelsUnderlyingEvent,
 ]

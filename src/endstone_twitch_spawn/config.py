@@ -9,12 +9,16 @@ import os
 class ConfigMessages(BaseModel):
     no_subcommand: str = "No subcommand was provided."
     invalid_subcommand: str = "The subcommand provided isn't valid."
-    generic_error: str = "A technical error has occoured. Please contact a server admin or owner."
+    generic_error: str = (
+        "A technical error has occoured. Please contact a server admin or owner."
+    )
+
 
 class Config(BaseModel):
     streamlabs_socket_token: str = ""
     log_events: bool = False
     messages: ConfigMessages = Field(default_factory=ConfigMessages)
+
 
 def load_config(plugin: Plugin) -> Config:
     folder = Path(plugin.data_folder)
@@ -23,7 +27,6 @@ def load_config(plugin: Plugin) -> Config:
     logger = plugin.logger
 
     yml = YAML()
-    yml.version = (1, 2)
     yml.preserve_quotes = False
 
     defaults: dict[str, tuple[Any, str]] = {
@@ -44,8 +47,8 @@ def load_config(plugin: Plugin) -> Config:
             "The subcommand provided isn't valid.",
             "Shown when /twitch is used with an invalid subcommand",
         ),
-        "messages.generic_error:": (
-            "A technical error has occoured. Please contact a server admin or owner.",
+        "messages.generic_error": (
+            "A technical error has occurred. Please contact a server admin or owner.",
             "Generic error for commands",
         ),
     }
@@ -69,7 +72,7 @@ def load_config(plugin: Plugin) -> Config:
 
         if keys[-1] not in current:
             current[keys[-1]] = value
-            current.yaml_add_eol_comment(comment, keys[-1])
+            current.yaml_set_comment_before_after_key(keys[-1], before=comment)
 
     with open(cfg_path, "w", encoding="utf-8") as f:
         yml.dump(existing, f)

@@ -6,6 +6,7 @@ from abc import ABC, abstractmethod
 if TYPE_CHECKING:
     from .main import TwitchSpawnPlugin
 
+
 class Subcommands(ABC):
     subcommand_map: dict[str, Callable[[CommandSender, Command, list[str]], bool]]
     name: str
@@ -14,6 +15,7 @@ class Subcommands(ABC):
     def no_args(self, sender: CommandSender, command: Command, args: list[str]):
         """Runs if no args was given to subcommand"""
         ...
+
 
 class WorkflowSubcommands(Subcommands):
     def __init__(self, plugin: "TwitchSpawnPlugin"):
@@ -34,7 +36,9 @@ class WorkflowSubcommands(Subcommands):
 
     def no_args(self, sender: CommandSender, command: Command, args: list[str]):
         if len(self._plugin.workflows) == 0:
-            sender.send_error_message(f"No workflows were found in {self._plugin.workflow_manager.folder}.")
+            sender.send_error_message(
+                f"No workflows were found in {self._plugin.workflow_manager.folder}."
+            )
         else:
             sender.send_message("Active Workflows:")
             for workflow in self._plugin.workflows:

@@ -9,5 +9,5 @@ __all__ = [
     "ExecutionResult",
     "WorkflowExecutor",
     "WorkflowManager",
-    "ActionsListener"
+    "ActionsListener",
 ]
