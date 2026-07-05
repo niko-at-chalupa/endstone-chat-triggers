@@ -3,6 +3,7 @@ from pathlib import Path
 from .models import Workflow
 from .parser import parse_workflow_file
 
+
 class WorkflowManager:
     def __init__(self, folder: Path, logger: Logger):
         self.folder = folder
@@ -12,7 +13,8 @@ class WorkflowManager:
 
     def scan_for_workflows(self):
         workflow_files = [
-            file for file in self.folder.iterdir()
+            file
+            for file in self.folder.iterdir()
             if file.suffix.lower() in [".yml", ".yaml"]
         ]
 

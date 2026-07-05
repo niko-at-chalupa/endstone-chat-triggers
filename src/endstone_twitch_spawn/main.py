@@ -17,7 +17,7 @@ class TwitchSpawnPlugin(Plugin):
             "description": "Greet the command sender.",
             "usages": [
                 "/twitch <subcommand: str> [args: message]",
-                "/twitch workflows [args: str]"
+                "/twitch workflows [args: str]",
             ],
         }
     }
@@ -25,23 +25,26 @@ class TwitchSpawnPlugin(Plugin):
     permissions = {
         "twitch_spawn.command.twitch": {
             "description": "Allow users to use the /hello command.",
-            "default": True, 
+            "default": True,
         }
     }
 
-
     def on_load(self):
         self.config: Config = load_config(self)
-        self.workflow_manager = WorkflowManager(self.data_folder / "workflows", self.logger)
-        self.subcommands: list[Subcommands] = [
-            WorkflowSubcommands(self)
-        ]
-        
+        self.workflow_manager = WorkflowManager(
+            self.data_folder / "workflows", self.logger
+        )
+        self.subcommands: list[Subcommands] = [WorkflowSubcommands(self)]
+
         self.workflow_manager.scan_for_workflows()
         if len(self.workflows) > 0:
-            self.logger.info(f"Found {cf.BOLD}{len(self.workflows)}{cf.RESET} workflows in {self.workflow_manager.folder}.")
+            self.logger.info(
+                f"Found {cf.BOLD}{len(self.workflows)}{cf.RESET} workflows in {self.workflow_manager.folder}."
+            )
         else:
-            self.logger.warning(f"No workflows were found in {self.workflow_manager.folder}.")
+            self.logger.warning(
+                f"No workflows were found in {self.workflow_manager.folder}."
+            )
 
         if self.config.streamlabs_socket_token:
             self.logger.info("Connecting to Streamlabs Socket API...")
@@ -54,7 +57,9 @@ class TwitchSpawnPlugin(Plugin):
             self._client.start()
         else:
             self.logger.error(
-                "*" * 40 + f"\nNo streamlabs_socket_token set through config! Disabling plugin.\n\nPlease check \n{self.data_folder / "config.yaml"}\nfor more info!\n" + "*" * 40
+                "*" * 40
+                + f"\nNo streamlabs_socket_token set through config! Disabling plugin.\n\nPlease check \n{self.data_folder / 'config.yaml'}\nfor more info!\n"
+                + "*" * 40
             )
             self.server.plugin_manager.disable_plugin(self)
             return
@@ -70,7 +75,9 @@ class TwitchSpawnPlugin(Plugin):
                 self._streamlabs_event_handler.register_events(listener)
 
         self.workflow_executor = WorkflowExecutor(self)
-        self._streamlabs_event_handler.register_events(ActionsListener(self.logger, self.workflow_executor, self.workflow_manager))
+        self._streamlabs_event_handler.register_events(
+            ActionsListener(self.logger, self.workflow_executor, self.workflow_manager)
+        )
 
     def on_disable(self):
         try:
@@ -85,7 +92,9 @@ class TwitchSpawnPlugin(Plugin):
         except AttributeError:
             return []
 
-    def on_command(self, sender: 'CommandSender', command: 'Command', args: list[str]) -> bool:
+    def on_command(
+        self, sender: "CommandSender", command: "Command", args: list[str]
+    ) -> bool:
         if self.config is None:
             self.logger.warning("Config is unset")
             return False
@@ -97,8 +106,10 @@ class TwitchSpawnPlugin(Plugin):
             sender.send_error_message(self.config.messages.no_subcommand)
             return False
 
-        subcommand_group = next((s for s in self.subcommands if s.name == args[0]), None)
-        
+        subcommand_group = next(
+            (s for s in self.subcommands if s.name == args[0]), None
+        )
+
         if not subcommand_group:
             sender.send_error_message(self.config.messages.invalid_subcommand)
             return False
@@ -113,13 +124,13 @@ class TwitchSpawnPlugin(Plugin):
 
         if not subcommand:
             subcommand = subcommand_group.no_args
-            subcommand_args = args[1:] 
+            subcommand_args = args[1:]
 
         try:
             return subcommand(sender, command, subcommand_args)
         except Exception as e:
             self.logger.error(
-                f"ERROR !!!!!!!!!!!!! 😭😭😭 While handling subcommand `{args[0]}` for `{sender.name}`!! 🥺🥺🥺", 
+                f"ERROR !!!!!!!!!!!!! 😭😭😭 While handling subcommand `{args[0]}` for `{sender.name}`!! 🥺🥺🥺",
             )
             self.logger.error(f"{e}")
             self.logger.error(f"{traceback.format_exc()}")

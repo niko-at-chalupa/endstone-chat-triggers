@@ -2,7 +2,12 @@ from typing import List, TYPE_CHECKING
 from .models import Workflow, ResolvedCondition
 from endstone.plugin import Plugin
 from .models import ExecutionResult
-from ..streamlabs.events import StreamlabsEvent, StreamlabsBaseEvent, EVENTS, streamlabs_event_handler
+from ..streamlabs.events import (
+    StreamlabsEvent,
+    StreamlabsBaseEvent,
+    EVENTS,
+    streamlabs_event_handler,
+)
 from endstone import Logger
 
 if TYPE_CHECKING:
@@ -59,25 +64,34 @@ class WorkflowExecutor:
             condition_results=condition_results,
         )
 
+
 def _bind_events(event_types: list):
     def class_decorator(cls):
         for index, event_type in enumerate(event_types):
+
             def create_handler(e_type):
                 def handler(self, event: e_type):
                     self.handle(event)
-                
-                handler.__annotations__ = {'event': e_type}
+
+                handler.__annotations__ = {"event": e_type}
                 return streamlabs_event_handler(handler)
-            
+
             arbitrary_name = f"_auto_handler_{index}"
             setattr(cls, arbitrary_name, create_handler(event_type))
-            
+
         return cls
+
     return class_decorator
+
 
 @_bind_events(EVENTS)
 class ActionsListener:
-    def __init__(self, logger: Logger, workflow_executor: WorkflowExecutor, workflow_manager: "WorkflowManager"):
+    def __init__(
+        self,
+        logger: Logger,
+        workflow_executor: WorkflowExecutor,
+        workflow_manager: "WorkflowManager",
+    ):
         self._logger = logger
         self.workflow_executor = workflow_executor
         self.workflow_manager = workflow_manager
@@ -88,10 +102,9 @@ class ActionsListener:
 
     def handle(self, event: StreamlabsBaseEvent | StreamlabsEvent):
         matching_workflows = (
-            w for w in self._workflows 
-            if event.event_name in w.event_names
+            w for w in self._workflows if event.event_name in w.event_names
         )
-        
+
         for workflow in matching_workflows:
             self.workflow_executor.run_workflow(workflow, event)
 

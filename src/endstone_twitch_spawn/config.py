@@ -9,12 +9,16 @@ import os
 class ConfigMessages(BaseModel):
     no_subcommand: str = "No subcommand was provided."
     invalid_subcommand: str = "The subcommand provided isn't valid."
-    generic_error: str = "A technical error has occoured. Please contact a server admin or owner."
+    generic_error: str = (
+        "A technical error has occoured. Please contact a server admin or owner."
+    )
+
 
 class Config(BaseModel):
     streamlabs_socket_token: str = ""
     log_events: bool = False
     messages: ConfigMessages = Field(default_factory=ConfigMessages)
+
 
 def load_config(plugin: Plugin) -> Config:
     folder = Path(plugin.data_folder)
