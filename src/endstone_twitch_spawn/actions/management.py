@@ -1,5 +1,5 @@
 from endstone.plugin import Plugin
-from endstone import Logger
+from endstone import Logger, ColorFormat
 from pathlib import Path
 from .models import Workflow, FailedWorkflow
 from .parser import parse_workflow, print_issues, format_issues_mc
@@ -38,9 +38,9 @@ class WorkflowManager:
             except Exception as e:
                 self._logger.error(f"Error while parsing workflow {file.name}:\n{e}")
 
-        self.log_failed_workflows()
+        self.log_workflows()
 
-    def log_failed_workflows(self):
+    def log_workflows(self):
         for workflow in self.failed_workflows:
             print_issues(workflow.issues, self._logger)
             for player in self._plugin.server.online_players:
@@ -50,3 +50,6 @@ class WorkflowManager:
             for player in self._plugin.server.online_players:
                 if player.is_op:
                     player.send_message("More details in the server console.")
+
+        for workflow in self.workflows:
+            self._plugin.server.broadcast(f"{ColorFormat.GREEN}Workflow {ColorFormat.BOLD}{workflow.name}{ColorFormat.RESET}{ColorFormat.GREEN} succeeded load", "twitch_spawn.command.twitch")
