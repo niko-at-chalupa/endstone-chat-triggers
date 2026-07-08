@@ -14,7 +14,7 @@ class TwitchSpawnPlugin(Plugin):
 
     commands = {
         "twitch": {
-            "description": "Greet the command sender.",
+            "description": "Utility commands for ETS",
             "usages": [
                 "/twitch <subcommand: str> [args: message]",
                 "/twitch workflows [args: str]",
@@ -24,8 +24,8 @@ class TwitchSpawnPlugin(Plugin):
 
     permissions = {
         "twitch_spawn.command.twitch": {
-            "description": "Allow users to use the /hello command.",
-            "default": True,
+            "description": "Allow users to use the /twitch command.",
+            "default": "op",
         }
     }
 
