@@ -1,6 +1,5 @@
-from .parser import parse_workflow, parse_workflow_file
+from .linter import validate_for_registration as parse_workflow
 
 __all__ = [
     "parse_workflow",
-    "parse_workflow_file",
 ]
