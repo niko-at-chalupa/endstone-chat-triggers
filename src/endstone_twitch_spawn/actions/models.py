@@ -1,5 +1,4 @@
 from __future__ import annotations
-from logging import ERROR
 from enum import Enum
 from pathlib import Path
 
@@ -11,8 +10,8 @@ class Condition(BaseModel):
     command: str
     expected: bool
 
-    source_line: int | None
-    source_file: Path | None
+    source_line: int | None = None
+    source_file: Path | None = None
 
     def resolve(self, actual: bool) -> ResolvedCondition:
         return ResolvedCondition(**self.model_dump(), actual=actual)
@@ -41,7 +40,7 @@ class ExecutionResult(BaseModel):
 
 
 class Severity(str, Enum):
-    ERROR = "error",
+    ERROR = "error"
     WARNING = "warning"
 
 
@@ -51,6 +50,7 @@ class Issue(BaseModel):
     source_line: int
     severity: Severity
     help: str | None = None
+    code: str
 
 
 class FailedWorkflow(BaseModel):
