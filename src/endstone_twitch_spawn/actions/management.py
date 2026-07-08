@@ -43,4 +43,10 @@ class WorkflowManager:
     def log_failed_workflows(self):
         for workflow in self.failed_workflows:
             print_issues(workflow.issues, self._logger)
-            self._plugin.server.broadcast(format_issues_mc(workflow.issues), "twitch_spawn.command.twitch")
+            for player in self._plugin.server.online_players:
+                if player.is_op:
+                    player.send_message(format_issues_mc(workflow.issues))
+        if len(self.failed_workflows) > 0:
+            for player in self._plugin.server.online_players:
+                if player.is_op:
+                    player.send_message("More details in the server console.")
