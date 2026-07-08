@@ -1,4 +1,5 @@
 from __future__ import annotations
+from enum import Enum
 from pathlib import Path
 
 from typing import List
@@ -9,8 +10,8 @@ class Condition(BaseModel):
     command: str
     expected: bool
 
-    source_line: int | None
-    source_file: Path | None
+    source_line: int | None = None
+    source_file: Path | None = None
 
     def resolve(self, actual: bool) -> ResolvedCondition:
         return ResolvedCondition(**self.model_dump(), actual=actual)
@@ -36,3 +37,23 @@ class ExecutionResult(BaseModel):
     triggered: bool
     ran_steps: List[str] = Field(default_factory=list)
     condition_results: List[ResolvedCondition] = Field(default_factory=list)
+
+
+class Severity(str, Enum):
+    ERROR = "error"
+    WARNING = "warning"
+
+
+class Issue(BaseModel):
+    name: str | None = None
+    file: Path
+    source_line: int
+    severity: Severity
+    help: str | None = None
+    code: str
+
+
+class FailedWorkflow(BaseModel):
+    name: str | None = None
+    file: Path
+    issues: list[Issue] = Field(default_factory=list)

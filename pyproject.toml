@@ -14,7 +14,8 @@ dependencies = [
     "python-socketio",
     "pydantic",
     "ruamel.yaml",
-    "websocket-client"
+    "websocket-client",
+    "rich",
 ]
 
 [project.entry-points."endstone"]

@@ -31,7 +31,7 @@ class WorkflowSubcommands(Subcommands):
 
     def reload(self, sender: CommandSender, command: Command, args: list[str]):
         self._plugin.workflow_manager.scan_for_workflows()
-        sender.send_message(f"{cf.GREEN}Reload complete.")
+        self._plugin.server.broadcast(f"{cf.GREEN}Workflow reload complete.", "twitch_spawn.command.twitch")
         return True
 
     def no_args(self, sender: CommandSender, command: Command, args: list[str]):

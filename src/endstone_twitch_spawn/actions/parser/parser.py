@@ -6,7 +6,7 @@ from typing import Any
 from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedMap, CommentedSeq
 
-from .models import Condition, Workflow
+from ..models import Condition, Workflow
 
 yaml = YAML()
 yaml.preserve_quotes = True
