@@ -32,7 +32,7 @@ class TwitchSpawnPlugin(Plugin):
     def on_load(self):
         self.config: Config = load_config(self)
         self.workflow_manager = WorkflowManager(
-            self.data_folder / "workflows", self.logger
+            self.data_folder / "workflows", self.logger, self
         )
         self.subcommands: list[Subcommands] = [WorkflowSubcommands(self)]
 

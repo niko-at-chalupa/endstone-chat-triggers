@@ -4,7 +4,7 @@ from rich.text import Text
 from rich.console import Console
 
 from ..models import Issue, Severity
-from endstone import Logger
+from endstone import Logger, ColorFormat
 
 
 def _source_line(file: Path, line_no: int) -> str | None:
@@ -109,3 +109,55 @@ def print_issues(issues: list[Issue], logger: Logger) -> None:
         logger.error(summary)
     else:
         logger.warning(summary)
+
+def format_issue_mc(issue: Issue) -> str:
+    is_error = issue.severity == Severity.ERROR
+    sev_color = ColorFormat.RED if is_error else ColorFormat.YELLOW
+    label = "Error" if is_error else "Warning"
+
+    header_code = f"[{issue.code}] " if issue.code else ""
+    title = issue.name or label
+
+    lines = []
+    lines.append(
+        f"{sev_color}{ColorFormat.BOLD}{label} {header_code}{ColorFormat.RESET}"
+        f"{ColorFormat.BOLD}{title}{ColorFormat.RESET}"
+    )
+    lines.append(
+        f"{ColorFormat.GRAY}in {ColorFormat.RESET}{ColorFormat.BOLD}"
+        f"workflows/{issue.file.name}{ColorFormat.RESET}"
+        f"{ColorFormat.GRAY}, line {issue.source_line}{ColorFormat.RESET}"
+    )
+
+    src = _source_line(issue.file, issue.source_line)
+    if src is not None:
+        stripped = src.strip()
+        lines.append(f"  {ColorFormat.ITALIC}\u201c{stripped}\u201d{ColorFormat.RESET}")
+
+    if issue.help:
+        lines.append(f"  {sev_color}-> {ColorFormat.RESET}{issue.help}")
+
+    return "\n".join(lines)
+
+def format_issues_mc(issues: list[Issue]) -> str:
+    """
+    Same content as print_issues_mc, but returns a single formatted
+    string instead of logging — caller decides what to do with it.
+    """
+    if not issues:
+        return ""
+
+    blocks = [format_issue_mc(issue) for issue in issues]
+
+    errors = sum(1 for i in issues if i.severity == Severity.ERROR)
+    warnings = sum(1 for i in issues if i.severity == Severity.WARNING)
+    parts = []
+    if errors:
+        parts.append(f"{errors} error{'s' if errors != 1 else ''}")
+    if warnings:
+        parts.append(f"{warnings} warning{'s' if warnings != 1 else ''}")
+
+    summary = f"{ColorFormat.BOLD}{', '.join(parts)} emitted{ColorFormat.RESET}"
+    blocks.append(summary)
+
+    return "\n\n".join(blocks)
