@@ -1,12 +1,34 @@
-from typing import Callable
+from typing import Any, Callable
 from pathlib import Path
 
+from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedMap
 
 from ..models import Issue, Severity, Workflow, FailedWorkflow
-from .parser import load_yaml_file, build_workflow, get_line
+from .parser import parse_workflow_file
+
+_yaml = YAML()
 
 LintRule = Callable[[CommentedMap, Path], list[Issue]]
+
+
+def _get_line(node: Any) -> int | None:
+    """Extract line number from a ruamel.yaml node if available."""
+    if hasattr(node, "lc") and hasattr(node.lc, "line"):
+        return node.lc.line + 1
+    return None
+
+
+def _load_raw(path: Path) -> CommentedMap:
+    """
+    Load YAML for inspection only — deliberately independent of
+    parser.py, which builds a validated Workflow directly and will
+    raise on data that hasn't passed lint yet.
+    """
+    data = _yaml.load(path.read_text(encoding="utf-8"))
+    if not isinstance(data, CommentedMap):
+        raise ValueError("Workflow YAML must be a mapping")
+    return data
 
 
 class RuleRegistry:
@@ -37,7 +59,7 @@ def check_missing_name(data: CommentedMap, file: Path) -> list[Issue]:
     name = data.get("name", "")
     if not name or not str(name).strip():
         return [_issue(
-            file, get_line(data),
+            file, _get_line(data),
             code="E001", name="missing_workflow_name", severity=Severity.ERROR,
             help="Add a 'name' field at the root of your YAML mapping.",
         )]
@@ -51,7 +73,7 @@ def check_empty_events(data: CommentedMap, file: Path) -> list[Issue]:
         events = [events]
     if not events:
         return [_issue(
-            file, get_line(data),
+            file, _get_line(data),
             code="W012", name="no_trigger_events", severity=Severity.WARNING,
             help="Without an 'event', this workflow will never be triggered.",
         )]
@@ -65,7 +87,7 @@ def check_blank_event_names(data: CommentedMap, file: Path) -> list[Issue]:
         events = [events]
     if any(not e or not str(e).strip() for e in events):
         return [_issue(
-            file, get_line(data),
+            file, _get_line(data),
             code="E002", name="blank_event_name", severity=Severity.ERROR,
             help="One or more 'event' entries are empty strings.",
         )]
@@ -84,7 +106,7 @@ def check_duplicate_events(data: CommentedMap, file: Path) -> list[Issue]:
         seen.add(name)
     if dupes:
         return [_issue(
-            file, get_line(data),
+            file, _get_line(data),
             code="W013", name="duplicate_trigger_events", severity=Severity.WARNING,
             help=f"Duplicate event(s) declared: {', '.join(sorted(dupes))}.",
         )]
@@ -95,7 +117,7 @@ def check_duplicate_events(data: CommentedMap, file: Path) -> list[Issue]:
 def check_empty_steps(data: CommentedMap, file: Path) -> list[Issue]:
     if not data.get("steps"):
         return [_issue(
-            file, get_line(data),
+            file, _get_line(data),
             code="E003", name="no_steps", severity=Severity.ERROR,
             help="Workflow has no 'steps'; it would trigger and do nothing.",
         )]
@@ -106,7 +128,7 @@ def check_empty_steps(data: CommentedMap, file: Path) -> list[Issue]:
 def check_fail_steps_without_steps(data: CommentedMap, file: Path) -> list[Issue]:
     if data.get("fail_steps") and not data.get("steps"):
         return [_issue(
-            file, get_line(data),
+            file, _get_line(data),
             code="W014", name="fail_steps_without_steps", severity=Severity.WARNING,
             help="'fail_steps' defined but there are no 'steps' that could fail.",
         )]
@@ -127,35 +149,29 @@ def check_duplicate_conditions(data: CommentedMap, file: Path) -> list[Issue]:
             seen.add(key)
     if dupes:
         return [_issue(
-            file, get_line(data),
+            file, _get_line(data),
             code="W015", name="duplicate_conditions", severity=Severity.WARNING,
             help=f"Duplicate condition(s) for command(s): {', '.join(sorted(dupes))}.",
         )]
     return []
 
 
-def lint_yaml(data: CommentedMap, file: Path) -> list[Issue]:
-    """Run all registered rules against raw parsed YAML."""
-    return RuleRegistry.run_all(data, file)
-
-
 def lint_file(path: Path) -> list[Issue]:
-    """Load and lint a workflow YAML file, without building a Workflow."""
-    return lint_yaml(load_yaml_file(path), path)
+    """Load and lint a workflow YAML file without building a Workflow."""
+    return RuleRegistry.run_all(_load_raw(path), path)
 
 
 def validate_for_registration(path: Path) -> Workflow | FailedWorkflow:
     """
-    The only sanctioned way to turn a YAML file into a Workflow.
+    The sanctioned way to turn a YAML file into a Workflow.
 
-    Loads the raw YAML, lints it, and:
-      - if there are any ERROR-severity issues, returns a FailedWorkflow
-        (carrying all issues, including warnings) without ever
-        constructing a Workflow.
-      - otherwise, builds and returns the validated Workflow.
+    Lints the raw YAML first. If there are any ERROR-severity issues,
+    returns a FailedWorkflow (carrying all issues, warnings included)
+    without touching parser.py at all. Otherwise, delegates to
+    parser.parse_workflow_file to build the real Workflow.
     """
-    data = load_yaml_file(path)
-    issues = lint_yaml(data, path)
+    data = _load_raw(path)
+    issues = RuleRegistry.run_all(data, path)
 
     if any(i.severity == Severity.ERROR for i in issues):
         return FailedWorkflow(
@@ -164,4 +180,4 @@ def validate_for_registration(path: Path) -> Workflow | FailedWorkflow:
             issues=issues,
         )
 
-    return build_workflow(data, source_file=path)
+    return parse_workflow_file(path)
