@@ -32,8 +32,10 @@ class WorkflowManager:
                 parsed_workflow = parse_workflow(file)
                 match parsed_workflow:
                     case Workflow():
+                        self._logger.debug(f"Workflow {parsed_workflow.name} succeeded")
                         self.workflows.append(parsed_workflow)
                     case FailedWorkflow():
+                        self._logger.debug(f"Workflow {parsed_workflow.name} failed")
                         self.failed_workflows.append(parsed_workflow)
             except Exception as e:
                 self._logger.error(f"Error while parsing workflow {file.name}:\n{e}")

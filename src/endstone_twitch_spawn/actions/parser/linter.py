@@ -1,7 +1,7 @@
 from typing import Any, Callable
 from pathlib import Path
 
-from ruamel.yaml import YAML
+from ruamel.yaml import YAML, YAMLError
 from ruamel.yaml.comments import CommentedMap
 
 from ..models import Issue, Severity, Workflow, FailedWorkflow
@@ -10,6 +10,10 @@ from .parser import parse_workflow_file
 _yaml = YAML()
 
 LintRule = Callable[[CommentedMap, Path], list[Issue]]
+
+
+class WorkflowLoadError(Exception):
+    """Raised when a workflow YAML file can't be parsed into a mapping at all."""
 
 
 def _get_line(node: Any) -> int | None:
@@ -24,10 +28,25 @@ def _load_raw(path: Path) -> CommentedMap:
     Load YAML for inspection only — deliberately independent of
     parser.py, which builds a validated Workflow directly and will
     raise on data that hasn't passed lint yet.
+
+    Raises WorkflowLoadError (never a raw YAMLError/ValueError) if the
+    file is empty, malformed, or not a mapping, so callers can turn
+    that into a lint Issue / FailedWorkflow instead of crashing.
     """
-    data = _yaml.load(path.read_text(encoding="utf-8"))
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError as e:
+        raise WorkflowLoadError(f"Could not read file: {e}") from e
+
+    try:
+        data = _yaml.load(text)
+    except YAMLError as e:
+        raise WorkflowLoadError(f"Invalid YAML: {e}") from e
+
+    if data is None:
+        raise WorkflowLoadError("Workflow YAML file is empty")
     if not isinstance(data, CommentedMap):
-        raise ValueError("Workflow YAML must be a mapping")
+        raise WorkflowLoadError("Workflow YAML must be a mapping")
     return data
 
 
@@ -52,6 +71,14 @@ class RuleRegistry:
 
 def _issue(file: Path, line: int | None, **kwargs) -> Issue:
     return Issue(file=file, source_line=line or 1, **kwargs)
+
+
+def _load_error_issue(file: Path, error: WorkflowLoadError) -> Issue:
+    return _issue(
+        file, None,
+        code="E000", name="invalid_workflow_file", severity=Severity.ERROR,
+        help=str(error),
+    )
 
 
 @RuleRegistry.register()
@@ -158,7 +185,11 @@ def check_duplicate_conditions(data: CommentedMap, file: Path) -> list[Issue]:
 
 def lint_file(path: Path) -> list[Issue]:
     """Load and lint a workflow YAML file without building a Workflow."""
-    return RuleRegistry.run_all(_load_raw(path), path)
+    try:
+        data = _load_raw(path)
+    except WorkflowLoadError as e:
+        return [_load_error_issue(path, e)]
+    return RuleRegistry.run_all(data, path)
 
 
 def validate_for_registration(path: Path) -> Workflow | FailedWorkflow:
@@ -170,7 +201,12 @@ def validate_for_registration(path: Path) -> Workflow | FailedWorkflow:
     without touching parser.py at all. Otherwise, delegates to
     parser.parse_workflow_file to build the real Workflow.
     """
-    data = _load_raw(path)
+    try:
+        data = _load_raw(path)
+    except WorkflowLoadError as e:
+        issue = _load_error_issue(path, e)
+        return FailedWorkflow(name=None, file=path, issues=[issue])
+
     issues = RuleRegistry.run_all(data, path)
 
     if any(i.severity == Severity.ERROR for i in issues):
