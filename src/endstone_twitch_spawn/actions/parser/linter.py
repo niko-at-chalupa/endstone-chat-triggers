@@ -1,8 +1,12 @@
 from typing import Callable
 from pathlib import Path
-from ..models import Workflow, Issue, Severity, FailedWorkflow
 
-LintRule = Callable[[Workflow], list[Issue]]
+from ruamel.yaml.comments import CommentedMap
+
+from ..models import Issue, Severity, Workflow, FailedWorkflow
+from .parser import load_yaml_file, build_workflow, get_line
+
+LintRule = Callable[[CommentedMap, Path], list[Issue]]
 
 
 class RuleRegistry:
@@ -17,144 +21,147 @@ class RuleRegistry:
         return decorator
 
     @classmethod
-    def run_all(cls, workflow: Workflow) -> list[Issue]:
+    def run_all(cls, data: CommentedMap, file: Path) -> list[Issue]:
         issues = []
         for rule in cls._rules:
-            issues.extend(rule(workflow))
+            issues.extend(rule(data, file))
         return issues
 
 
+def _issue(file: Path, line: int | None, **kwargs) -> Issue:
+    return Issue(file=file, source_line=line or 1, **kwargs)
+
+
 @RuleRegistry.register()
-def check_missing_name(workflow: Workflow) -> list[Issue]:
-    if not workflow.name or not workflow.name.strip():
-        return [Issue(
-            code="E001",
-            name="missing_workflow_name",
-            file=workflow.source_file or Path("unknown"),
-            source_line=workflow.source_line or 1,
-            severity=Severity.ERROR,
+def check_missing_name(data: CommentedMap, file: Path) -> list[Issue]:
+    name = data.get("name", "")
+    if not name or not str(name).strip():
+        return [_issue(
+            file, get_line(data),
+            code="E001", name="missing_workflow_name", severity=Severity.ERROR,
             help="Add a 'name' field at the root of your YAML mapping.",
         )]
     return []
 
 
 @RuleRegistry.register()
-def check_empty_events(workflow: Workflow) -> list[Issue]:
-    if not workflow.event_names:
-        return [Issue(
-            code="W012",
-            name="no_trigger_events",
-            file=workflow.source_file or Path("unknown"),
-            source_line=workflow.source_line or 1,
-            severity=Severity.WARNING,
+def check_empty_events(data: CommentedMap, file: Path) -> list[Issue]:
+    events = data.get("event", [])
+    if isinstance(events, str):
+        events = [events]
+    if not events:
+        return [_issue(
+            file, get_line(data),
+            code="W012", name="no_trigger_events", severity=Severity.WARNING,
             help="Without an 'event', this workflow will never be triggered.",
         )]
     return []
 
 
 @RuleRegistry.register()
-def check_duplicate_events(workflow: Workflow) -> list[Issue]:
-    seen = set()
-    dupes = set()
-    for name in workflow.event_names:
-        if name in seen:
-            dupes.add(name)
-        seen.add(name)
-    if dupes:
-        return [Issue(
-            code="W013",
-            name="duplicate_trigger_events",
-            file=workflow.source_file or Path("unknown"),
-            source_line=workflow.source_line or 1,
-            severity=Severity.WARNING,
-            help=f"Duplicate event(s) declared: {', '.join(sorted(dupes))}.",
-        )]
-    return []
-
-
-@RuleRegistry.register()
-def check_blank_event_names(workflow: Workflow) -> list[Issue]:
-    if any(not e or not e.strip() for e in workflow.event_names):
-        return [Issue(
-            code="E002",
-            name="blank_event_name",
-            file=workflow.source_file or Path("unknown"),
-            source_line=workflow.source_line or 1,
-            severity=Severity.ERROR,
+def check_blank_event_names(data: CommentedMap, file: Path) -> list[Issue]:
+    events = data.get("event", [])
+    if isinstance(events, str):
+        events = [events]
+    if any(not e or not str(e).strip() for e in events):
+        return [_issue(
+            file, get_line(data),
+            code="E002", name="blank_event_name", severity=Severity.ERROR,
             help="One or more 'event' entries are empty strings.",
         )]
     return []
 
 
 @RuleRegistry.register()
-def check_empty_steps(workflow: Workflow) -> list[Issue]:
-    if not workflow.steps:
-        return [Issue(
-            code="E003",
-            name="no_steps",
-            file=workflow.source_file or Path("unknown"),
-            source_line=workflow.source_line or 1,
-            severity=Severity.ERROR,
+def check_duplicate_events(data: CommentedMap, file: Path) -> list[Issue]:
+    events = data.get("event", [])
+    if isinstance(events, str):
+        events = [events]
+    seen, dupes = set(), set()
+    for name in events:
+        if name in seen:
+            dupes.add(name)
+        seen.add(name)
+    if dupes:
+        return [_issue(
+            file, get_line(data),
+            code="W013", name="duplicate_trigger_events", severity=Severity.WARNING,
+            help=f"Duplicate event(s) declared: {', '.join(sorted(dupes))}.",
+        )]
+    return []
+
+
+@RuleRegistry.register()
+def check_empty_steps(data: CommentedMap, file: Path) -> list[Issue]:
+    if not data.get("steps"):
+        return [_issue(
+            file, get_line(data),
+            code="E003", name="no_steps", severity=Severity.ERROR,
             help="Workflow has no 'steps'; it would trigger and do nothing.",
         )]
     return []
 
 
 @RuleRegistry.register()
-def check_fail_steps_without_steps(workflow: Workflow) -> list[Issue]:
-    if workflow.fail_steps and not workflow.steps:
-        return [Issue(
-            code="W014",
-            name="fail_steps_without_steps",
-            file=workflow.source_file or Path("unknown"),
-            source_line=workflow.source_line or 1,
-            severity=Severity.WARNING,
+def check_fail_steps_without_steps(data: CommentedMap, file: Path) -> list[Issue]:
+    if data.get("fail_steps") and not data.get("steps"):
+        return [_issue(
+            file, get_line(data),
+            code="W014", name="fail_steps_without_steps", severity=Severity.WARNING,
             help="'fail_steps' defined but there are no 'steps' that could fail.",
         )]
     return []
 
 
 @RuleRegistry.register()
-def check_duplicate_conditions(workflow: Workflow) -> list[Issue]:
-    seen = set()
-    dupes = set()
-    for c in workflow.conditions:
-        key = (c.command, c.expected)
-        if key in seen:
-            dupes.add(c.command)
-        seen.add(key)
+def check_duplicate_conditions(data: CommentedMap, file: Path) -> list[Issue]:
+    raw_conditions = data.get("conditions") or []
+    seen, dupes = set(), set()
+    for item in raw_conditions:
+        if not isinstance(item, CommentedMap):
+            continue
+        for command, expected in item.items():
+            key = (command, bool(expected))
+            if key in seen:
+                dupes.add(command)
+            seen.add(key)
     if dupes:
-        return [Issue(
-            code="W015",
-            name="duplicate_conditions",
-            file=workflow.source_file or Path("unknown"),
-            source_line=workflow.source_line or 1,
-            severity=Severity.WARNING,
+        return [_issue(
+            file, get_line(data),
+            code="W015", name="duplicate_conditions", severity=Severity.WARNING,
             help=f"Duplicate condition(s) for command(s): {', '.join(sorted(dupes))}.",
         )]
     return []
 
 
-def lint_workflow(workflow: Workflow) -> list[Issue]:
-    """Run all registered rules against a workflow."""
-    return RuleRegistry.run_all(workflow)
+def lint_yaml(data: CommentedMap, file: Path) -> list[Issue]:
+    """Run all registered rules against raw parsed YAML."""
+    return RuleRegistry.run_all(data, file)
 
 
-def validate_for_registration(workflow: Workflow) -> Workflow | FailedWorkflow:
+def lint_file(path: Path) -> list[Issue]:
+    """Load and lint a workflow YAML file, without building a Workflow."""
+    return lint_yaml(load_yaml_file(path), path)
+
+
+def validate_for_registration(path: Path) -> Workflow | FailedWorkflow:
     """
-    Lint a workflow. Returns the Workflow unchanged if there are no
-    ERROR-severity issues (it may still have WARNING issues; call
-    lint_workflow directly if you need to inspect those too). Returns a
-    FailedWorkflow if any ERROR-severity issue was found.
-    """
-    issues = lint_workflow(workflow)
-    has_errors = any(i.severity == Severity.ERROR for i in issues)
+    The only sanctioned way to turn a YAML file into a Workflow.
 
-    if has_errors:
+    Loads the raw YAML, lints it, and:
+      - if there are any ERROR-severity issues, returns a FailedWorkflow
+        (carrying all issues, including warnings) without ever
+        constructing a Workflow.
+      - otherwise, builds and returns the validated Workflow.
+    """
+    data = load_yaml_file(path)
+    issues = lint_yaml(data, path)
+
+    if any(i.severity == Severity.ERROR for i in issues):
         return FailedWorkflow(
-            name=workflow.name or None,
-            file=workflow.source_file or Path("unknown"),
+            name=str(data.get("name")) if data.get("name") else None,
+            file=path,
             issues=issues,
         )
 
-    return workflow
+    return build_workflow(data, source_file=path)
