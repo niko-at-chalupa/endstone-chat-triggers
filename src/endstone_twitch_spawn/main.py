@@ -86,7 +86,7 @@ class TwitchSpawnPlugin(Plugin):
         self, sender: "CommandSender", command: "Command", args: list[str]
     ) -> bool:
         if self.config is None:
-            self.logger.warning("Config is unset")
+            self.logger.error("*" * 40+"\nConfig is unset, this shouldn't be happening\n"+"*" * 40)
             return False
 
         if command.name != "twitch":
