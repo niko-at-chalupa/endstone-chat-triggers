@@ -52,4 +52,7 @@ class WorkflowManager:
                     player.send_message("More details in the server console.")
 
         for workflow in self.workflows:
-            self._plugin.server.broadcast(f"{ColorFormat.GREEN}Workflow {ColorFormat.BOLD}{workflow.name}{ColorFormat.RESET}{ColorFormat.GREEN} succeeded load", "twitch_spawn.command.twitch")
+            self._plugin.server.broadcast(
+                f"{ColorFormat.GREEN}Workflow {ColorFormat.BOLD}{workflow.name}{ColorFormat.RESET}{ColorFormat.GREEN} succeeded load",
+                "twitch_spawn.command.twitch",
+            )

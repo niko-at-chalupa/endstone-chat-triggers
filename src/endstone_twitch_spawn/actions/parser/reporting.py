@@ -110,6 +110,7 @@ def print_issues(issues: list[Issue], logger: Logger) -> None:
     else:
         logger.warning(summary)
 
+
 def format_issue_mc(issue: Issue) -> str:
     is_error = issue.severity == Severity.ERROR
     sev_color = ColorFormat.RED if is_error else ColorFormat.YELLOW
@@ -138,6 +139,7 @@ def format_issue_mc(issue: Issue) -> str:
         lines.append(f"  {sev_color}-> {ColorFormat.RESET}{issue.help}")
 
     return "\n".join(lines)
+
 
 def format_issues_mc(issues: list[Issue]) -> str:
     """

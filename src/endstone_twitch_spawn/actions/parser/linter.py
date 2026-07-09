@@ -59,6 +59,7 @@ class RuleRegistry:
             if func not in cls._rules:  # avoid dupes on module re-import
                 cls._rules.append(func)
             return func
+
         return decorator
 
     @classmethod
@@ -75,8 +76,11 @@ def _issue(file: Path, line: int | None, **kwargs) -> Issue:
 
 def _load_error_issue(file: Path, error: WorkflowLoadError) -> Issue:
     return _issue(
-        file, None,
-        code="E000", name="invalid_workflow_file", severity=Severity.ERROR,
+        file,
+        None,
+        code="E000",
+        name="invalid_workflow_file",
+        severity=Severity.ERROR,
         help=str(error),
     )
 
@@ -85,11 +89,16 @@ def _load_error_issue(file: Path, error: WorkflowLoadError) -> Issue:
 def check_missing_name(data: CommentedMap, file: Path) -> list[Issue]:
     name = data.get("name", "")
     if not name or not str(name).strip():
-        return [_issue(
-            file, _get_line(data),
-            code="E001", name="missing_workflow_name", severity=Severity.ERROR,
-            help="Add a 'name' field at the root of your YAML mapping.",
-        )]
+        return [
+            _issue(
+                file,
+                _get_line(data),
+                code="E001",
+                name="missing_workflow_name",
+                severity=Severity.ERROR,
+                help="Add a 'name' field at the root of your YAML mapping.",
+            )
+        ]
     return []
 
 
@@ -99,11 +108,16 @@ def check_empty_events(data: CommentedMap, file: Path) -> list[Issue]:
     if isinstance(events, str):
         events = [events]
     if not events:
-        return [_issue(
-            file, _get_line(data),
-            code="W012", name="no_trigger_events", severity=Severity.WARNING,
-            help="Without an 'event', this workflow will never be triggered.",
-        )]
+        return [
+            _issue(
+                file,
+                _get_line(data),
+                code="W012",
+                name="no_trigger_events",
+                severity=Severity.WARNING,
+                help="Without an 'event', this workflow will never be triggered.",
+            )
+        ]
     return []
 
 
@@ -113,11 +127,16 @@ def check_blank_event_names(data: CommentedMap, file: Path) -> list[Issue]:
     if isinstance(events, str):
         events = [events]
     if any(not e or not str(e).strip() for e in events):
-        return [_issue(
-            file, _get_line(data),
-            code="E002", name="blank_event_name", severity=Severity.ERROR,
-            help="One or more 'event' entries are empty strings.",
-        )]
+        return [
+            _issue(
+                file,
+                _get_line(data),
+                code="E002",
+                name="blank_event_name",
+                severity=Severity.ERROR,
+                help="One or more 'event' entries are empty strings.",
+            )
+        ]
     return []
 
 
@@ -132,33 +151,48 @@ def check_duplicate_events(data: CommentedMap, file: Path) -> list[Issue]:
             dupes.add(name)
         seen.add(name)
     if dupes:
-        return [_issue(
-            file, _get_line(data),
-            code="W013", name="duplicate_trigger_events", severity=Severity.WARNING,
-            help=f"Duplicate event(s) declared: {', '.join(sorted(dupes))}.",
-        )]
+        return [
+            _issue(
+                file,
+                _get_line(data),
+                code="W013",
+                name="duplicate_trigger_events",
+                severity=Severity.WARNING,
+                help=f"Duplicate event(s) declared: {', '.join(sorted(dupes))}.",
+            )
+        ]
     return []
 
 
 @RuleRegistry.register()
 def check_empty_steps(data: CommentedMap, file: Path) -> list[Issue]:
     if not data.get("steps"):
-        return [_issue(
-            file, _get_line(data),
-            code="E003", name="no_steps", severity=Severity.ERROR,
-            help="Workflow has no 'steps'; it would trigger and do nothing.",
-        )]
+        return [
+            _issue(
+                file,
+                _get_line(data),
+                code="E003",
+                name="no_steps",
+                severity=Severity.ERROR,
+                help="Workflow has no 'steps'; it would trigger and do nothing.",
+            )
+        ]
     return []
 
 
 @RuleRegistry.register()
 def check_fail_steps_without_steps(data: CommentedMap, file: Path) -> list[Issue]:
     if data.get("fail_steps") and not data.get("steps"):
-        return [_issue(
-            file, _get_line(data),
-            code="W014", name="fail_steps_without_steps", severity=Severity.WARNING,
-            help="'fail_steps' defined but there are no 'steps' that could fail.",
-        )]
+        return [
+            _issue(
+                file,
+                _get_line(data),
+                code="W014",
+                name="fail_steps_without_steps",
+                severity=Severity.WARNING,
+                help="'fail_steps' defined but there are no 'steps' that could fail.",
+            )
+        ]
     return []
 
 
@@ -175,11 +209,16 @@ def check_duplicate_conditions(data: CommentedMap, file: Path) -> list[Issue]:
                 dupes.add(command)
             seen.add(key)
     if dupes:
-        return [_issue(
-            file, _get_line(data),
-            code="W015", name="duplicate_conditions", severity=Severity.WARNING,
-            help=f"Duplicate condition(s) for command(s): {', '.join(sorted(dupes))}.",
-        )]
+        return [
+            _issue(
+                file,
+                _get_line(data),
+                code="W015",
+                name="duplicate_conditions",
+                severity=Severity.WARNING,
+                help=f"Duplicate condition(s) for command(s): {', '.join(sorted(dupes))}.",
+            )
+        ]
     return []
 
 
