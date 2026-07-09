@@ -36,16 +36,6 @@ class TwitchSpawnPlugin(Plugin):
         )
         self.subcommands: list[Subcommands] = [WorkflowSubcommands(self)]
 
-        self.workflow_manager.scan_for_workflows()
-        if len(self.workflows) > 0:
-            self.logger.info(
-                f"Found {cf.BOLD}{len(self.workflows)}{cf.RESET} workflows in {self.workflow_manager.folder}."
-            )
-        else:
-            self.logger.warning(
-                f"No workflows were found in {self.workflow_manager.folder}."
-            )
-
         if self.config.streamlabs_socket_token:
             self.logger.info("Connecting to Streamlabs Socket API...")
             self._streamlabs_event_handler = StreamlabsEventHandler(self.logger)
@@ -136,3 +126,15 @@ class TwitchSpawnPlugin(Plugin):
             self.logger.error(f"{traceback.format_exc()}")
             sender.send_error_message(self.config.messages.generic_error)
             return False
+
+    def on_enable(self):
+        self.workflow_manager.scan_for_workflows()
+
+        if len(self.workflows) > 0:
+            self.logger.info(
+                f"Found {cf.BOLD}{len(self.workflows)}{cf.RESET} workflows in {self.workflow_manager.folder}."
+            )
+        else:
+            self.logger.warning(
+                f"No workflows were found in {self.workflow_manager.folder}."
+            )
