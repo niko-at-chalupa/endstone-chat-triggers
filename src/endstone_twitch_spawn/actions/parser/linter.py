@@ -7,9 +7,15 @@ from ruamel.yaml.comments import CommentedMap
 from ..models import Issue, Severity, Workflow, FailedWorkflow
 from .parser import parse_workflow_file
 
+from ...events import ALL_EVENTS
+
 _yaml = YAML()
 
 LintRule = Callable[[CommentedMap, Path], list[Issue]]
+
+VALID_EVENTS: list[str] = []
+for event in ALL_EVENTS:
+    VALID_EVENTS.append(str(event.event_name))
 
 
 class WorkflowLoadError(Exception):
@@ -217,6 +223,30 @@ def check_duplicate_conditions(data: CommentedMap, file: Path) -> list[Issue]:
                 name="duplicate_conditions",
                 severity=Severity.WARNING,
                 help=f"Duplicate condition(s) for command(s): {', '.join(sorted(dupes))}.",
+            )
+        ]
+    return []
+
+
+@RuleRegistry.register()
+def check_unknown_events(data: CommentedMap, file: Path) -> list[Issue]:
+
+    events = data.get("event", [])
+    if isinstance(events, str):
+        events = [events]
+    unknown = sorted(
+        {e for e in events if e and str(e).strip() and e not in VALID_EVENTS}
+    )
+    if unknown:
+        return [
+            _issue(
+                file,
+                _get_line(data),
+                code="W016",
+                name="unknown_event",
+                severity=Severity.WARNING,
+                help=f"Unrecognized event(s): {', '.join(unknown)}. "
+                     f"Valid events are: {', '.join(sorted(VALID_EVENTS))}.",
             )
         ]
     return []
