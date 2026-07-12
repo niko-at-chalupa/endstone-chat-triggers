@@ -39,7 +39,7 @@ def stream_event_handler(
     return decorator
 
 
-class streamEventHandler:
+class StreamEventHandler:
     def __init__(self, logger: Logger):
         self._logger = logger
         self._handlers: dict[Type[StreamEvent], list[Callable[[Any], Any]]] = {}
