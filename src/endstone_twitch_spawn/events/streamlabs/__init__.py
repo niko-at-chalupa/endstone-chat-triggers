@@ -24,11 +24,11 @@ from .models import (
     StreamLabelsUnderlyingData,
     StreamLabelsUnderlyingMessage,
     AlertPlayingMessage,
-    TwitchFollowMessage as StreamlabsTwitchFollowMessage,
-    TwitchSubscriptionMessage as StreamlabsTwitchSubscriptionMessage,
-    TwitchBitsMessage as StreamlabsTwitchBitsMessage,
-    TwitchHostMessage as StreamlabsTwitchHostMessage,
-    TwitchRaidMessage as StreamlabsTwitchRaidMessage,
+    TwitchFollowMessage,
+    TwitchSubscriptionMessage,
+    TwitchBitsMessage,
+    TwitchHostMessage,
+    TwitchRaidMessage,
 )
 
 __all__ = [
@@ -55,9 +55,9 @@ __all__ = [
     "StreamLabelsUnderlyingData",
     "StreamLabelsUnderlyingMessage",
     "AlertPlayingMessage",
-    "StreamlabsTwitchFollowMessage",
-    "StreamlabsTwitchSubscriptionMessage",
-    "StreamlabsTwitchBitsMessage",
-    "StreamlabsTwitchHostMessage",
-    "StreamlabsTwitchRaidMessage",
+    "TwitchFollowMessage",
+    "TwitchSubscriptionMessage",
+    "TwitchBitsMessage",
+    "TwitchHostMessage",
+    "TwitchRaidMessage",
 ]
