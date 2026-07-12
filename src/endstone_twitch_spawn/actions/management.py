@@ -51,8 +51,18 @@ class WorkflowManager:
                 if player.is_op:
                     player.send_message("More details in the server console.")
 
-        for workflow in self.workflows:
-            self._plugin.server.broadcast(
-                f"{ColorFormat.GREEN}Workflow {ColorFormat.BOLD}{workflow.name}{ColorFormat.RESET}{ColorFormat.GREEN} succeeded load",
-                "twitch_spawn.command.twitch",
-            )
+        for workflow in self.workflows:     
+            if len(workflow.warnings) > 0:
+                self._plugin.server.broadcast(
+                    f"{ColorFormat.YELLOW}Workflow {ColorFormat.BOLD}{workflow.name}{ColorFormat.RESET}{ColorFormat.YELLOW} emitted warnings, but succeeded load",
+                    "twitch_spawn.command.twitch",
+                )
+                print_issues(workflow.warnings, self._logger)
+                for player in self._plugin.server.online_players:
+                    if player.is_op:
+                        player.send_message(format_issues_mc(workflow.warnings))
+            else:
+                self._plugin.server.broadcast(
+                    f"{ColorFormat.GREEN}Workflow {ColorFormat.BOLD}{workflow.name}{ColorFormat.RESET}{ColorFormat.GREEN} succeeded load",
+                    "twitch_spawn.command.twitch",
+                )

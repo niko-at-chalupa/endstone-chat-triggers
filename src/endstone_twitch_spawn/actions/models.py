@@ -21,17 +21,6 @@ class ResolvedCondition(Condition):
     actual: bool
 
 
-class Workflow(BaseModel):
-    name: str
-    event_names: List[str] = Field(default_factory=list)
-    conditions: List[Condition] = Field(default_factory=list)
-    steps: List[str] = Field(default_factory=list)
-    fail_steps: List[str] = Field(default_factory=list)
-
-    source_file: Path | None = None
-    source_line: int | None = None
-
-
 class ExecutionResult(BaseModel):
     workflow_name: str
     triggered: bool
@@ -57,3 +46,15 @@ class FailedWorkflow(BaseModel):
     name: str | None = None
     file: Path
     issues: list[Issue] = Field(default_factory=list)
+
+
+class Workflow(BaseModel):
+    name: str
+    event_names: List[str] = Field(default_factory=list)
+    conditions: List[Condition] = Field(default_factory=list)
+    steps: List[str] = Field(default_factory=list)
+    fail_steps: List[str] = Field(default_factory=list)
+    warnings: List[Issue]
+
+    source_file: Path | None = None
+    source_line: int | None = None

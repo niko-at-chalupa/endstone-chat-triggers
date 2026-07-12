@@ -238,7 +238,8 @@ def validate_for_registration(path: Path) -> Workflow | FailedWorkflow:
     Lints the raw YAML first. If there are any ERROR-severity issues,
     returns a FailedWorkflow (carrying all issues, warnings included)
     without touching parser.py at all. Otherwise, delegates to
-    parser.parse_workflow_file to build the real Workflow.
+    parser.parse_workflow_file to build the real Workflow, attaching
+    the lint warnings so they aren't silently dropped.
     """
     try:
         data = _load_raw(path)
@@ -255,4 +256,6 @@ def validate_for_registration(path: Path) -> Workflow | FailedWorkflow:
             issues=issues,
         )
 
-    return parse_workflow_file(path)
+    workflow = parse_workflow_file(path)
+    workflow.warnings = issues
+    return workflow
