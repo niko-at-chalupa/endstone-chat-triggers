@@ -2,13 +2,9 @@ from typing import List, TYPE_CHECKING
 from .models import Workflow, ResolvedCondition
 from endstone.plugin import Plugin
 from .models import ExecutionResult
-from ..streamlabs.events import (
-    StreamlabsEvent,
-    StreamlabsBaseEvent,
-    EVENTS,
-    streamlabs_event_handler,
-)
 from endstone import Logger
+from ..events.base import StreamEvent, stream_event_handler
+from ..events.streamlabs import EVENTS as STREAMLABS_EVENTS
 
 if TYPE_CHECKING:
     from endstone_twitch_spawn.actions import WorkflowManager
@@ -33,7 +29,7 @@ class WorkflowExecutor:
         self._command_executor = _CommandExecutor(self._plugin)
 
     def run_workflow(
-        self, workflow: Workflow, event: StreamlabsEvent
+        self, workflow: Workflow, event: StreamEvent
     ) -> ExecutionResult:
         condition_results: list[ResolvedCondition] = []
 
@@ -74,7 +70,7 @@ def _bind_events(event_types: list):
                     self.handle(event)
 
                 handler.__annotations__ = {"event": e_type}
-                return streamlabs_event_handler(handler)
+                return stream_event_handler(handler)
 
             arbitrary_name = f"_auto_handler_{index}"
             setattr(cls, arbitrary_name, create_handler(event_type))
@@ -84,7 +80,7 @@ def _bind_events(event_types: list):
     return class_decorator
 
 
-@_bind_events(EVENTS)
+@_bind_events(STREAMLABS_EVENTS)
 class ActionsListener:
     def __init__(
         self,
@@ -100,7 +96,7 @@ class ActionsListener:
     def _workflows(self) -> list[Workflow]:
         return self.workflow_manager.workflows
 
-    def handle(self, event: StreamlabsBaseEvent | StreamlabsEvent):
+    def handle(self, event: StreamEvent):
         matching_workflows = (
             w for w in self._workflows if event.event_name in w.event_names
         )
