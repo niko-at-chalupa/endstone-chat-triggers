@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 class TwitchSpawnApi:
     def __init__(self, twitch_spawn_plugin: "TwitchSpawnPlugin"):
         self.plugin = twitch_spawn_plugin
-        self._event_handler = self.plugin._streamlabs_event_handler
+        self._event_handler = self.plugin._stream_event_handler
 
     def register_events(self, listener: Any):
         """Registers Twitch event handlers."""
