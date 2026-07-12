@@ -7,9 +7,9 @@ from endstone import Logger
 
 
 class StreamEvent(ABC):
-    @property
-    def event_name(self) -> str:
-        return self.__class__.__name__
+    @classmethod
+    def event_name(cls) -> str:
+        return cls.__name__
 
 
 def stream_event_handler(func=None, *, priority: EventPriority = EventPriority.NORMAL):
