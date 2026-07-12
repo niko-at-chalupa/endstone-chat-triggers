@@ -5,16 +5,14 @@ import traceback
 from endstone.event import EventPriority
 from endstone import Logger
 
+
 class StreamEvent(ABC):
     @property
     def event_name(self) -> str:
         return self.__class__.__name__
 
 
-
-def stream_event_handler(
-    func=None, *, priority: EventPriority = EventPriority.NORMAL
-):
+def stream_event_handler(func=None, *, priority: EventPriority = EventPriority.NORMAL):
     """
     Decorator to register an event handler.
 

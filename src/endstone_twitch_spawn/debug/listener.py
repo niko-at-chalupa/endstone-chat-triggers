@@ -2,6 +2,7 @@ from ..events.base import StreamEvent, stream_event_handler
 from ..events.streamlabs import EVENTS as STREAMLABS_EVENTS
 from endstone import Logger
 
+
 def _bind_events(event_types: list):
     def class_decorator(cls):
         for index, event_type in enumerate(event_types):
@@ -19,6 +20,7 @@ def _bind_events(event_types: list):
         return cls
 
     return class_decorator
+
 
 @_bind_events(STREAMLABS_EVENTS)
 class Listener:

@@ -58,6 +58,7 @@ class TwitchSpawnPlugin(Plugin):
         if self.config.log_events:
             self.logger.set_level(self.logger.Level.DEBUG)
             from .debug import Listener
+
             self._stream_event_handler.register_events(Listener)
 
         self.workflow_executor = WorkflowExecutor(self)

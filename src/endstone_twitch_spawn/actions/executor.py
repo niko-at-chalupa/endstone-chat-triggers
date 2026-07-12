@@ -28,9 +28,7 @@ class WorkflowExecutor:
         self._plugin = plugin
         self._command_executor = _CommandExecutor(self._plugin)
 
-    def run_workflow(
-        self, workflow: Workflow, event: StreamEvent
-    ) -> ExecutionResult:
+    def run_workflow(self, workflow: Workflow, event: StreamEvent) -> ExecutionResult:
         condition_results: list[ResolvedCondition] = []
 
         for condition in workflow.conditions:

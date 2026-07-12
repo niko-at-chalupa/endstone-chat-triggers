@@ -24,7 +24,6 @@ from .models import (
     StreamLabelsUnderlyingData,
     StreamLabelsUnderlyingMessage,
     AlertPlayingMessage,
-
     TwitchFollowMessage as StreamlabsTwitchFollowMessage,
     TwitchSubscriptionMessage as StreamlabsTwitchSubscriptionMessage,
     TwitchBitsMessage as StreamlabsTwitchBitsMessage,
