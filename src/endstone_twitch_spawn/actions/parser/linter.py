@@ -15,7 +15,7 @@ LintRule = Callable[[CommentedMap, Path], list[Issue]]
 
 VALID_EVENTS: list[str] = []
 for event in ALL_EVENTS:
-    VALID_EVENTS.append(str(event.event_name))
+    VALID_EVENTS.append(str(event.event_name()))
 
 
 class WorkflowLoadError(Exception):
