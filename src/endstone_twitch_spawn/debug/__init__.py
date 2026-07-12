@@ -1,4 +1,3 @@
-from .debug_twitch import Listener as TwitchDebugListener
-from .debug_generic import Listener as GenericDebugListener
+from .listener import Listener
 
-__all__ = ["TwitchDebugListener", "GenericDebugListener"]
+__all__ = ["Listener"]

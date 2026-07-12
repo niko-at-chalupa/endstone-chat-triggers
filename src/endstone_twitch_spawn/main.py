@@ -6,7 +6,7 @@ from endstone.command import Command, CommandSender
 from .commands import WorkflowSubcommands, Subcommands
 import traceback
 from .events.streamlabs.client import StreamlabsClient
-from .events.base import stream_event_handler
+from .events.base import stream_event_handler, StreamEventHandler
 
 
 class TwitchSpawnPlugin(Plugin):
@@ -39,7 +39,7 @@ class TwitchSpawnPlugin(Plugin):
 
         if self.config.streamlabs_socket_token:
             self.logger.info("Connecting to Streamlabs Socket API...")
-            self._stream_event_handler = stream_event_handler(self.logger)
+            self._stream_event_handler = StreamEventHandler(self.logger)
             self._client = StreamlabsClient(
                 self.logger,
                 self.config.streamlabs_socket_token,
@@ -57,13 +57,8 @@ class TwitchSpawnPlugin(Plugin):
 
         if self.config.log_events:
             self.logger.set_level(self.logger.Level.DEBUG)
-            from .debug import TwitchDebugListener, GenericDebugListener
-
-            for listener in [
-                TwitchDebugListener(self.logger),
-                GenericDebugListener(self.logger),
-            ]:
-                self._stream_event_handler.register_events(listener)
+            from .debug import Listener
+            self._stream_event_handler.register_events(Listener)
 
         self.workflow_executor = WorkflowExecutor(self)
         self._stream_event_handler.register_events(
