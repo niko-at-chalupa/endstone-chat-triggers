@@ -6,7 +6,7 @@ from endstone.command import Command, CommandSender
 from .commands import WorkflowSubcommands, Subcommands
 import traceback
 from .events.streamlabs.client import StreamlabsClient
-from .events.base import stream_event_handler, StreamEventHandler
+from .events.base import StreamEventHandler
 
 
 class TwitchSpawnPlugin(Plugin):
