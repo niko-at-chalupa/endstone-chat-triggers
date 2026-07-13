@@ -16,6 +16,9 @@ class ConfigMessages(BaseModel):
 
 class Config(BaseModel):
     streamlabs_socket_token: str = ""
+    twitch_client_id: str = ""
+    twitch_client_secret: str = ""
+    event_source: str = "streamlabs"
     log_events: bool = False
     messages: ConfigMessages = Field(default_factory=ConfigMessages)
 
@@ -30,9 +33,21 @@ def load_config(plugin: Plugin) -> Config:
     yml.preserve_quotes = False
 
     defaults: dict[str, tuple[Any, str]] = {
+        "event_source": (
+            "streamlabs",
+            'Which event source to use: "streamlabs" or "twitchio". Determines which client the plugin connects with.',
+        ),
         "streamlabs_socket_token": (
             "",
-            '"Your Socket API Token" from https://streamlabs.com/dashboard#/settings/api-settings. You can also do this through environment variable (STREAMLABS_SOCKET_TOKEN), if perferred.',
+            '"Your Socket API Token" from https://streamlabs.com/dashboard#/settings/api-settings. You can also do this through environment variable (STREAMLABS_SOCKET_TOKEN), if perferred. Only used when event_source is "streamlabs".',
+        ),
+        "twitch_client_id": (
+            "",
+            "Client ID from your registered app at https://dev.twitch.tv/console/apps. Only used when event_source is \"twitchio\".",
+        ),
+        "twitch_client_secret": (
+            "",
+            "Client Secret from your registered app at https://dev.twitch.tv/console/apps. Only used when event_source is \"twitchio\".",
         ),
         # "log_events" is less scary than "debug," people shouldn't be afraid of using this
         "log_events": (
