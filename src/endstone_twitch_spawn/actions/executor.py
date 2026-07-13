@@ -96,7 +96,7 @@ class ActionsListener:
 
     def handle(self, event: StreamEvent):
         matching_workflows = (
-            w for w in self._workflows if event.event_name() in w.event_names
+            w for w in self._workflows if event.event_name in w.event_names
         )
 
         for workflow in matching_workflows:
