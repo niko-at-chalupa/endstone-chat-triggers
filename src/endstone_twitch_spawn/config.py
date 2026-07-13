@@ -15,10 +15,10 @@ class ConfigMessages(BaseModel):
 
 
 class Config(BaseModel):
+    event_source: str = "streamlabs"
     streamlabs_socket_token: str = ""
     twitch_client_id: str = ""
     twitch_client_secret: str = ""
-    event_source: str = "streamlabs"
     log_events: bool = False
     messages: ConfigMessages = Field(default_factory=ConfigMessages)
 
