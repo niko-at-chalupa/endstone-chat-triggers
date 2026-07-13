@@ -5,15 +5,13 @@ from .models import ExecutionResult
 from endstone import Logger
 from ..events.base import StreamEvent, stream_event_handler
 from ..events.streamlabs import EVENTS as STREAMLABS_EVENTS
+from ..events.twitchio import EVENTS as TWITCHIO_EVENTS
 
 if TYPE_CHECKING:
     from endstone_twitch_spawn.actions import WorkflowManager
 
 
 class _CommandExecutor:
-    # Why do we need this? We're going to implement custom commands
-    # and stuff later on.
-
     def __init__(self, plugin: Plugin):
         self._plugin = plugin
 
@@ -32,12 +30,12 @@ class WorkflowExecutor:
         condition_results: list[ResolvedCondition] = []
 
         for condition in workflow.conditions:
-            command = condition.command  # TODO: make module that resolves placeholders
+            command = condition.command
             actual = self._command_executor.run(command)
             condition_results.append(condition.resolve(actual))
             if actual != condition.expected:
                 for fail_step in workflow.fail_steps:
-                    command = fail_step  # TODO: make module that resolves placeholders
+                    command = fail_step
                     self._command_executor.run(command)
                 return ExecutionResult(
                     workflow_name=workflow.name,
@@ -47,7 +45,7 @@ class WorkflowExecutor:
 
         ran_steps: List[str] = []
         for step in workflow.steps:
-            command = step  # TODO: make module that resolves placeholders
+            command = step
             self._command_executor.run(command)
             ran_steps.append(command)
 
@@ -78,7 +76,7 @@ def _bind_events(event_types: list):
     return class_decorator
 
 
-@_bind_events(STREAMLABS_EVENTS)
+@_bind_events(STREAMLABS_EVENTS + TWITCHIO_EVENTS)
 class ActionsListener:
     def __init__(
         self,
