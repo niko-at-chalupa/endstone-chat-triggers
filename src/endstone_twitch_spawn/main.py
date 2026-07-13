@@ -74,7 +74,7 @@ class TwitchSpawnPlugin(Plugin):
                 self.config.twitch_client_secret,
                 self._stream_event_handler,
             )
-            self._client.start()
+            self._client.run_background()
 
         else:
             self.logger.error(
@@ -98,7 +98,10 @@ class TwitchSpawnPlugin(Plugin):
 
     def on_disable(self):
         try:
-            self._client.stop()
+            if self.config.event_source == "twitchio":
+                self._client.stop_background()
+            else:
+                self._client.stop()
         except AttributeError:
             pass
 

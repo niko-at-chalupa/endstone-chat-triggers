@@ -27,10 +27,23 @@ class TwitchIoClient(twitchio.Client):
         self._logger = logger
         self._stream_event_handler = stream_event_handler
 
-    def start(self):
-        endstone_asyncio.submit(super().start())
+    def run_background(self):
+        future = endstone_asyncio.submit(self._start_async())
+        future.add_done_callback(self._on_start_done)
 
-    def stop(self):
+    async def _start_async(self):
+        import asyncio
+        loop = asyncio.get_running_loop()
+        loop.add_signal_handler = lambda *args, **kwargs: None
+        await super().start()
+
+    def _on_start_done(self, future):
+        try:
+            future.result()
+        except Exception as e:
+            self._logger.error(f"TwitchIO client failed to start: {e}")
+
+    def stop_background(self):
         endstone_asyncio.submit(self.close())
 
     async def event_ready(self):
@@ -42,7 +55,7 @@ class TwitchIoClient(twitchio.Client):
                 "bits:read",
                 "channel:read:redemptions",
             ])
-            url = self.get_authorization_url(scopes=scopes)
+            # url = self.adapter.something  / Pending to do
             self._logger.warning(f"No Twitch token found. Visit this URL to authorize: {url}")
 
     async def event_oauth_authorized(self, payload):
