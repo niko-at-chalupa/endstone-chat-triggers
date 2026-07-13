@@ -31,4 +31,4 @@ class Listener:
         self._logger = logger
 
     def handle(self, event: StreamEvent):
-        self._logger.debug(f"Caught event {event.event_name}: {event}")
+        self._logger.debug(f"Caught event {event.event_name()}: {event}")
