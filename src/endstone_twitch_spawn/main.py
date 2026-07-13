@@ -6,6 +6,7 @@ from endstone.command import Command, CommandSender
 from .commands import WorkflowSubcommands, Subcommands
 import traceback
 from .events.streamlabs.client import StreamlabsClient
+from .events.twitchio.client import TwitchIoClient
 from .events.base import StreamEventHandler
 
 
@@ -36,20 +37,49 @@ class TwitchSpawnPlugin(Plugin):
             self.data_folder / "workflows", self.logger, self
         )
         self.subcommands: list[Subcommands] = [WorkflowSubcommands(self)]
+        self._stream_event_handler = StreamEventHandler(self.logger)
 
-        if self.config.streamlabs_socket_token:
+        if self.config.event_source == "streamlabs":
+            if not self.config.streamlabs_socket_token:
+                self.logger.error(
+                    "*" * 40
+                    + f"\nevent_source is \"streamlabs\" but no streamlabs_socket_token was set! Disabling plugin.\n\nPlease check \n{self.data_folder / 'config.yaml'}\nfor more info!\n"
+                    + "*" * 40
+                )
+                self.server.plugin_manager.disable_plugin(self)
+                return
+
             self.logger.info("Connecting to Streamlabs Socket API...")
-            self._stream_event_handler = StreamEventHandler(self.logger)
             self._client = StreamlabsClient(
                 self.logger,
                 self.config.streamlabs_socket_token,
                 self._stream_event_handler,
             )
             self._client.start()
+
+        elif self.config.event_source == "twitchio":
+            if not self.config.twitch_client_id or not self.config.twitch_client_secret:
+                self.logger.error(
+                    "*" * 40
+                    + f"\nevent_source is \"twitchio\" but twitch_client_id or twitch_client_secret is missing! Disabling plugin.\n\nPlease check \n{self.data_folder / 'config.yaml'}\nfor more info!\n"
+                    + "*" * 40
+                )
+                self.server.plugin_manager.disable_plugin(self)
+                return
+
+            self.logger.info("Connecting to Twitch via TwitchIO...")
+            self._client = TwitchIoClient(
+                self.logger,
+                self.config.twitch_client_id,
+                self.config.twitch_client_secret,
+                self._stream_event_handler,
+            )
+            self._client.start()
+
         else:
             self.logger.error(
                 "*" * 40
-                + f"\nNo streamlabs_socket_token set through config! Disabling plugin.\n\nPlease check \n{self.data_folder / 'config.yaml'}\nfor more info!\n"
+                + f"\nInvalid event_source \"{self.config.event_source}\". Must be \"streamlabs\" or \"twitchio\". Disabling plugin.\n\nPlease check \n{self.data_folder / 'config.yaml'}\nfor more info!\n"
                 + "*" * 40
             )
             self.server.plugin_manager.disable_plugin(self)
