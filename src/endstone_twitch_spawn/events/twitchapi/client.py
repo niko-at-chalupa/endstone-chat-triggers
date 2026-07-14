@@ -1,5 +1,3 @@
-import asyncio
-import threading
 from typing import Optional
 from twitchAPI.twitch import Twitch
 from twitchAPI.type import AuthScope, TwitchAPIException
@@ -17,6 +15,7 @@ from twitchAPI.object.eventsub import (
 )
 from twitchAPI.helper import first
 from endstone import Logger
+from endstone import asyncio as endstone_asyncio
 from ..base import StreamEventHandler
 
 
@@ -38,29 +37,30 @@ class TwitchApiClient:
         self._stream_event_handler = stream_event_handler
         self._twitch: Optional[Twitch] = None
         self._websocket: Optional[EventSubWebsocket] = None
-        self._loop: Optional[asyncio.AbstractEventLoop] = None
-        self._thread: Optional[threading.Thread] = None
+        self._loop = endstone_asyncio.get_loop()
+        self._task: Optional[asyncio.Task] = None
         self._running = False
 
     def start(self):
         if self._running:
             return
         self._running = True
-        self._thread = threading.Thread(target=self._run_async, daemon=True)
-        self._thread.start()
+        self._task = endstone_asyncio.submit(self._async_main())
 
     def stop(self):
         self._running = False
-        if self._loop and self._websocket:
-            asyncio.run_coroutine_threadsafe(self._websocket.stop(), self._loop)
-        if self._thread and self._thread.is_alive():
-            self._thread.join(timeout=5)
-
-    def _run_async(self):
-        asyncio.run(self._async_main())
+        if self._task and not self._task.done():
+            self._task.cancel()
+        if self._websocket is not None:
+            try:
+                future = asyncio.run_coroutine_threadsafe(self._websocket.stop(), self._loop)
+                future.result(timeout=3)
+            except (RuntimeError, asyncio.TimeoutError, Exception) as e:
+                self._logger.debug(f"Error while stopping websocket: {e}")
+            finally:
+                self._websocket = None
 
     async def _async_main(self):
-        self._loop = asyncio.get_running_loop()
         try:
             self._twitch = await Twitch(self._client_id, self._client_secret)
             if self._twitch is None:
@@ -77,7 +77,6 @@ class TwitchApiClient:
             )
             user = await first(self._twitch.get_users())
             user_id = user.id
-
             self._websocket = EventSubWebsocket(self._twitch)
             self._websocket.start()
 
@@ -126,13 +125,21 @@ class TwitchApiClient:
             self._logger.info("TwitchAPI client connected and listening for events")
             while self._running:
                 await asyncio.sleep(1)
+        except asyncio.CancelledError:
+            self._logger.info("TwitchAPI client task cancelled")
+            raise
         except TwitchAPIException as e:
             self._logger.error(f"TwitchAPI connection error: {e}")
         except Exception as e:
             self._logger.error(f"Unexpected error in TwitchAPI client: {e}")
         finally:
-            if self._websocket:
-                await self._websocket.stop()
+            if self._websocket is not None:
+                try:
+                    await self._websocket.stop()
+                except RuntimeError:
+                    pass
+                finally:
+                    self._websocket = None
             if self._twitch:
                 await self._twitch.close()
 
@@ -145,6 +152,8 @@ class TwitchApiClient:
             self._logger.debug(f"Ignored Twitch event of type: {event_type}")
 
     async def _on_channel_follow(self, event: ChannelFollowEvent):
+        if self._twitch is None:
+            return
         data = event.event
         self._logger.debug(f"Follow from {data.user_name}")
         self._dispatch_event("follow", {
@@ -155,6 +164,8 @@ class TwitchApiClient:
         })
 
     async def _on_channel_subscribe(self, event: ChannelSubscribeEvent):
+        if self._twitch is None:
+            return
         data = event.event
         self._logger.debug(f"Subscription from {data.user_name}")
         self._dispatch_event("subscription", {
@@ -167,6 +178,8 @@ class TwitchApiClient:
         })
 
     async def _on_channel_subscription_gift(self, event: ChannelSubscriptionGiftEvent):
+        if self._twitch is None:
+            return
         data = event.event
         self._logger.debug(f"Subscription gift from {data.user_name}")
         self._dispatch_event("subscription", {
@@ -179,6 +192,8 @@ class TwitchApiClient:
         })
 
     async def _on_channel_subscription_message(self, event: ChannelSubscriptionMessageEvent):
+        if self._twitch is None:
+            return
         data = event.event
         self._logger.debug(f"Subscription message from {data.user_name}")
         self._dispatch_event("subscription", {
@@ -192,17 +207,21 @@ class TwitchApiClient:
         })
 
     async def _on_channel_cheer(self, event: ChannelCheerEvent):
+        if self._twitch is None:
+            return
         data = event.event
-        self._logger.debug(f"Bits from {data.user_name}: {data.amount}")
+        self._logger.debug(f"Bits from {data.user_name}: {data.bits}")
         self._dispatch_event("bits", {
             "user_id": data.user_id,
             "user_name": data.user_name,
             "user_login": data.user_login,
-            "amount": data.amount,
+            "amount": data.bits,
             "message": data.message,
         })
 
     async def _on_channel_raid(self, event: ChannelRaidEvent):
+        if self._twitch is None:
+            return
         data = event.event
         self._logger.debug(f"Raid from {data.from_broadcaster_user_name}")
         self._dispatch_event("raid", {
@@ -213,6 +232,8 @@ class TwitchApiClient:
         })
 
     async def _on_channel_points_redemption(self, event: ChannelPointsCustomRewardRedemptionAddEvent):
+        if self._twitch is None:
+            return
         data = event.event
         self._logger.debug(f"Channel points redemption: {data.reward.title}")
         self._dispatch_event("channel_points", {
@@ -226,6 +247,8 @@ class TwitchApiClient:
         })
 
     async def _on_prediction_begin(self, event: ChannelPredictionEvent):
+        if self._twitch is None:
+            return
         data = event.event
         self._logger.debug(f"Prediction started: {data.title}")
         self._dispatch_event("prediction", {
@@ -238,25 +261,29 @@ class TwitchApiClient:
         })
 
     async def _on_prediction_progress(self, event: ChannelPredictionEvent):
+        if self._twitch is None:
+            return
         data = event.event
         self._logger.debug(f"Prediction progress: {data.id}")
         self._dispatch_event("prediction", {
             "prediction_id": data.id,
-            "title": data.title,
-            "outcomes": data.outcomes,
-            "started_at": data.started_at,
+            "title": "",
+            "outcomes": [],
+            "started_at": "",
             "ended_at": None,
             "status": "progress",
         })
 
     async def _on_prediction_end(self, event: ChannelPredictionEndEvent):
+        if self._twitch is None:
+            return
         data = event.event
         self._logger.debug(f"Prediction ended: {data.id}")
         self._dispatch_event("prediction", {
             "prediction_id": data.id,
-            "title": data.title,
-            "outcomes": data.outcomes,
-            "started_at": data.started_at,
+            "title": "",
+            "outcomes": [],
+            "started_at": "",
             "ended_at": data.ended_at,
             "status": data.status,
         })
