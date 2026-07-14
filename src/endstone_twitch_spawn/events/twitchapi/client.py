@@ -63,6 +63,8 @@ class TwitchApiClient:
         self._loop = asyncio.get_running_loop()
         try:
             self._twitch = await Twitch(self._client_id, self._client_secret)
+            if self._twitch is None:
+                return
             await self._twitch.set_user_authentication(
                 self._access_token,
                 [
@@ -240,9 +242,9 @@ class TwitchApiClient:
         self._logger.debug(f"Prediction progress: {data.id}")
         self._dispatch_event("prediction", {
             "prediction_id": data.id,
-            "title": "",
-            "outcomes": [],
-            "started_at": "",
+            "title": data.title,
+            "outcomes": data.outcomes,
+            "started_at": data.started_at,
             "ended_at": None,
             "status": "progress",
         })
@@ -252,9 +254,9 @@ class TwitchApiClient:
         self._logger.debug(f"Prediction ended: {data.id}")
         self._dispatch_event("prediction", {
             "prediction_id": data.id,
-            "title": "",
-            "outcomes": [],
-            "started_at": "",
+            "title": data.title,
+            "outcomes": data.outcomes,
+            "started_at": data.started_at,
             "ended_at": data.ended_at,
             "status": data.status,
         })
