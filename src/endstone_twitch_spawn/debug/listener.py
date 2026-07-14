@@ -1,6 +1,6 @@
 from ..events.base import StreamEvent, stream_event_handler
 from ..events.streamlabs import EVENTS as STREAMLABS_EVENTS
-from ..events.twitchio import EVENTS as TWITCHIO_EVENTS
+from ..events.twitchapi import EVENTS as TWITCHAPI_EVENTS
 from endstone import Logger
 
 
@@ -23,7 +23,7 @@ def _bind_events(event_types: list):
     return class_decorator
 
 
-@_bind_events(STREAMLABS_EVENTS + TWITCHIO_EVENTS)
+@_bind_events(STREAMLABS_EVENTS + TWITCHAPI_EVENTS)
 class Listener:
     def __init__(
         self,
