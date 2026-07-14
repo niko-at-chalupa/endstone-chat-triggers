@@ -5,8 +5,6 @@ from endstone import ColorFormat as cf
 from endstone.command import Command, CommandSender
 from .commands import WorkflowSubcommands, Subcommands
 import traceback
-from .events.streamlabs.client import StreamlabsClient
-from .events.twitchio.client import TwitchIoClient
 from .events.base import StreamEventHandler
 
 
@@ -50,6 +48,7 @@ class TwitchSpawnPlugin(Plugin):
                 return
 
             self.logger.info("Connecting to Streamlabs Socket API...")
+            from .events.streamlabs.client import StreamlabsClient
             self._client = StreamlabsClient(
                 self.logger,
                 self.config.streamlabs_socket_token,
@@ -57,29 +56,32 @@ class TwitchSpawnPlugin(Plugin):
             )
             self._client.start()
 
-        elif self.config.event_source == "twitchio":
-            if not self.config.twitch_client_id or not self.config.twitch_client_secret:
+        elif self.config.event_source == "twitchapi":
+            if not self.config.twitch_client_id or not self.config.twitch_client_secret or not self.config.twitch_access_token or not self.config.twitch_refresh_token:
                 self.logger.error(
                     "*" * 40
-                    + f"\nevent_source is \"twitchio\" but twitch_client_id or twitch_client_secret is missing! Disabling plugin.\n\nPlease check \n{self.data_folder / 'config.yaml'}\nfor more info!\n"
+                    + f"\nevent_source is \"twitchapi\" but twitch_client_id, twitch_client_secret, twitch_access_token, or twitch_refresh_token is missing! Disabling plugin.\n\nPlease check \n{self.data_folder / 'config.yaml'}\nfor more info!\n"
                     + "*" * 40
                 )
                 self.server.plugin_manager.disable_plugin(self)
                 return
 
-            self.logger.info("Connecting to Twitch via TwitchIO...")
-            self._client = TwitchIoClient(
+            self.logger.info("Connecting to Twitch via TwitchAPI...")
+            from .events.twitchapi.client import TwitchApiClient
+            self._client = TwitchApiClient(
                 self.logger,
                 self.config.twitch_client_id,
                 self.config.twitch_client_secret,
+                self.config.twitch_access_token,
+                self.config.twitch_refresh_token,
                 self._stream_event_handler,
             )
-            self._client.run_background()
+            self._client.start()
 
         else:
             self.logger.error(
                 "*" * 40
-                + f"\nInvalid event_source \"{self.config.event_source}\". Must be \"streamlabs\" or \"twitchio\". Disabling plugin.\n\nPlease check \n{self.data_folder / 'config.yaml'}\nfor more info!\n"
+                + f"\nInvalid event_source \"{self.config.event_source}\". Must be \"streamlabs\" or \"twitchapi\". Disabling plugin.\n\nPlease check \n{self.data_folder / 'config.yaml'}\nfor more info!\n"
                 + "*" * 40
             )
             self.server.plugin_manager.disable_plugin(self)
@@ -88,7 +90,6 @@ class TwitchSpawnPlugin(Plugin):
         if self.config.log_events:
             self.logger.set_level(self.logger.Level.DEBUG)
             from .debug import Listener
-
             self._stream_event_handler.register_events(Listener(self.logger))
 
         self.workflow_executor = WorkflowExecutor(self)
@@ -98,10 +99,7 @@ class TwitchSpawnPlugin(Plugin):
 
     def on_disable(self):
         try:
-            if self.config.event_source == "twitchio":
-                self._client.stop_background()
-            else:
-                self._client.stop()
+            self._client.stop()
         except AttributeError:
             pass
 

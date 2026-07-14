@@ -16,7 +16,7 @@ dependencies = [
     "ruamel.yaml",
     "websocket-client",
     "rich",
-    "twitchio",
+    "twitchapi",
 ]
 
 [project.entry-points."endstone"]

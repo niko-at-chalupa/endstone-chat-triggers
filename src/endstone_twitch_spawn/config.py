@@ -19,6 +19,8 @@ class Config(BaseModel):
     streamlabs_socket_token: str = ""
     twitch_client_id: str = ""
     twitch_client_secret: str = ""
+    twitch_access_token: str = ""
+    twitch_refresh_token: str = ""
     log_events: bool = False
     messages: ConfigMessages = Field(default_factory=ConfigMessages)
 
@@ -35,7 +37,7 @@ def load_config(plugin: Plugin) -> Config:
     defaults: dict[str, tuple[Any, str]] = {
         "event_source": (
             "streamlabs",
-            'Which event source to use: "streamlabs" or "twitchio". Determines which client the plugin connects with.',
+            'Which event source to use: "streamlabs" or "twitchapi". Determines which client the plugin connects with.',
         ),
         "streamlabs_socket_token": (
             "",
@@ -43,13 +45,20 @@ def load_config(plugin: Plugin) -> Config:
         ),
         "twitch_client_id": (
             "",
-            "Client ID from your registered app at https://dev.twitch.tv/console/apps. Only used when event_source is \"twitchio\".",
+            "Client ID from your registered app at https://dev.twitch.tv/console/apps. Used for TwitchAPI.",
         ),
         "twitch_client_secret": (
             "",
-            "Client Secret from your registered app at https://dev.twitch.tv/console/apps. Only used when event_source is \"twitchio\".",
+            "Client Secret from your registered app at https://dev.twitch.tv/console/apps. Used for TwitchAPI.",
         ),
-        # "log_events" is less scary than "debug," people shouldn't be afraid of using this
+        "twitch_access_token": (
+            "",
+            "OAuth access token for TwitchAPI (https://twitchtokengenerator.com/). Can be obtained via OAuth flow. Only used when event_source is 'twitchapi'.",
+        ),
+        "twitch_refresh_token": (
+            "",
+            "OAuth refresh token for TwitchAPI (https://twitchtokengenerator.com/9. Used to renew access tokens. Only used when event_source is 'twitchapi'.",
+        ),
         "log_events": (
             False,
             "Log events by sending DEBUG messages. This will also set the log level to DEBUG, which may fill up the console with a lot of stuff. You can also do this through environment variable (DEBUG=1) if perferred.",
@@ -99,18 +108,6 @@ def load_config(plugin: Plugin) -> Config:
             return [commented_map_to_dict(v) for v in data]
         return data
 
-    def unflatten_dict(d: dict) -> dict:
-        result = {}
-        for key, value in d.items():
-            if "." in key:
-                parent, child = key.split(".", 1)
-                if parent not in result:
-                    result[parent] = {}
-                result[parent][child] = value
-            else:
-                result[key] = value
-        return result
-
     config_dict = commented_map_to_dict(existing)
 
     streamlabs_socket_token_env = os.environ.get("STREAMLABS_SOCKET_TOKEN")
@@ -129,6 +126,4 @@ def load_config(plugin: Plugin) -> Config:
             f"log_events was overridden to `{config_dict['log_events']}` by environment variable"
         )
 
-    nested_config = unflatten_dict(config_dict)
-
-    return Config(**nested_config)
+    return Config(**config_dict)
