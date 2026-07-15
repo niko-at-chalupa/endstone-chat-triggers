@@ -99,5 +99,3 @@ class ActionsListener:
 
         for workflow in matching_workflows:
             self.workflow_executor.run_workflow(workflow, event)
-
-        self._logger.info("handled")
