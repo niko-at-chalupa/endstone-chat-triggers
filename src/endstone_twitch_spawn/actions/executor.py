@@ -21,33 +21,89 @@ class _CommandExecutor:
         )
 
 
+def _get_multiplier(tc, event: StreamEvent) -> int:
+    from ..events.twitchapi.events import TwitchSubscriptionEvent, TwitchRaidEvent
+    if isinstance(event, TwitchSubscriptionEvent) and tc.apply_tiers:
+        tier = event.message[0].tier
+        return int(tier) // 1000
+    if isinstance(event, TwitchRaidEvent) and tc.max_viewer_multiplier is not None:
+        viewers = event.message[0].viewers
+        return min(viewers, tc.max_viewer_multiplier)
+    return 1
+
+
+def _check_twitch_conditions(tc, event: StreamEvent) -> bool:
+    from ..events.twitchapi.events import TwitchBitsEvent, TwitchChannelPointsEvent
+    if isinstance(event, TwitchBitsEvent) and tc.amount is not None:
+        return event.message[0].amount == tc.amount
+    if isinstance(event, TwitchChannelPointsEvent) and tc.reward_id is not None:
+        return event.message[0].reward_id == tc.reward_id
+    return True
+
+
 class WorkflowExecutor:
     def __init__(self, plugin: Plugin):
         self._plugin = plugin
         self._command_executor = _CommandExecutor(self._plugin)
 
+    def _resolve_targets(self, names: list[str]) -> list:
+        players = []
+        for name in names:
+            player = self._plugin.server.get_player(name)
+            if player is not None:
+                players.append(player)
+        return players
+
     def run_workflow(self, workflow: Workflow, event: StreamEvent) -> ExecutionResult:
         condition_results: list[ResolvedCondition] = []
 
         for condition in workflow.conditions:
-            command = condition.command
-            actual = self._command_executor.run(command)
+            actual = self._command_executor.run(condition.command)
             condition_results.append(condition.resolve(actual))
             if actual != condition.expected:
                 for fail_step in workflow.fail_steps:
-                    command = fail_step
-                    self._command_executor.run(command)
+                    self._command_executor.run(fail_step)
                 return ExecutionResult(
                     workflow_name=workflow.name,
                     triggered=False,
                     condition_results=condition_results,
                 )
 
-        ran_steps: List[str] = []
-        for step in workflow.steps:
-            command = step
-            self._command_executor.run(command)
-            ran_steps.append(command)
+        tc = workflow.twitch_conditions
+        multiplier = 1
+        targets = []
+
+        if tc:
+            if not _check_twitch_conditions(tc, event):
+                return ExecutionResult(
+                    workflow_name=workflow.name,
+                    triggered=False,
+                    condition_results=condition_results,
+                )
+            if tc.target:
+                targets = self._resolve_targets(tc.target)
+                if not targets:
+                    return ExecutionResult(
+                        workflow_name=workflow.name,
+                        triggered=False,
+                        condition_results=condition_results,
+                    )
+            multiplier = _get_multiplier(tc, event)
+
+        ran_steps: list[str] = []
+
+        if targets:
+            for target in targets:
+                for _ in range(multiplier):
+                    for step in workflow.steps:
+                        command = step.replace("{target}", target.name)
+                        self._command_executor.run(command)
+                        ran_steps.append(command)
+        else:
+            for _ in range(multiplier):
+                for step in workflow.steps:
+                    self._command_executor.run(step)
+                    ran_steps.append(step)
 
         return ExecutionResult(
             workflow_name=workflow.name,

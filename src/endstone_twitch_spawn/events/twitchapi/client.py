@@ -162,7 +162,7 @@ class TwitchApiClient:
             "user_id": data.user_id,
             "user_name": data.user_name,
             "user_login": data.user_login,
-            "followed_at": data.followed_at,
+            "followed_at": data.followed_at.isoformat(),
         })
 
     async def _on_channel_subscribe(self, event: ChannelSubscribeEvent):

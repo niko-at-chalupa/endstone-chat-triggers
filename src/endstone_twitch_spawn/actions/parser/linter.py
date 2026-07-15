@@ -227,6 +227,43 @@ def check_duplicate_conditions(data: CommentedMap, file: Path) -> list[Issue]:
         ]
     return []
 
+@RuleRegistry.register()
+def check_twitch_conditions(data: CommentedMap, file: Path) -> list[Issue]:
+    raw_twitch = data.get("twitch_conditions")
+    if not raw_twitch or not isinstance(raw_twitch, CommentedMap):
+        return []
+
+    events = data.get("event", [])
+    if isinstance(events, str):
+        events = [events]
+
+    issues = []
+
+    VALID_FIELDS = {
+        "TwitchBitsEvent": {"target", "amount"},
+        "TwitchChannelPointsEvent": {"target", "reward_id"},
+        "TwitchSubscriptionEvent": {"target", "apply_tiers"},
+        "TwitchRaidEvent": {"target", "max_viewer_multiplier"},
+        "TwitchFollowEvent": {"target"},
+        "TwitchPredictionEvent": set(),
+    }
+
+    for evt in events:
+        allowed = VALID_FIELDS.get(evt)
+        if allowed is None:
+            continue
+        for key in raw_twitch:
+            if key not in allowed:
+                issues.append(_issue(
+                    file,
+                    _get_line(raw_twitch),
+                    code="W017",
+                    name="invalid_twitch_condition_field",
+                    severity=Severity.WARNING,
+                    help=f"Field '{key}' is not valid for event '{evt}'. Valid fields: {', '.join(sorted(allowed)) or 'none'}.",
+                ))
+
+    return issues
 
 @RuleRegistry.register()
 def check_unknown_events(data: CommentedMap, file: Path) -> list[Issue]:
