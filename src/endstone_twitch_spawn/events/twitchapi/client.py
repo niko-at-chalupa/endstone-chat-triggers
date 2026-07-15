@@ -1,3 +1,4 @@
+import asyncio
 from typing import Optional
 from twitchAPI.twitch import Twitch
 from twitchAPI.type import AuthScope, TwitchAPIException
@@ -55,7 +56,7 @@ class TwitchApiClient:
             try:
                 future = asyncio.run_coroutine_threadsafe(self._websocket.stop(), self._loop)
                 future.result(timeout=3)
-            except (RuntimeError, asyncio.TimeoutError, Exception) as e:
+            except Exception as e:
                 self._logger.debug(f"Error while stopping websocket: {e}")
             finally:
                 self._websocket = None
@@ -77,6 +78,7 @@ class TwitchApiClient:
             )
             user = await first(self._twitch.get_users())
             user_id = user.id
+            self._logger.info(f"Trying to connect as {user.display_name}")
             self._websocket = EventSubWebsocket(self._twitch)
             self._websocket.start()
 
@@ -122,7 +124,7 @@ class TwitchApiClient:
                 self._on_prediction_end
             )
 
-            self._logger.info("TwitchAPI client connected and listening for events")
+            self._logger.info(f"TwitchAPI client connected and listening events for {user_id}")
             while self._running:
                 await asyncio.sleep(1)
         except asyncio.CancelledError:
