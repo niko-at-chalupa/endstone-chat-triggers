@@ -16,9 +16,15 @@ class _CommandExecutor:
         self._plugin = plugin
 
     def run(self, command_line: str) -> bool:
-        return self._plugin.server.dispatch_command(
-            self._plugin.server.command_sender, command_line
-        )
+        result = {}
+
+        def _task():
+            result["value"] = self._plugin.server.dispatch_command(
+                self._plugin.server.command_sender, command_line
+            )
+
+        self._plugin.server.scheduler.run_task(self._plugin, _task)
+        return result.get("value", False)
 
 
 def _get_multiplier(tc, event: StreamEvent) -> int:
@@ -61,8 +67,7 @@ class WorkflowExecutor:
             actual = self._command_executor.run(condition.command)
             condition_results.append(condition.resolve(actual))
             if actual != condition.expected:
-                for fail_step in workflow.fail_steps:
-                    self._command_executor.run(fail_step)
+                self._run_sync(lambda: self._run_steps(workflow.fail_steps))
                 return ExecutionResult(
                     workflow_name=workflow.name,
                     triggered=False,
@@ -70,40 +75,41 @@ class WorkflowExecutor:
                 )
 
         tc = workflow.twitch_conditions
-        multiplier = 1
-        targets = []
 
-        if tc:
-            if not _check_twitch_conditions(tc, event):
-                return ExecutionResult(
-                    workflow_name=workflow.name,
-                    triggered=False,
-                    condition_results=condition_results,
-                )
-            if tc.target:
-                targets = self._resolve_targets(tc.target)
-                if not targets:
-                    return ExecutionResult(
-                        workflow_name=workflow.name,
-                        triggered=False,
-                        condition_results=condition_results,
-                    )
-            multiplier = _get_multiplier(tc, event)
+        if tc and not _check_twitch_conditions(tc, event):
+            return ExecutionResult(
+                workflow_name=workflow.name,
+                triggered=False,
+                condition_results=condition_results,
+            )
 
         ran_steps: list[str] = []
 
-        if targets:
-            for target in targets:
+        def _task():
+            multiplier = 1
+            targets = []
+
+            if tc:
+                if tc.target:
+                    targets = self._resolve_targets(tc.target)
+                    if not targets:
+                        return
+                multiplier = _get_multiplier(tc, event)
+
+            if targets:
+                for target in targets:
+                    for _ in range(multiplier):
+                        for step in workflow.steps:
+                            command = step.replace("{target}", target.name)
+                            self._command_executor.run(command)
+                            ran_steps.append(command)
+            else:
                 for _ in range(multiplier):
                     for step in workflow.steps:
-                        command = step.replace("{target}", target.name)
-                        self._command_executor.run(command)
-                        ran_steps.append(command)
-        else:
-            for _ in range(multiplier):
-                for step in workflow.steps:
-                    self._command_executor.run(step)
-                    ran_steps.append(step)
+                        self._command_executor.run(step)
+                        ran_steps.append(step)
+
+        self._plugin.server.scheduler.run_task(self._plugin, _task)
 
         return ExecutionResult(
             workflow_name=workflow.name,
@@ -111,6 +117,9 @@ class WorkflowExecutor:
             ran_steps=ran_steps,
             condition_results=condition_results,
         )
+
+    def _run_sync(self, fn):
+        self._plugin.server.scheduler.run_task(self._plugin, fn)
 
 
 def _bind_events(event_types: list):
