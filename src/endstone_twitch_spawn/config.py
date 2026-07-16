@@ -15,7 +15,8 @@ class ConfigMessages(BaseModel):
 
 
 class Config(BaseModel):
-    event_source: str = "streamlabs"
+    use_streamlabs: bool = True
+    use_twitchapi: bool = False
     streamlabs_socket_token: str = ""
     twitch_client_id: str = ""
     twitch_client_secret: str = ""
@@ -35,13 +36,17 @@ def load_config(plugin: Plugin) -> Config:
     yml.preserve_quotes = False
 
     defaults: dict[str, tuple[Any, str]] = {
-        "event_source": (
-            "streamlabs",
-            'Which event source to use: "streamlabs" or "twitchapi". Determines which client the plugin connects with.',
+        "use_streamlabs": (
+            True,
+            'Whether to use Streamlabs as the event source. Only one of "use_streamlabs" or "use_twitchapi" should be enabled at a time.',
+        ),
+        "use_twitchapi": (
+            False,
+            'Whether to use the Twitch API as the event source. Only one of "use_streamlabs" or "use_twitchapi" should be enabled at a time.',
         ),
         "streamlabs_socket_token": (
             "",
-            '"Your Socket API Token" from https://streamlabs.com/dashboard#/settings/api-settings. You can also do this through environment variable (STREAMLABS_SOCKET_TOKEN), if perferred. Only used when event_source is "streamlabs".',
+            '"Your Socket API Token" from https://streamlabs.com/dashboard#/settings/api-settings. You can also do this through environment variable (STREAMLABS_SOCKET_TOKEN), if perferred. Only used when use_streamlabs is true.',
         ),
         "twitch_client_id": (
             "",
@@ -53,11 +58,11 @@ def load_config(plugin: Plugin) -> Config:
         ),
         "twitch_access_token": (
             "",
-            "OAuth access token for TwitchAPI (https://twitchtokengenerator.com/). Can be obtained via OAuth flow. Only used when event_source is 'twitchapi'.",
+            "OAuth access token for TwitchAPI (https://twitchtokengenerator.com/). Can be obtained via OAuth flow. Only used when use_twitchapi is true.",
         ),
         "twitch_refresh_token": (
             "",
-            "OAuth refresh token for TwitchAPI (https://twitchtokengenerator.com/9. Used to renew access tokens. Only used when event_source is 'twitchapi'.",
+            "OAuth refresh token for TwitchAPI (https://twitchtokengenerator.com/9. Used to renew access tokens. Only used when use_twitchapi is true.",
         ),
         "log_events": (
             False,
@@ -84,6 +89,16 @@ def load_config(plugin: Plugin) -> Config:
             existing = CommentedMap(existing or {})
     else:
         existing = CommentedMap()
+
+    if "event_source" in existing:
+        legacy_source = existing.pop("event_source")
+        if isinstance(legacy_source, str) and "use_streamlabs" not in existing:
+            existing["use_streamlabs"] = legacy_source.lower() == "streamlabs"
+        if isinstance(legacy_source, str) and "use_twitchapi" not in existing:
+            existing["use_twitchapi"] = legacy_source.lower() == "twitchapi"
+        logger.warning(
+            "Migrated legacy 'event_source' config key to 'use_streamlabs'/'use_twitchapi'"
+        )
 
     for key, (value, comment) in defaults.items():
         keys = key.split(".")
@@ -125,5 +140,16 @@ def load_config(plugin: Plugin) -> Config:
         logger.warning(
             f"log_events was overridden to `{config_dict['log_events']}` by environment variable"
         )
+
+    if config_dict.get("use_streamlabs") and config_dict.get("use_twitchapi"):
+        logger.warning(
+            "Both use_streamlabs and use_twitchapi are enabled; use_twitchapi will take precedence"
+        )
+        config_dict["use_streamlabs"] = False
+    elif not config_dict.get("use_streamlabs") and not config_dict.get("use_twitchapi"):
+        logger.warning(
+            "Neither use_streamlabs nor use_twitchapi is enabled; defaulting to use_streamlabs"
+        )
+        config_dict["use_streamlabs"] = True
 
     return Config(**config_dict)
