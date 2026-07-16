@@ -60,6 +60,17 @@ class WorkflowExecutor:
                 players.append(player)
         return players
 
+    def _get_user_name(self, event: StreamEvent) -> str | None:
+        from ..events.twitchapi.events import (
+            TwitchBitsEvent,
+            TwitchFollowEvent,
+            TwitchChannelPointsEvent,
+            TwitchSubscriptionEvent,
+        )
+        if isinstance(event, (TwitchBitsEvent, TwitchFollowEvent, TwitchChannelPointsEvent, TwitchSubscriptionEvent)):
+            return event.message[0].user_name
+        return None
+
     def run_workflow(self, workflow: Workflow, event: StreamEvent) -> ExecutionResult:
         condition_results: list[ResolvedCondition] = []
 
@@ -84,7 +95,7 @@ class WorkflowExecutor:
             )
 
         ran_steps: list[str] = []
-
+        user_name = self._get_user_name(event)
         def _task():
             multiplier = 1
             targets = []
@@ -101,13 +112,18 @@ class WorkflowExecutor:
                     for _ in range(multiplier):
                         for step in workflow.steps:
                             command = step.replace("{target}", target.name)
+                            if user_name:
+                                command = command.replace("{user_name}", user_name)
                             self._command_executor.run(command)
                             ran_steps.append(command)
             else:
                 for _ in range(multiplier):
                     for step in workflow.steps:
-                        self._command_executor.run(step)
-                        ran_steps.append(step)
+                        command = step
+                        if user_name:
+                            command = command.replace("{user_name}", user_name)
+                        self._command_executor.run(command)
+                        ran_steps.append(command)
 
         self._plugin.server.scheduler.run_task(self._plugin, _task)
 
