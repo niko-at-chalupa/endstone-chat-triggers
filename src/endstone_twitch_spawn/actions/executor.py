@@ -42,8 +42,11 @@ def _check_twitch_conditions(tc, event: StreamEvent) -> bool:
     from ..events.twitchapi.events import TwitchBitsEvent, TwitchChannelPointsEvent
     if isinstance(event, TwitchBitsEvent) and tc.amount is not None:
         return event.message[0].amount == tc.amount
-    if isinstance(event, TwitchChannelPointsEvent) and tc.reward_id is not None:
-        return event.message[0].reward_id == tc.reward_id
+    if isinstance(event, TwitchChannelPointsEvent):
+        if tc.reward_id is not None:
+            return event.message[0].reward_id == tc.reward_id
+        if tc.reward_title is not None:
+            return event.message[0].reward_title == tc.reward_title
     return True
 
 

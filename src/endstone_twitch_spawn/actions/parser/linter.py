@@ -241,7 +241,7 @@ def check_twitch_conditions(data: CommentedMap, file: Path) -> list[Issue]:
 
     VALID_FIELDS = {
         "TwitchBitsEvent": {"target", "amount"},
-        "TwitchChannelPointsEvent": {"target", "reward_id"},
+        "TwitchChannelPointsEvent": {"target", "reward_id", "reward_title"},
         "TwitchSubscriptionEvent": {"target", "apply_tiers"},
         "TwitchRaidEvent": {"target", "max_viewer_multiplier"},
         "TwitchFollowEvent": {"target"},

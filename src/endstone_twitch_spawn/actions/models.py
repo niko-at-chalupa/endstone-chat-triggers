@@ -20,6 +20,7 @@ class TwitchConditions(BaseModel):
     target: list[str] = Field(default_factory=list)
     amount: Optional[int] = None
     reward_id: Optional[str] = None
+    reward_title: Optional[str] = None
     apply_tiers: bool = False
     max_viewer_multiplier: Optional[int] = None
 
