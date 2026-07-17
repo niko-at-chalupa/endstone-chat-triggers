@@ -15,7 +15,13 @@ class ConfigMessages(BaseModel):
 
 
 class Config(BaseModel):
+    use_streamlabs: bool = True
+    use_twitchapi: bool = False
     streamlabs_socket_token: str = ""
+    twitch_client_id: str = ""
+    twitch_client_secret: str = ""
+    twitch_access_token: str = ""
+    twitch_refresh_token: str = ""
     log_events: bool = False
     messages: ConfigMessages = Field(default_factory=ConfigMessages)
 
@@ -30,11 +36,34 @@ def load_config(plugin: Plugin) -> Config:
     yml.preserve_quotes = False
 
     defaults: dict[str, tuple[Any, str]] = {
+        "use_streamlabs": (
+            True,
+            'Whether to use Streamlabs as the event source. Only one of "use_streamlabs" or "use_twitchapi" should be enabled at a time.',
+        ),
+        "use_twitchapi": (
+            False,
+            'Whether to use the Twitch API as the event source. Only one of "use_streamlabs" or "use_twitchapi" should be enabled at a time.',
+        ),
         "streamlabs_socket_token": (
             "",
-            '"Your Socket API Token" from https://streamlabs.com/dashboard#/settings/api-settings. You can also do this through environment variable (STREAMLABS_SOCKET_TOKEN), if perferred.',
+            '"Your Socket API Token" from https://streamlabs.com/dashboard#/settings/api-settings. You can also do this through environment variable (STREAMLABS_SOCKET_TOKEN), if perferred. Only used when use_streamlabs is true.',
         ),
-        # "log_events" is less scary than "debug," people shouldn't be afraid of using this
+        "twitch_client_id": (
+            "",
+            "Client ID from your registered app at https://dev.twitch.tv/console/apps. Used for TwitchAPI.",
+        ),
+        "twitch_client_secret": (
+            "",
+            "Client Secret from your registered app at https://dev.twitch.tv/console/apps. Used for TwitchAPI.",
+        ),
+        "twitch_access_token": (
+            "",
+            "OAuth access token for TwitchAPI (https://twitchtokengenerator.com/). Can be obtained via OAuth flow. Only used when use_twitchapi is true.",
+        ),
+        "twitch_refresh_token": (
+            "",
+            "OAuth refresh token for TwitchAPI (https://twitchtokengenerator.com/9. Used to renew access tokens. Only used when use_twitchapi is true.",
+        ),
         "log_events": (
             False,
             "Log events by sending DEBUG messages. This will also set the log level to DEBUG, which may fill up the console with a lot of stuff. You can also do this through environment variable (DEBUG=1) if perferred.",
@@ -61,6 +90,16 @@ def load_config(plugin: Plugin) -> Config:
     else:
         existing = CommentedMap()
 
+    if "event_source" in existing:
+        legacy_source = existing.pop("event_source")
+        if isinstance(legacy_source, str) and "use_streamlabs" not in existing:
+            existing["use_streamlabs"] = legacy_source.lower() == "streamlabs"
+        if isinstance(legacy_source, str) and "use_twitchapi" not in existing:
+            existing["use_twitchapi"] = legacy_source.lower() == "twitchapi"
+        logger.warning(
+            "Migrated legacy 'event_source' config key to 'use_streamlabs'/'use_twitchapi'"
+        )
+
     for key, (value, comment) in defaults.items():
         keys = key.split(".")
         current = existing
@@ -84,18 +123,6 @@ def load_config(plugin: Plugin) -> Config:
             return [commented_map_to_dict(v) for v in data]
         return data
 
-    def unflatten_dict(d: dict) -> dict:
-        result = {}
-        for key, value in d.items():
-            if "." in key:
-                parent, child = key.split(".", 1)
-                if parent not in result:
-                    result[parent] = {}
-                result[parent][child] = value
-            else:
-                result[key] = value
-        return result
-
     config_dict = commented_map_to_dict(existing)
 
     streamlabs_socket_token_env = os.environ.get("STREAMLABS_SOCKET_TOKEN")
@@ -114,6 +141,15 @@ def load_config(plugin: Plugin) -> Config:
             f"log_events was overridden to `{config_dict['log_events']}` by environment variable"
         )
 
-    nested_config = unflatten_dict(config_dict)
+    if config_dict.get("use_streamlabs") and config_dict.get("use_twitchapi"):
+        logger.warning(
+            "Both use_streamlabs and use_twitchapi are enabled; use_twitchapi will take precedence"
+        )
+        config_dict["use_streamlabs"] = False
+    elif not config_dict.get("use_streamlabs") and not config_dict.get("use_twitchapi"):
+        logger.warning(
+            "Neither use_streamlabs nor use_twitchapi is enabled; defaulting to use_streamlabs"
+        )
+        config_dict["use_streamlabs"] = True
 
-    return Config(**nested_config)
+    return Config(**config_dict)

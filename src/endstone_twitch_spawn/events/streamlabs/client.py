@@ -1,5 +1,5 @@
 import endstone
-from .events import StreamlabsEventHandler
+from ..base import StreamEventHandler
 import socketio
 
 STREAMLABS_SOCKET_URL = "https://sockets.streamlabs.com"
@@ -10,12 +10,12 @@ class StreamlabsClient:
         self,
         logger: endstone.Logger,
         token: str,
-        streamlabs_event_handler: StreamlabsEventHandler,
+        stream_event_handler: StreamEventHandler,
     ):
         self._token = token
         self._logger = logger
         self._client = socketio.Client()
-        self._streamlabs_event_handler = streamlabs_event_handler
+        self._streamlabs_event_handler = stream_event_handler
 
         self._client.on("connect", self._on_connect)
         self._client.on("disconnect", self._on_disconnect)

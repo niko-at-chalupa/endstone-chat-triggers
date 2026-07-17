@@ -7,9 +7,15 @@ from ruamel.yaml.comments import CommentedMap
 from ..models import Issue, Severity, Workflow, FailedWorkflow
 from .parser import parse_workflow_file
 
+from ...events import ALL_EVENTS
+
 _yaml = YAML()
 
 LintRule = Callable[[CommentedMap, Path], list[Issue]]
+
+VALID_EVENTS: list[str] = []
+for event in ALL_EVENTS:
+    VALID_EVENTS.append(str(event.event_name()))
 
 
 class WorkflowLoadError(Exception):
@@ -221,6 +227,67 @@ def check_duplicate_conditions(data: CommentedMap, file: Path) -> list[Issue]:
         ]
     return []
 
+@RuleRegistry.register()
+def check_twitch_conditions(data: CommentedMap, file: Path) -> list[Issue]:
+    raw_twitch = data.get("twitch_conditions")
+    if not raw_twitch or not isinstance(raw_twitch, CommentedMap):
+        return []
+
+    events = data.get("event", [])
+    if isinstance(events, str):
+        events = [events]
+
+    issues = []
+
+    VALID_FIELDS = {
+        "TwitchBitsEvent": {"target", "amount"},
+        "TwitchChannelPointsEvent": {"target", "reward_id", "reward_title"},
+        "TwitchSubscriptionEvent": {"target", "apply_tiers"},
+        "TwitchRaidEvent": {"target", "max_viewer_multiplier"},
+        "TwitchFollowEvent": {"target"},
+        "TwitchPredictionEvent": set(),
+    }
+
+    for evt in events:
+        allowed = VALID_FIELDS.get(evt)
+        if allowed is None:
+            continue
+        for key in raw_twitch:
+            if key not in allowed:
+                issues.append(_issue(
+                    file,
+                    _get_line(raw_twitch),
+                    code="W017",
+                    name="invalid_twitch_condition_field",
+                    severity=Severity.WARNING,
+                    help=f"Field '{key}' is not valid for event '{evt}'. Valid fields: {', '.join(sorted(allowed)) or 'none'}.",
+                ))
+
+    return issues
+
+@RuleRegistry.register()
+def check_unknown_events(data: CommentedMap, file: Path) -> list[Issue]:
+
+    events = data.get("event", [])
+    if isinstance(events, str):
+        events = [events]
+    unknown = sorted(
+        {e for e in events if e and str(e).strip() and e not in VALID_EVENTS}
+    )
+    if unknown:
+        return [
+            _issue(
+                file,
+                _get_line(data),
+                code="W016",
+                name="unknown_event",
+                severity=Severity.WARNING,
+                help=f"Unrecognized event(s): {', '.join(unknown)}. "
+                     f"Valid events are: {', '.join(sorted(VALID_EVENTS))}.",
+            )
+        ]
+    return []
+
 
 def lint_file(path: Path) -> list[Issue]:
     """Load and lint a workflow YAML file without building a Workflow."""
@@ -238,7 +305,8 @@ def validate_for_registration(path: Path) -> Workflow | FailedWorkflow:
     Lints the raw YAML first. If there are any ERROR-severity issues,
     returns a FailedWorkflow (carrying all issues, warnings included)
     without touching parser.py at all. Otherwise, delegates to
-    parser.parse_workflow_file to build the real Workflow.
+    parser.parse_workflow_file to build the real Workflow, attaching
+    the lint warnings so they aren't silently dropped.
     """
     try:
         data = _load_raw(path)
@@ -255,4 +323,6 @@ def validate_for_registration(path: Path) -> Workflow | FailedWorkflow:
             issues=issues,
         )
 
-    return parse_workflow_file(path)
+    workflow = parse_workflow_file(path)
+    workflow.warnings = issues
+    return workflow

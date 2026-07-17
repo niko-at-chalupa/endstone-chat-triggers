@@ -6,7 +6,7 @@ from typing import Any
 from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedMap, CommentedSeq
 
-from ..models import Condition, Workflow
+from ..models import Condition, Workflow, TwitchConditions
 
 yaml = YAML()
 yaml.preserve_quotes = True
@@ -52,9 +52,10 @@ def parse_workflow(workflow: str, source_file: Path | None = None) -> Workflow:
     if isinstance(raw_events, str):
         raw_events = [raw_events]
 
-    raw_conditions = data.get("conditions")
-    if raw_conditions is None:
-        raw_conditions = []
+    raw_conditions = data.get("conditions") or []
+
+    raw_twitch = data.get("twitch_conditions")
+    twitch_conditions = TwitchConditions(**raw_twitch) if isinstance(raw_twitch, dict) else None
 
     workflow_obj = Workflow(
         name=data.get("name", ""),
@@ -62,6 +63,7 @@ def parse_workflow(workflow: str, source_file: Path | None = None) -> Workflow:
         conditions=_parse_conditions(raw_conditions),  # type: ignore
         steps=list(data.get("steps", [])),
         fail_steps=list(data.get("fail_steps", [])),
+        twitch_conditions=twitch_conditions,
         source_file=source_file,
         source_line=_get_line(data),
     )

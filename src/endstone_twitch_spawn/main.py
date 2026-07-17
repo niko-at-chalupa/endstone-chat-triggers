@@ -1,11 +1,11 @@
 from .config import Config, load_config
 from endstone.plugin import Plugin
-from .streamlabs import StreamlabsClient, StreamlabsEventHandler
 from .actions import Workflow, WorkflowManager, ActionsListener, WorkflowExecutor
 from endstone import ColorFormat as cf
 from endstone.command import Command, CommandSender
 from .commands import WorkflowSubcommands, Subcommands
 import traceback
+from .events.base import StreamEventHandler
 
 
 class TwitchSpawnPlugin(Plugin):
@@ -35,37 +35,72 @@ class TwitchSpawnPlugin(Plugin):
             self.data_folder / "workflows", self.logger, self
         )
         self.subcommands: list[Subcommands] = [WorkflowSubcommands(self)]
+        self._stream_event_handler = StreamEventHandler(self.logger)
 
-        if self.config.streamlabs_socket_token:
-            self.logger.info("Connecting to Streamlabs Socket API...")
-            self._streamlabs_event_handler = StreamlabsEventHandler(self.logger)
-            self._client = StreamlabsClient(
-                self.logger,
-                self.config.streamlabs_socket_token,
-                self._streamlabs_event_handler,
-            )
-            self._client.start()
-        else:
-            self.logger.error(
-                "*" * 40
-                + f"\nNo streamlabs_socket_token set through config! Disabling plugin.\n\nPlease check \n{self.data_folder / 'config.yaml'}\nfor more info!\n"
-                + "*" * 40
-            )
-            self.server.plugin_manager.disable_plugin(self)
-            return
+        match (self.config.use_streamlabs, self.config.use_twitchapi):
+            case (True, False):
+                if not self.config.streamlabs_socket_token:
+                    self.logger.error(
+                        "*" * 40
+                        + f"\nuse_streamlabs is enabled but no streamlabs_socket_token was set! Disabling plugin.\n\nPlease check \n{self.data_folder / 'config.yaml'}\nfor more info!\n"
+                        + "*" * 40
+                    )
+                    self.server.plugin_manager.disable_plugin(self)
+                    return
+
+                self.logger.info("Connecting to Streamlabs Socket API...")
+                from .events.streamlabs.client import StreamlabsClient
+                self._client = StreamlabsClient(
+                    self.logger,
+                    self.config.streamlabs_socket_token,
+                    self._stream_event_handler,
+                )
+                self._client.start()
+            case (False, True):
+                if not self.config.twitch_client_id or not self.config.twitch_client_secret or not self.config.twitch_access_token or not self.config.twitch_refresh_token:
+                    self.logger.error(
+                        "*" * 40
+                        + f"\nuse_twitchapi is enabled but twitch_client_id, twitch_client_secret, twitch_access_token, or twitch_refresh_token is missing! Disabling plugin.\n\nPlease check \n{self.data_folder / 'config.yaml'}\nfor more info!\n"
+                        + "*" * 40
+                    )
+                    self.server.plugin_manager.disable_plugin(self)
+                    return
+
+                self.logger.info("Connecting to Twitch via TwitchAPI...")
+                from .events.twitchapi.client import TwitchApiClient
+                self._client = TwitchApiClient(
+                    self.logger,
+                    self.config.twitch_client_id,
+                    self.config.twitch_client_secret,
+                    self.config.twitch_access_token,
+                    self.config.twitch_refresh_token,
+                    self._stream_event_handler,
+                )
+                self._client.start()
+            case (True, True):
+                self.logger.error(
+                    "*" * 40
+                    + f"\nBoth use_streamlabs and use_twitchapi are enabled. Only one event source may be active at a time. Disabling plugin.\n\nPlease check \n{self.data_folder / 'config.yaml'}\nfor more info!\n"
+                    + "*" * 40
+                )
+                self.server.plugin_manager.disable_plugin(self)
+                return
+            case (False, False):
+                self.logger.error(
+                    "*" * 40
+                    + f"\nNo event source is enabled. Set either use_streamlabs or use_twitchapi to true. Disabling plugin.\n\nPlease check \n{self.data_folder / 'config.yaml'}\nfor more info!\n"
+                    + "*" * 40
+                )
+                self.server.plugin_manager.disable_plugin(self)
+                return
 
         if self.config.log_events:
             self.logger.set_level(self.logger.Level.DEBUG)
-            from .debug import TwitchDebugListener, GenericDebugListener
-
-            for listener in [
-                TwitchDebugListener(self.logger),
-                GenericDebugListener(self.logger),
-            ]:
-                self._streamlabs_event_handler.register_events(listener)
+            from .debug import Listener
+            self._stream_event_handler.register_events(Listener(self.logger))
 
         self.workflow_executor = WorkflowExecutor(self)
-        self._streamlabs_event_handler.register_events(
+        self._stream_event_handler.register_events(
             ActionsListener(self.logger, self.workflow_executor, self.workflow_manager)
         )
 

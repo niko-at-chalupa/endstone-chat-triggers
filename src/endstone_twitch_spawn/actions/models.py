@@ -2,7 +2,7 @@ from __future__ import annotations
 from enum import Enum
 from pathlib import Path
 
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel, Field
 
 
@@ -16,20 +16,16 @@ class Condition(BaseModel):
     def resolve(self, actual: bool) -> ResolvedCondition:
         return ResolvedCondition(**self.model_dump(), actual=actual)
 
+class TwitchConditions(BaseModel):
+    target: list[str] = Field(default_factory=list)
+    amount: Optional[int] = None
+    reward_id: Optional[str] = None
+    reward_title: Optional[str] = None
+    apply_tiers: bool = False
+    max_viewer_multiplier: Optional[int] = None
 
 class ResolvedCondition(Condition):
     actual: bool
-
-
-class Workflow(BaseModel):
-    name: str
-    event_names: List[str] = Field(default_factory=list)
-    conditions: List[Condition] = Field(default_factory=list)
-    steps: List[str] = Field(default_factory=list)
-    fail_steps: List[str] = Field(default_factory=list)
-
-    source_file: Path | None = None
-    source_line: int | None = None
 
 
 class ExecutionResult(BaseModel):
@@ -57,3 +53,16 @@ class FailedWorkflow(BaseModel):
     name: str | None = None
     file: Path
     issues: list[Issue] = Field(default_factory=list)
+
+
+class Workflow(BaseModel):
+    name: str
+    event_names: List[str] = Field(default_factory=list)
+    conditions: List[Condition] = Field(default_factory=list)
+    twitch_conditions: Optional[TwitchConditions] = None
+    steps: List[str] = Field(default_factory=list)
+    fail_steps: List[str] = Field(default_factory=list)
+    warnings: List[Issue] = Field(default_factory=list)
+
+    source_file: Path | None = None
+    source_line: int | None = None
