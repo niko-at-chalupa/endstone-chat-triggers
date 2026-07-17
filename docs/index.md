@@ -8,15 +8,6 @@
 ChatTriggers is an [Endstone](https://endstone.dev/stable/) plugin that integrates with your live streams and has things trigger based off of different events.
 
 ## Features
-
----
-
-> #### A lot of events!!
->
-> The plugin's able to respond to a wide variety of events! Donations, follows, subscriptions, resubs, bits...
-
-<!-- -->
-
 > #### An easy way to bind to events
 >
 > Implements _workflows_, which are an easy way to have commands be ran upon an event.
@@ -54,6 +45,12 @@ ChatTriggers is an [Endstone](https://endstone.dev/stable/) plugin that integrat
 >   - "say Chalupa7235 isn't in the server!"
 >   # ...you can add more if you'd like
 > ```
+
+<!-- -->
+
+> #### A lot of events!!
+>
+> The plugin's able to respond to a wide variety of events! Donations, follows, subscriptions, resubs, bits...
 
 <!-- -->
 
@@ -121,3 +118,18 @@ ChatTriggers is an [Endstone](https://endstone.dev/stable/) plugin that integrat
 > ```
 >
 > ![Minecraft screenshot depicting logs in-game](assets/images/screenshot-logging.png)
+
+<br />
+
+# Start
+<div class="grid cards" markdown>
+
+-   **Install ChatTriggers On Your Endstone Server**
+  
+    ---
+  
+    Follow the short guide to install and configure ChatTriggers on your Endstone server.
+  
+    [**:octicons-arrow-right-24: Getting Started**](getting-started/installation.md)
+  
+</div>
