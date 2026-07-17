@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING, Any
 # https://github.com/niko-at-chalupa/endstone-clans-api/blob/17af142a5c780fe418cec91431924fb873ac7525/src/endstone_clans_api/api.py
 
 if TYPE_CHECKING:
-    from .main import TwitchSpawnPlugin
+    from .main import ChatTriggersPlugin
 
 
-class TwitchSpawnApi:
-    def __init__(self, twitch_spawn_plugin: "TwitchSpawnPlugin"):
+class ChatTriggersApi:
+    def __init__(self, twitch_spawn_plugin: "ChatTriggersPlugin"):
         self.plugin = twitch_spawn_plugin
         self._event_handler = self.plugin._stream_event_handler
 
