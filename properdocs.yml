@@ -1,0 +1,9 @@
+site_name: My Docs
+theme:
+  name: material
+  palette:
+    scheme: slate
+extra_css:
+  - stylesheets/extra.css
+extra:
+  generator: false
