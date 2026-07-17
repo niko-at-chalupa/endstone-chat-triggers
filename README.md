@@ -1,5 +1,5 @@
 <div align="center">
-<img src="images/twitchspawnforendstone.png" />
+<img src="images/chattriggers.png" alt="chat triggers" />
 </div>
 
 ---
