@@ -12,5 +12,11 @@
 
   --md-default-bg-color--light: #281f2d;
   --md-typeset-bg-color: #281f2d;
-  
+  --md-code-bg-color--light: #2a1f2e;
+  --md-code-bg-color: #2a1f2e;
+}
+
+.md-typeset blockquote {
+    border-left: 0.25rem solid var(--md-default-fg-color--lighter);
+    border-radius: 0.25rem;
 }

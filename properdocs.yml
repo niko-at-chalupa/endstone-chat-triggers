@@ -7,3 +7,10 @@ extra_css:
   - stylesheets/extra.css
 extra:
   generator: false
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - md_in_html
