@@ -1,4 +1,4 @@
-from typing import List, TYPE_CHECKING
+from typing import TYPE_CHECKING
 from .models import Workflow, ResolvedCondition
 from endstone.plugin import Plugin
 from .models import ExecutionResult
@@ -8,7 +8,7 @@ from ..events.streamlabs import EVENTS as STREAMLABS_EVENTS
 from ..events.twitchapi import EVENTS as TWITCHAPI_EVENTS
 
 if TYPE_CHECKING:
-    from endstone_twitch_spawn.actions import WorkflowManager
+    from . import WorkflowManager
 
 
 class _CommandExecutor:
