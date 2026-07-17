@@ -7,8 +7,8 @@ if TYPE_CHECKING:
 
 
 class ChatTriggersApi:
-    def __init__(self, twitch_spawn_plugin: "ChatTriggersPlugin"):
-        self.plugin = twitch_spawn_plugin
+    def __init__(self, chat_triggers_plugin: "ChatTriggersPlugin"):
+        self.plugin = chat_triggers_plugin
         self._event_handler = self.plugin._stream_event_handler
 
     def register_events(self, listener: Any):
