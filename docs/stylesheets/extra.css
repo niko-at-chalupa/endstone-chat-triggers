@@ -19,7 +19,7 @@
   --md-mermaid-node-fg-color: #ddb9f8;
   --md-accent-fg-color: #a855f7;
   --active-border: #ae84cf; 
-  --inactive-border: rgba(44, 45, 56, 0.685); 
+  --inactive-border: rgb(29, 48, 255); 
   --hypr-rounding: 10px;
   --hypr-gaps: 10px;
   
@@ -96,21 +96,14 @@ html, body {
 }
 
 .md-typeset .admonition {
-    background: var(--generic-window-bg);
-    border: 3px solid var(--inactive-border);
-    border-radius: var(--hypr-rounding);
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    z-index: 1;
-
-    transition: border-color 0.4s cubic-bezier(0.23, 1, 0.32, 1), 
-                box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.md-typeset .admonition:hover {
-    border-color: var(--active-border);
+  background: var(--generic-window-bg);
+  border: 2px solid var(--inactive-border);
+  border-radius: var(--hypr-rounding);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  z-index: 1;
 }
 
 .md-typeset .admonition .admonition-title {
