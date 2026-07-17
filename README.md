@@ -57,7 +57,7 @@ A "remake" of the Java mod [TwitchSpawn](https://www.curseforge.com/minecraft/mc
 > - A plugin API so external plugins can interact.
 > </h3>
 >
-> Other plugins can interact with endstone-twitch-spawn, which means you're not limited to workflows.
+> Other plugins can interact with ChatTriggers, which means you're not limited to workflows.
 > ```py
 >from endstone_twitch_spawn import (
 >    get_twitch_api, 
