@@ -9,17 +9,7 @@ ChatTriggers is an [Endstone](https://endstone.dev/stable/) plugin that integrat
 
 ## Features
 
-markdown![chat triggers](assets/images/chattriggers.png)
-
-> **[TwitchSpawn](https://www.curseforge.com/minecraft/mc-mods/twitchspawn)**
->
-> "A mod for twitch streamers. Handles live events with the rules handcrafted by the streamer!"
-
-ChatTriggers is an [Endstone](https://endstone.dev/stable/) plugin that integrates with your live streams and has things trigger based off of different events.
-
 ---
-
-## Features
 
 > #### A lot of events!!
 >

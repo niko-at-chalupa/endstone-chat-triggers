@@ -14,6 +14,7 @@
   --md-typeset-bg-color: #281f2d;
   --md-code-bg-color--light: #2a1f2e;
   --md-code-bg-color: #2a1f2e;
+  --md-default-fg-color--lighter: #ddb9f8;
 }
 
 .md-typeset blockquote {
