@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "endstone-twitch-spawn"
+name = "endstone-chat-triggers"
 version = "0.1.0"
 description = "A plugin for streamers!! Handles live events and such"
 authors = [
@@ -20,7 +20,7 @@ dependencies = [
 ]
 
 [project.entry-points."endstone"]
-twitch-spawn = "endstone_twitch_spawn:TwitchSpawnPlugin"
+chat-triggers = "endstone_chat_triggers:ChatTriggersPlugin"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/endstone_twitch_spawn"]
+packages = ["src/endstone_chat_triggers"]

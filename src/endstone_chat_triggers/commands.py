@@ -4,7 +4,7 @@ from endstone import ColorFormat as cf
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from .main import TwitchSpawnPlugin
+    from .main import ChatTriggersPlugin
 
 
 class Subcommands(ABC):
@@ -18,7 +18,7 @@ class Subcommands(ABC):
 
 
 class WorkflowSubcommands(Subcommands):
-    def __init__(self, plugin: "TwitchSpawnPlugin"):
+    def __init__(self, plugin: "ChatTriggersPlugin"):
         self._plugin = plugin
         self.subcommand_map = {
             "reload": self.reload,

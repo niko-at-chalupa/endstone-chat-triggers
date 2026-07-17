@@ -8,23 +8,23 @@ import traceback
 from .events.base import StreamEventHandler
 
 
-class TwitchSpawnPlugin(Plugin):
+class ChatTriggersPlugin(Plugin):
     api_version = "0.11"
     config: Config | None = None
 
     commands = {
-        "twitch": {
-            "description": "Utility commands for ETS",
+        "chat_triggers": {
+            "description": "Utility commands for ChatTriggers",
             "usages": [
-                "/twitch <subcommand: str> [args: message]",
-                "/twitch workflows [args: str]",
+                "/chat_triggers <subcommand: str> [args: message]",
+                "/chat_triggers workflows [args: str]",
             ],
         }
     }
 
     permissions = {
-        "twitch_spawn.command.twitch": {
-            "description": "Allow users to use the /twitch command.",
+        "chat_triggers.command.chattriggers": {
+            "description": "Allow users to use the /chat_triggers command.",
             "default": "op",
         }
     }
@@ -126,7 +126,7 @@ class TwitchSpawnPlugin(Plugin):
             )
             return False
 
-        if command.name != "twitch":
+        if command.name != "chat_triggers":
             return False
 
         if not args:

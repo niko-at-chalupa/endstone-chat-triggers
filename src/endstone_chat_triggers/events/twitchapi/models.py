@@ -1,5 +1,5 @@
 from typing import Optional, Any, List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class TwitchFollowMessage(BaseModel):
