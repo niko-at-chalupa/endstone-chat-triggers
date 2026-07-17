@@ -15,9 +15,109 @@
   --md-code-bg-color--light: #2a1f2e;
   --md-code-bg-color: #2a1f2e;
   --md-default-fg-color--lighter: #ddb9f8;
+  --md-code-hl-color: #ddb9f8;
+  --md-mermaid-node-fg-color: #ddb9f8;
+  --md-accent-fg-color: #a855f7;
+  --active-border: #ae84cf; 
+  --inactive-border: rgba(44, 45, 56, 0.685); 
+  --hypr-rounding: 10px;
+  --hypr-gaps: 10px;
+  
+  --generic-window-bg: #201a22;
+  --generic-window-text: #cdd6f4;
+  --generic-window-accent: #ae84cf;
 }
 
 .md-typeset blockquote {
     border-left: 0.25rem solid var(--md-default-fg-color--lighter);
     border-radius: 0.25rem;
+}
+
+@font-face {
+  font-family: "Xanh Mono";
+  src: url('../fonts/Zanh_Mono/xanh-mono-v19-latin-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.md-typeset h1 {
+  font-family: "Xanh Mono";
+  src: url("../fonts/xanh-mono-v19-latin-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  color: #ffffff;
+}
+
+h2 {
+  font-family: "Xanh Mono";
+  src: url("../fonts/xanh-mono-v19-latin-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  color: #ffffff;
+}
+
+html, body {
+  background-color: #151217;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+@font-face {
+  font-family: "Xanh Mono";
+  src: url("../fonts/Xanh_Mono/xanh-mono-v19-latin-regular.woff2") format("woff2");
+  font-display: swap;
+}
+
+::selection {
+  background-color: #ddb9f8;
+  color: #2a1f2e;
+}
+
+#page-transition-overlay {
+  position: fixed;
+  inset: 0;
+  background: #151217;
+  opacity: 1;
+  pointer-events: none;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+}
+
+#page-transition-overlay img {
+  opacity: 0;
+  width: 80px;
+}
+
+.md-typeset .admonition {
+    background: var(--generic-window-bg);
+    border: 3px solid var(--inactive-border);
+    border-radius: var(--hypr-rounding);
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    z-index: 1;
+
+    transition: border-color 0.4s cubic-bezier(0.23, 1, 0.32, 1), 
+                box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.md-typeset .admonition:hover {
+    border-color: var(--active-border);
+}
+
+.md-typeset .admonition .admonition-title {
+  background-color: #2a1f2e;
+}
+
+blockquote {
+  opacity: 0;
+  transform: translateY(40px);
 }

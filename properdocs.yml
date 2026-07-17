@@ -14,3 +14,7 @@ markdown_extensions:
   - pymdownx.tabbed:
       alternate_style: true
   - md_in_html
+extra_javascript:
+  - javascripts/window.js
+  - https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js
+  - https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js
