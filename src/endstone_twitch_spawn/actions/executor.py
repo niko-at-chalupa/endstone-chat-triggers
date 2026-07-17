@@ -81,7 +81,7 @@ class WorkflowExecutor:
             actual = self._command_executor.run(condition.command)
             condition_results.append(condition.resolve(actual))
             if actual != condition.expected:
-                self._run_sync(lambda: self._run_steps(workflow.fail_steps))
+                self._run_sync(lambda: [self._command_executor.run(step) for step in workflow.fail_steps])
                 return ExecutionResult(
                     workflow_name=workflow.name,
                     triggered=False,
