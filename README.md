@@ -60,10 +60,10 @@ A "remake" of the Java mod [TwitchSpawn](https://www.curseforge.com/minecraft/mc
 > Other plugins can interact with ChatTriggers, which means you're not limited to workflows.
 > ```py
 >from endstone_twitch_spawn import (
->    get_twitch_api, 
+>    get_chat_triggers_api, 
 >    TwitchFollowEvent, 
 >    streamlabs_event_handler, 
->    TwitchSpawnApi
+>    ChatTriggersApi
 >)
 >from endstone.plugin import Plugin
 >
@@ -71,12 +71,12 @@ A "remake" of the Java mod [TwitchSpawn](https://www.curseforge.com/minecraft/mc
 >    def on_enable(self):
 >        # This will get the plugin, and then the 
 >        # plugin's API.
->        api: TwitchSpawnApi | None = get_twitch_api(self.server.plugin_manager)
+>        api: ChatTriggersApi | None = get_chat_triggers_api(self.server.plugin_manager)
 >
 >        # Since we're doing everything right, there
 >        # is little-to-no reason that this should 
 >        # return None.
->        assert api, "`get_twitch_api` returned `None`"
+>        assert api, "`get_chat_triggers_api` returned `None`"
 >        self.api: TwitchSpawnApi = api
 >        
 >        # Just like Endstone's register_events, you
