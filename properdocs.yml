@@ -6,6 +6,7 @@ theme:
   features:
     - navigation.tabs.sticky
     - navigation.top 
+  favicon: assets/images/favicon.png
 extra_css:
   - stylesheets/extra.css
 extra:
@@ -17,7 +18,7 @@ markdown_extensions:
   - pymdownx.tabbed:
       alternate_style: true
   - md_in_html
-  - attr_list
+  - attr_list 
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
