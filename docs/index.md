@@ -1,13 +1,13 @@
 ![chat triggers](assets/images/chattriggers.png)
 
+<div class="animated-header-wrap">
+  <h2>ChatTriggers is an <a href="https://endstone.dev/stable/" target="blank">Endstone</a> plugin that <span class="highlight">integrates with your live streams and has things trigger based off of different events</span>.</h4>
+</div>
+
 ---
 
 !!! quote "[TwitchSpawn](https://www.curseforge.com/minecraft/mc-mods/twitchspawn)"
     "A mod for twitch streamers. Handles live events with the rules handcrafted by the streamer!"
-
-<div class="animated-header-wrap">
-  <h3>ChatTriggers is an <a href="https://endstone.dev/stable/" target="blank">Endstone</a> plugin that <span class="highlight">integrates with your live streams and has things trigger based off of different events</span>.</h4>
-</div>
 
 ## Features
 > <div class="animated-header-wrap">

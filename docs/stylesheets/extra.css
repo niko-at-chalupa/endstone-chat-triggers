@@ -272,3 +272,15 @@ blockquote {
   border-radius: 3px;
 }
 */
+
+strong {
+  font-family: 'Roboto Mono', monospace;
+}
+
+p {
+  font-family: 'Roboto Mono', monospace;
+}
+
+.md-tabs {
+  background-color: 
+}
