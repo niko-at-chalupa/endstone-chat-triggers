@@ -83,7 +83,13 @@ h4 {
   color: #ffffff;
 }
 
-html, body {
+html {
+  background-color: #151217;
+  margin: 0;
+  padding: 0;
+}
+
+body {
   background-color: #151217;
   margin: 0;
   padding: 0;
@@ -203,11 +209,6 @@ blockquote {
   background-color: #0a080b;
 }
 
-.md-header {
-  position: sticky;
-  top: 0;
-}
-
 /* Hide the raw h4 before JS/GSAP has run, to prevent a flash of
    unstyled/unsplit content while GSAP is still loading */
 .animated-header-wrap h4:not(.headertext-nonanimated):not(.headertext-animated) {
@@ -279,4 +280,8 @@ strong {
 
 p {
   font-family: 'Roboto Mono', monospace;
+}
+
+.md-container {
+  overflow-x: hidden;
 }

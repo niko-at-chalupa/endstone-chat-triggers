@@ -3,6 +3,9 @@ theme:
   name: material
   palette:
     scheme: slate
+  features:
+    - navigation.tabs.sticky
+    - navigation.top 
 extra_css:
   - stylesheets/extra.css
 extra:
@@ -27,3 +30,5 @@ extra_javascript:
 plugins:
   - git-committers:
       repository: niko-at-chalupa/endstone-chat-triggers
+      branch: main
+      enabled: true
