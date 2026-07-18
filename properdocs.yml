@@ -22,3 +22,5 @@ extra_javascript:
   - javascripts/window.js
   - https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js
   - https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js
+  - javascripts/headers.js
+  - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js

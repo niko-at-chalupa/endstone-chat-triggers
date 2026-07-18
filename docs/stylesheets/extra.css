@@ -73,6 +73,16 @@ h2 {
   color: #ffffff;
 }
 
+
+h4 {
+  font-family: "Xanh Mono";
+  src: url("../fonts/xanh-mono-v19-latin-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  color: #ffffff;
+}
+
 html, body {
   background-color: #151217;
   margin: 0;
@@ -197,3 +207,51 @@ blockquote {
   position: sticky;
   top: 0;
 }
+
+.animated-header-wrap {
+  position: relative;
+}
+
+.headertext-nonanimated {
+  position: relative !important;
+  opacity: 0.2 !important;
+  z-index: 1 !important;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+  margin: 0 !important;
+}
+
+.headertext-animated {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  z-index: 2 !important;
+  margin: 0 !important;
+  visibility: hidden;
+}
+
+.animated-header-wrap h4 {
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+  padding: 0;
+}
+
+/*
+.highlight-static {
+  padding: 0 4px;
+}
+*/
+
+/*
+[class*="highlight-"] {
+  padding: 0 4px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 100%;
+  background-image: linear-gradient(to right, #473b4f, #ddb9f8);
+  border-radius: 3px;
+}
+*/

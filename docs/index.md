@@ -5,10 +5,15 @@
 !!! quote "[TwitchSpawn](https://www.curseforge.com/minecraft/mc-mods/twitchspawn)"
     "A mod for twitch streamers. Handles live events with the rules handcrafted by the streamer!"
 
-ChatTriggers is an [Endstone](https://endstone.dev/stable/) plugin that integrates with your live streams and has things trigger based off of different events.
+<div class="animated-header-wrap">
+  <h3>ChatTriggers is an <a href="https://endstone.dev/stable/" target="blank">Endstone</a> plugin that <span class="highlight">integrates with your live streams and has things trigger based off of different events</span>.</h4>
+</div>
 
 ## Features
-> #### An easy way to bind to events
+> <div class="animated-header-wrap">
+>   <h4>An <span class="highlight">easy way</span> to bind to events</h4>
+> </div>
+>
 >
 > Implements _workflows_, which are an easy way to have commands be ran upon an event.
 >
@@ -48,13 +53,17 @@ ChatTriggers is an [Endstone](https://endstone.dev/stable/) plugin that integrat
 
 <!-- -->
 
-> #### A lot of events!!
+> <div class="animated-header-wrap">
+>   <h4>A <span class="highlight">lot</span> of events</h4>
+> </div>
 >
 > The plugin's able to respond to a wide variety of events! Donations, follows, subscriptions, resubs, bits...
 
 <!-- -->
 
-> #### A plugin API so external plugins can interact.
+> <div class="animated-header-wrap">
+>   <h4>A plugin API <span class="highlight">so other plugins can interact</span></h4>
+> </div>
 >
 > Other plugins can interact with ChatTriggers, which means you're not limited to workflows.
 >
@@ -93,7 +102,9 @@ ChatTriggers is an [Endstone](https://endstone.dev/stable/) plugin that integrat
 
 <!-- -->
 
-> #### Detailed error logging
+> <div class="animated-header-wrap">
+>   <h4><span class="highlight">Detailed</span> error logging</h4>
+> </div>
 >
 > Catch errors in your workflows _before_ they get the chance to mess anything up.
 >
