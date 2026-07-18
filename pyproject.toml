@@ -19,6 +19,7 @@ dependencies = [
     "rich",
     "twitchapi",
 ]
+readme = "README.md"
 
 [project.entry-points."endstone"]
 chat-triggers = "endstone_chat_triggers:ChatTriggersPlugin"

@@ -4,9 +4,9 @@
 
 ---
 
-A "remake" of the Java mod [TwitchSpawn](https://www.curseforge.com/minecraft/mc-mods/twitchspawn).
-
 > "A mod for twitch streamers. Handles live events with the rules handcrafted by the streamer!"
+
+The full documentation can be found Documentation [here](https://niko-at-chalupa.github.io/endstone-chat-triggers/)
 
 # Features
 
