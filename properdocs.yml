@@ -1,0 +1,29 @@
+site_name: ChatTriggers
+theme:
+  name: material
+  palette:
+    scheme: slate
+extra_css:
+  - stylesheets/extra.css
+extra:
+  generator: false
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - md_in_html
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+extra_javascript:
+  - javascripts/window.js
+  - https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js
+  - https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js
+  - javascripts/headers.js
+  - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
+plugins:
+  - git-committers:
+      repository: niko-at-chalupa/endstone-chat-triggers

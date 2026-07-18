@@ -20,7 +20,7 @@ A "remake" of the Java mod [TwitchSpawn](https://www.curseforge.com/minecraft/mc
 > - An easy way to bind to events
 > </h3>
 >
-> Supports **workflows**, which is an easy way to have commands be ran upon an event.
+> Implements _workflows_, which are an easy way to have commands be ran upon an event.
 > ```yaml
 ># The name of the workflow. It can be anything.
 >name: Give Chalupa7235 Diamonds on Follow
