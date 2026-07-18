@@ -1,0 +1,287 @@
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color: #151217;
+  --md-primary-bg-color: #151217;
+  --md-default-fg-color: #ffffff;
+  --md-typeset-color: #ffffff;
+  --md-typeset-a-color: #e6d5f8;
+  --md-typeset-h1-color: #e6d5f8;
+  --md-typeset-h2-color: #e6d5f8;
+  --md-typeset-h3-color: #e6d5f8;
+  --md-primary-fg-color: #e6d5f8;
+  --md-default-fg-color--light: #e6d5f8;
+
+  --md-default-bg-color--light: #281f2d;
+  --md-typeset-bg-color: #281f2d;
+  --md-code-bg-color--light: #2a1f2e;
+  --md-code-bg-color: #2a1f2e;
+  --md-default-fg-color--lighter: #ddb9f8;
+  --md-code-hl-color: #ddb9f8;
+  --md-mermaid-node-fg-color: #ddb9f8;
+  --md-accent-fg-color: #a855f7;
+  --active-border: #ae84cf; 
+  --inactive-border: #2c2d38af;
+  --hypr-rounding: 10px;
+  --hypr-gaps: 10px;
+  
+  --generic-window-bg: #201a22;
+  --generic-window-text: #cdd6f4;
+  --generic-window-accent: #ae84cf;
+  --md-typeset-a-color: #ae84cf;
+}
+
+.md-typeset a {
+  color: #ae84cf;
+}
+
+.md-nav__link--active .md-ellipsis {
+  color: #ffffff;
+  transition: color 0.2s ease;
+}
+
+.md-nav__link--active:hover .md-ellipsis {
+  color: #a855f7;
+}
+
+.md-typeset blockquote {
+    border-left: 0.25rem solid var(--md-default-fg-color--lighter);
+    border-radius: 0.25rem;
+}
+
+@font-face {
+  font-family: "Xanh Mono";
+  src: url('../fonts/Zanh_Mono/xanh-mono-v19-latin-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.md-typeset h1 {
+  font-family: "Xanh Mono";
+  src: url("../fonts/xanh-mono-v19-latin-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  color: #ffffff;
+}
+
+h2 {
+  font-family: "Xanh Mono";
+  src: url("../fonts/xanh-mono-v19-latin-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  color: #ffffff;
+}
+
+
+h4 {
+  font-family: "Xanh Mono";
+  src: url("../fonts/xanh-mono-v19-latin-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  color: #ffffff;
+}
+
+html {
+  background-color: #151217;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #151217;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+@font-face {
+  font-family: "Xanh Mono";
+  src: url("../fonts/Xanh_Mono/xanh-mono-v19-latin-regular.woff2") format("woff2");
+  font-display: swap;
+}
+
+::selection {
+  background-color: #ddb9f8;
+  color: #2a1f2e;
+}
+
+#page-transition-overlay {
+  position: fixed;
+  inset: 0;
+  background: #151217;
+  opacity: 1;
+  pointer-events: none;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+}
+
+#page-transition-overlay img {
+  opacity: 0;
+  width: 80px;
+}
+
+.md-typeset .admonition {
+  background: var(--generic-window-bg) !important;
+  border: 2px solid var(--inactive-border) !important;
+  border-radius: var(--hypr-rounding) !important;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  z-index: 1;
+  transition: border-color 0.4s cubic-bezier(0.23, 1, 0.32, 1), 
+            box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1) !important;
+}
+
+.md-typeset .admonition:hover {
+    border-color: var(--active-border) !important;
+}
+
+.md-typeset .admonition .admonition-title {
+  background-color: #2a1f2e;
+}
+
+blockquote {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.grid.cards > ul > li {
+  border: 2px solid var(--inactive-border) !important;
+  border-radius: var(--hypr-rounding) !important;
+  transition: border-color 0.4s cubic-bezier(0.23, 1, 0.32, 1), 
+            box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1) !important;
+  background-color: #201a22;
+}
+
+.grid.cards > ul > li:hover {
+    border-color: var(--active-border) !important;
+}
+
+.grid.cards > ul > li {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.md-typeset h1 {
+  margin: 0 0 0 !important;
+}
+
+@media screen and (min-width: 60em) {
+  .md-search__form {
+    background-color: #151217;
+    border-radius: .1rem;
+    height: 1.8rem;
+    border-radius: 3em !important;
+    box-shadow: #000000;
+  }
+}
+
+.md-search__form,
+.md-search__form:hover {
+  background-color: #151217 !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+.md-search__icon.md-icon {
+  color: #e6d5f8;
+}
+
+.md-search__output {
+  margin-top: -0.9rem;
+  padding-top: 1.5rem;
+  border-radius: 0 0 1rem 1rem;
+  background-color: #0a080b;
+}
+
+.md-search__form {
+  position: relative;
+  background-color: #0a080b;
+}
+
+.md-search-result__meta {
+  background-color: #0a080b;
+}
+
+/* Hide the raw h4 before JS/GSAP has run, to prevent a flash of
+   unstyled/unsplit content while GSAP is still loading */
+.animated-header-wrap h4:not(.headertext-nonanimated):not(.headertext-animated) {
+  visibility: hidden;
+}
+
+.animated-header-wrap {
+  position: relative;
+}
+
+.headertext-nonanimated {
+  position: relative !important;
+  opacity: 0.2 !important;
+  z-index: 1 !important;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+  white-space: normal;
+}
+
+.headertext-animated {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  z-index: 2 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+  white-space: normal;
+}
+
+/* SplitText word wrapper elements — kill any injected margin/padding */
+.headertext-animated .word {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.animated-header-wrap h4 {
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+  padding: 0;
+}
+
+/*
+.highlight-static {
+  padding: 0 4px;
+}
+*/
+
+/*
+[class*="highlight-"] {
+  padding: 0 4px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 100%;
+  background-image: linear-gradient(to right, #473b4f, #ddb9f8);
+  border-radius: 3px;
+}
+*/
+
+strong {
+  font-family: 'Roboto Mono', monospace;
+}
+
+p {
+  font-family: 'Roboto Mono', monospace;
+}
+
+.md-container {
+  overflow-x: hidden;
+}
