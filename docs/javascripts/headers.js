@@ -25,10 +25,10 @@ whenGsapReady(() => {
     const fontFamily = computedStyle.fontFamily;
     const color = computedStyle.color;
 
+    // --- Static (dimmed) version ---
     const staticH4 = document.createElement("h4");
     staticH4.innerHTML = originalHTML;
     staticH4.className = "headertext-nonanimated";
-    
     staticH4.style.fontSize = fontSize;
     staticH4.style.lineHeight = lineHeight;
     staticH4.style.fontWeight = fontWeight;
@@ -36,11 +36,11 @@ whenGsapReady(() => {
     staticH4.style.color = color;
     staticH4.style.margin = "0";
     staticH4.style.padding = "0";
-    
     staticH4.querySelectorAll("span.highlight").forEach(span => {
       span.replaceWith(document.createTextNode(span.textContent));
     });
 
+    // --- Animated version ---
     const animatedH4 = originalH4;
     animatedH4.className = "headertext-animated";
     animatedH4.innerHTML = originalHTML;
@@ -51,14 +51,6 @@ whenGsapReady(() => {
     animatedH4.style.fontWeight = fontWeight;
     animatedH4.style.fontFamily = fontFamily;
     animatedH4.style.color = color;
-    animatedH4.style.opacity = "0";
-
-    /* I don't even know */
-    gsap.set(animatedH4, { 
-      visibility: "visible", 
-      opacity: 0
-    });
-    animatedH4.style.visibility = "visible";
 
     animatedH4.querySelectorAll("span.highlight").forEach(span => {
       span.replaceWith(document.createTextNode(span.textContent));
@@ -68,33 +60,47 @@ whenGsapReady(() => {
     wrap.appendChild(staticH4);
     wrap.appendChild(animatedH4);
 
+    // Ensure the wrap is a positioning context for the absolute layer
+    wrap.style.position = wrap.style.position || "relative";
+
     staticH4.style.position = "relative";
     staticH4.style.zIndex = "1";
     staticH4.style.opacity = "0.2";
     staticH4.style.pointerEvents = "none";
     staticH4.style.userSelect = "none";
     staticH4.style.webkitUserSelect = "none";
-    
+
     animatedH4.style.position = "absolute";
     animatedH4.style.top = "0";
     animatedH4.style.left = "0";
     animatedH4.style.width = "100%";
     animatedH4.style.height = "100%";
     animatedH4.style.zIndex = "2";
-    animatedH4.style.visibility = "hidden";
     animatedH4.style.visibility = "visible";
 
-    const animatedSplit = new SplitText(animatedH4, { type: "words" });
-    
+    // Split into words, preserving original spacing exactly
+    const animatedSplit = new SplitText(animatedH4, {
+      type: "words",
+      wordsClass: "word",
+      reduceWhiteSpace: false,
+    });
+
     animatedSplit.words.forEach(word => {
       word.style.color = color;
       word.style.fontSize = fontSize;
       word.style.lineHeight = lineHeight;
       word.style.fontWeight = fontWeight;
       word.style.fontFamily = fontFamily;
+
+      // Reset box model so word-splitting doesn't add stray spacing
+      word.style.margin = "0";
+      word.style.padding = "0";
+      word.style.display = "inline-block";
+      word.style.boxSizing = "border-box";
     });
-    
-    gsap.set(animatedH4, { visibility: "visible" });
+
+    // Hide words immediately — prevents flash of unstyled/unanimated content
+    gsap.set(animatedSplit.words, { opacity: 0 });
 
     headerInstances.push({
       wrap,
@@ -105,9 +111,6 @@ whenGsapReady(() => {
   function playAnimation(instance) {
     const { animatedSplit } = instance;
     if (!animatedSplit || !animatedSplit.words) return;
-
-    gsap.set(animatedSplit.words, { opacity: 0 });
-    gsap.set(instance, { visibility: "visible" });
 
     gsap.to(animatedSplit.words, {
       opacity: 1,

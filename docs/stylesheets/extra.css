@@ -208,6 +208,12 @@ blockquote {
   top: 0;
 }
 
+/* Hide the raw h4 before JS/GSAP has run, to prevent a flash of
+   unstyled/unsplit content while GSAP is still loading */
+.animated-header-wrap h4:not(.headertext-nonanimated):not(.headertext-animated) {
+  visibility: hidden;
+}
+
 .animated-header-wrap {
   position: relative;
 }
@@ -220,6 +226,9 @@ blockquote {
   -webkit-user-select: none;
   pointer-events: none;
   margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+  white-space: normal;
 }
 
 .headertext-animated {
@@ -229,7 +238,15 @@ blockquote {
   width: 100% !important;
   z-index: 2 !important;
   margin: 0 !important;
-  visibility: hidden;
+  padding: 0 !important;
+  box-sizing: border-box;
+  white-space: normal;
+}
+
+/* SplitText word wrapper elements — kill any injected margin/padding */
+.headertext-animated .word {
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .animated-header-wrap h4 {
