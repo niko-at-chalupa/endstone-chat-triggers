@@ -96,6 +96,6 @@ It's obvious that these logs are highlighting issues that the plugin has come ac
   
     Now that we are done with installing the plugin, we can now move on to configuring it.
   
-    [**:octicons-arrow-right-24: Configuration**](getting-started/configuration.md)
+    [**:octicons-arrow-right-24: Configuration**](configuration.md)
   
 </div>
