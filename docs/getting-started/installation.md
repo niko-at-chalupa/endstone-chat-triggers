@@ -1,181 +1,101 @@
 ## Endstone
 
-ChatTriggers uses the Endstone modloader for Minecraft bedrock.
+ChatTriggers uses the [Endstone](https://github.com/EndstoneMC/endstone/) modloader for Minecraft bedrock.
 
 ??? question "Why Endstone?"
-    You can return any product within 30 days of purchase.
-    Please ensure the item is in its original packaging.
+    Endstone is a custom Minecraft: Bedrock Edition server that preserves vanilla features. Traditionally, if you wanted plugins that modified vanilla gameplay on Bedrock (while preserving vanilla features), you'd either have to go for the native addon and script APIs (which are notoriously unable to change vanilla gameplay that much) or use a Java server and use a proxy like Geyser to play on Bedrock.
+
+This guide **assumes that you have an Endstone server already installed and set up**. If that is not the case, then check out this [guide here](https://endstone.dev/stable/getting-started/installation/#installation) to install Endstone and create a server with it.
 
 ## Installation Methods
 
-### Method 1: PyPI Installation (Recommended)
+> <div class="animated-header-wrap">
+>   <h4>Installation through PyPI (RECOMMENDED!!)</h4>
+> </div>
+>
+>
+> The easiest way to install endstone-chat-triggers is through PyPI using `pip`.
+> 
+> Open your terminal/command prompt and run:
+>
+> ```bash
+> pip install endstone-chat-triggers
+> ```
+>
+> !!! tip "Updating"
+    If you want to update the plugin, you can run `pip install --upgrade endstone-chat-triggers`.
 
-The easiest way to install endstone-chat-triggers is through PyPI using pip.
+<!-- -->
 
-#### Step 1: Install via pip
+> <details>
+> <summary>
+> <div class="animated-header-wrap">
+>   <h4>Installation through PyPI (<code>.whl</code> file)</h4>
+> </div>
+> </summary>
+>
+>
+> If you'd prefer to install through a `.whl` file, you can just head over to our [releases page](https://github.com/niko-at-chalupa/endstone-chat-triggers/releases/tag/v1.0.1) and download it from there.
+> 
+> Go to the [releases page](https://github.com/niko-at-chalupa/endstone-chat-triggers/releases/tag/v1.0.1) and download the `.whl` file at the top (the name of the file may vary):
+>
+> ![Screenshot depecting Chat Triggers' release page](../assets/images/screenshot-releases.png)
+>
+> ...Then, take that `.whl` file and put it in your server's `plugins/` folder:
+>
+> ![Screenshot depecting the Chat Triggers WHL file placed within the plugins folder of an Endstone server](../assets/images/screenshot-releases.png)
+>
+> The plugin loader will automatically detect and load the `.whl` file.
+>
+> </details>
 
-Open your terminal/command prompt and run:
+## Post-Install
 
-```bash
-pip install endstone-chat-triggers
-```
+After you're done installing the plugin, you'll see it log some things in your server's console. Such logs will be similar to the following:
 
-#### Step 2: Copy to Plugins Folder
+<pre><code><div class="doesntmatter">...
+[01:16:40 INFO]: This server is running Endstone version: 0.11.6 (Minecraft: 26.33)
+[01:16:40 INFO]: Loading packs from 'resource_packs' (Resources)
+[01:16:40 INFO]: Pack Stack - None
+[01:16:41 INFO]: IPv4 supported, port: 19132: Used for gameplay and LAN discovery
+[01:16:41 INFO]: IPv6 supported, port: 19133: Used for gameplay
+</div>
+[01:16:41 INFO]: [ChatTriggers] Loading chat_triggers v1.0.1
+[01:16:41 ERROR]: [ChatTriggers] ****************************************
+[01:16:41 ERROR]: [ChatTriggers] use_streamlabs is enabled but no streamlabs_socket_token was set! Disabling plugin.
+[01:16:41 ERROR]: [ChatTriggers] 
+[01:16:41 ERROR]: [ChatTriggers] Please check 
+[01:16:41 ERROR]: [ChatTriggers] /home/niko/Development/repositories/endstone-chat-triggers/bedrock_server/plugins/chat_triggers/config.yaml
+[01:16:41 ERROR]: [ChatTriggers] for more info!
+[01:16:41 ERROR]: [ChatTriggers] ****************************************
+<div class="doesntmatter">
+[01:16:41 INFO]: Waiting for Minecraft services...
+[01:16:41 INFO]: Server started.
+[01:16:41 INFO]: ================ TELEMETRY MESSAGE ===================
+[01:16:41 INFO]: Server Telemetry is currently not enabled. 
+[01:16:41 INFO]: Enabling this telemetry helps us improve the game.
+[01:16:41 INFO]: To enable this feature, add the line 'emit-server-telemetry=true'
+[01:16:41 INFO]: to the server.properties file in the handheld/src-server directory
+[01:16:41 INFO]: ======================================================
+[01:16:42 INFO]: Packet limit config updated
+</div>
+[01:16:42 INFO]: [ChatTriggers] Enabling chat_triggers v1.0.1
+[01:16:42 WARNING]: [ChatTriggers] No workflows were found in /home/niko/Development/repositories/endstone-chat-triggers/bedrock_server/plugins/chat_triggers/workflows.
+</code></pre>
 
-After installation, locate your Endstone server directory and copy the plugin to the plugins folder:
+If you do not see the special logs sent out by ChatTriggers, then that's a sign you've probably installed the plugin incorrectly. If you need assistance in setting this plugin up, you can ask for support in my [Discord server](https://discord.gg/rtFfPaYQFP).
 
-```bash
-# The plugin should be copied to:
-# {bedrock_server_path}/plugins/
-```
 
-On Windows, this might look like:
-```
-C:\path\to\bedrock_server\plugins\
-```
+It's obvious that these logs are highlighting issues that the plugin has come across. The plugin is coming across issues because it still isn't configured.
 
-On Linux, this might look like:
-```
-/path/to/bedrock_server/plugins/
-```
+<div class="grid cards" markdown>
 
-#### Step 3: Start Your Server
-
-Restart your Endstone server. The plugin will be automatically loaded during startup:
-
-```bash
-endstone
-```
-
-### Method 2: GitHub Releases (.whl Files)
-
-For users who prefer to manually download releases or need a specific version.
-
-#### Step 1: Download the .whl File
-
-1. Visit the [Endstone Chat Triggers releases page](https://github.com/niko-at-chalupa/endstone-chat-triggers/releases)
-2. Download the latest `.whl` file for your Python version
-3. Choose the appropriate wheel file for your platform (Windows or Linux)
-
-**Wheel naming convention:**
-- `endstone_chat_triggers-X.X.X-cpXXX-cpXXX-*.whl`
-
-Example files:
-- `endstone_chat_triggers-1.0.1-cp311-cp311-win_amd64.whl` (Windows, Python 3.11)
-- `endstone_chat_triggers-1.0.1-cp311-cp311-manylinux_x86_64.whl` (Linux, Python 3.11)
-
-#### Step 2: Place in Plugins Folder
-
-1. Navigate to your Endstone server directory
-2. Locate the `plugins` folder (create it if it doesn't exist)
-3. Copy the downloaded `.whl` file directly into the plugins folder
-
-```
-bedrock_server/
-├── plugins/
-│   └── endstone_chat_triggers-1.0.1-cp311-cp311-*.whl
-├── server.properties
-└── ...
-```
-
-#### Step 3: Start Your Server
-
-Restart your Endstone server:
-
-```bash
-endstone
-```
-
-The plugin loader will automatically detect and load the `.whl` file.
-
-## Installation Verification
-
-After starting your server, check the console output for successful plugin loading. You should see:
-
-```
-[INFO] Loading plugin: Chat Triggers
-[INFO] Chat Triggers v1.0.1 successfully loaded!
-```
-
-If the plugin doesn't load:
-1. Verify the `.whl` file is in the correct plugins folder
-2. Check that your Python version matches the wheel file (e.g., cp311 for Python 3.11)
-3. Ensure Endstone version is v0.9.4 or later
-4. Check server logs for error messages
-
-## Updating the Plugin
-
-### Via PyPI
-
-To update to the latest version:
-
-```bash
-pip install --upgrade endstone-chat-triggers
-```
-
-Then restart your server.
-
-### Via GitHub Releases
-
-1. Download the new `.whl` file from releases
-2. Remove the old `.whl` file from the plugins folder
-3. Copy the new `.whl` file into the plugins folder
-4. Restart your server
-
-## Troubleshooting Installation Issues
-
-### "Module not found" Error
-
-**Problem:** Plugin fails to load with module not found error.
-
-**Solutions:**
-- Verify the `.whl` file is not corrupted by re-downloading it
-- Ensure you're using the correct Python version for the wheel file
-- Try installing dependencies: `pip install endstone`
-
-### "Python 3.x is not supported" Error
-
-**Problem:** Plugin reports incompatible Python version.
-
-**Solution:**
-- Upgrade to Python 3.10 or later
-- Verify your Python installation: `python --version`
-
-### Plugin Doesn't Load on Linux
-
-**Problem:** Plugin loads on Windows but not on Linux.
-
-**Solutions:**
-- Verify you're using the `manylinux` wheel version
-- Ensure Endstone is properly installed on Linux
-- Check file permissions: `chmod +r endstone_chat_triggers-*.whl`
-
-### Outdated Endstone Version
-
-**Problem:** "Incompatible with Endstone version"
-
-**Solution:**
-- Update Endstone: `pip install --upgrade endstone`
-- Verify installation: `endstone --version`
-
-## Next Steps
-
-After successful installation:
-
-1. **Configure Workflows**: See [Configuration Guide](./CONFIGURATION.md) for setup instructions
-2. **Create Your First Workflow**: Learn to create event-driven workflows in the configuration guide
-3. **Connect to Twitch**: Configure your Twitch credentials for event handling
-4. **Review Examples**: Check the documentation for workflow examples and best practices
-
-## Getting Help
-
-- **Official Documentation**: [https://niko-at-chalupa.github.io/endstone-chat-triggers/](https://niko-at-chalupa.github.io/endstone-chat-triggers/)
-- **GitHub Issues**: Report problems at [https://github.com/niko-at-chalupa/endstone-chat-triggers/issues](https://github.com/niko-at-chalupa/endstone-chat-triggers/issues)
-- **Endstone Documentation**: [https://endstone.dev/](https://endstone.dev/)
-
-## Supported Endstone Versions
-
-- Endstone 0.9.4+
-- Python 3.10, 3.11, 3.12, 3.13+
-
-The plugin follows Endstone's compatibility guidelines and is tested against the latest stable releases.
+-   **Next: Configuring ChatTriggers On Your Endstone Server**
+  
+    ---
+  
+    Now that we are done with installing the plugin, we can now move on to configuring it.
+  
+    [**:octicons-arrow-right-24: Configuration**](getting-started/configuration.md)
+  
+</div>
