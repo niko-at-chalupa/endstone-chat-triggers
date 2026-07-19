@@ -6,7 +6,7 @@
 
 > "A mod for twitch streamers. Handles live events with the rules handcrafted by the streamer!"
 
-The full documentation can be found Documentation [here](https://niko-at-chalupa.github.io/endstone-chat-triggers/)
+The full documentation can be found [here](https://niko-at-chalupa.github.io/endstone-chat-triggers/)
 
 # Features
 
