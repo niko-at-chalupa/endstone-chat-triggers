@@ -139,7 +139,7 @@
   
     ---
   
-    Follow the short guide to install and configure ChatTriggers on your Endstone server.
+    Follow the short guide to install configure, and use ChatTriggers on your Endstone server.
   
     [**:octicons-arrow-right-24: Getting Started**](getting-started/installation.md)
   

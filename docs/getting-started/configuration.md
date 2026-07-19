@@ -52,13 +52,16 @@ Once we're done configuring the plugin, we won't see any errors when loading the
 [01:45:43 WARNING]: [ChatTriggers] No workflows were found in /home/niko/Development/repositories/endstone-chat-triggers/bedrock_server/plugins/chat_triggers/workflows.
 </code></pre>
 
+
+Notice the final line: "No workflows were found." Out-of-the-box, ChatTriggers doesn't actually do anything. ChatTriggers needs to recieve instructions on how it should respond to events, and the primary way of giving those instructions are through workflows. 
+
 <div class="grid cards" markdown>
 
--   **Next: Configuring ChatTriggers On Your Endstone Server**
+-   **Next: Writing Our First Workflow**
   
     ---
   
-    Now that we are done with installing the plugin, we can now move on to configuring it.
+    Finally, now that the plugin's fully set up, we can use it. The primary (and easiest) way to use the plugin is through workflows, which we lightly will cover in the following guide.
   
     [**:octicons-arrow-right-24: First Workflow**](first-workflow.md)
   
