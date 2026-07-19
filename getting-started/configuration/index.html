@@ -9,8 +9,10 @@
       
       
       
-        <link rel="prev" href="../first-workflow/">
+        <link rel="prev" href="../..">
       
+      
+        <link rel="next" href="../first-workflow/">
       
       
         
@@ -21,7 +23,7 @@
     
     
       
-        <title>Installation - ChatTriggers</title>
+        <title>Configuration - ChatTriggers</title>
       
     
     
@@ -72,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#endstone" class="md-skip">
+        <a href="#configuration-file" class="md-skip">
           Skip to content
         </a>
       
@@ -108,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Installation
+              Configuration
             
           </span>
         </div>
@@ -237,10 +239,35 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../configuration/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -256,6 +283,46 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration File
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#after-configuring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        After Configuring
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -293,35 +360,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Installation
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
         
   
   
@@ -337,57 +379,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#endstone" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Endstone
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#installation-methods" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Installation Methods
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#post-install" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Post-Install
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -425,10 +416,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#endstone" class="md-nav__link">
+  <a href="#configuration-file" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Endstone
+        Configuration File
       
     </span>
   </a>
@@ -436,21 +427,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#installation-methods" class="md-nav__link">
+  <a href="#after-configuring" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation Methods
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#post-install" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Post-Install
+        After Configuring
       
     </span>
   </a>
@@ -474,86 +454,63 @@
 
 
 
-  <h1>Installation</h1>
+  <h1>Configuration</h1>
 
-<h2 id="endstone">Endstone</h2>
-<p>ChatTriggers uses the <a href="https://github.com/EndstoneMC/endstone/">Endstone</a> modloader for Minecraft bedrock.</p>
-<details class="question">
-<summary>Why Endstone?</summary>
-<p>Endstone is a custom Minecraft: Bedrock Edition server that preserves vanilla features. Traditionally, if you wanted plugins that modified vanilla gameplay on Bedrock (while preserving vanilla features), you'd either have to go for the native addon and script APIs (which are notoriously unable to change vanilla gameplay that much) or use a Java server and use a proxy like Geyser to play on Bedrock.</p>
-</details>
-<p>This guide <strong>assumes that you have an Endstone server already installed and set up</strong>. If that is not the case, then check out this <a href="https://endstone.dev/stable/getting-started/installation/#installation">guide here</a> to install Endstone and create a server with it.</p>
-<h2 id="installation-methods">Installation Methods</h2>
-<blockquote>
-<p><div class="animated-header-wrap">
-  <h4>Installation through PyPI (RECOMMENDED!!)</h4>
-</div></p>
-<p>The easiest way to install endstone-chat-triggers is through PyPI using <code>pip</code>.</p>
-<p>Open your terminal/command prompt and run:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>endstone-chat-triggers
+<h2 id="configuration-file">Configuration File</h2>
+<p>The configuration file for the plugin is located at <code>plugins/chat_triggers/config.yaml</code>. This file (alongside its parent directories) are created every time the plugin is started (which includes plugin reloads). The configuration is in the <a href="https://yaml.org/">YAML</a> format, and every field has a comment before it.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Whether to use Streamlabs as the event source. Only one of &quot;use_streamlabs&quot; or &quot;use_twitchapi&quot; should be enabled at a time.</span>
+<span class="nt">use_streamlabs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="c1"># Whether to use the Twitch API as the event source. Only one of &quot;use_streamlabs&quot; or &quot;use_twitchapi&quot; should be enabled at a time.</span>
+<span class="nt">use_twitchapi</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="c1"># &quot;Your Socket API Token&quot; from https://streamlabs.com/dashboard#/settings/api-settings. You can also do this through environment variable (STREAMLABS_SOCKET_TOKEN), if perferred. Only used when use_streamlabs is true.</span>
+<span class="nt">streamlabs_socket_token</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span>
+<span class="c1"># Client ID from your registered app at https://dev.twitch.tv/console/apps. Used for TwitchAPI.</span>
+<span class="nt">twitch_client_id</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span>
+<span class="c1"># Client Secret from your registered app at https://dev.twitch.tv/console/apps. Used for TwitchAPI.</span>
+<span class="nt">twitch_client_secret</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span>
+<span class="c1"># OAuth access token for TwitchAPI (https://twitchtokengenerator.com/). Can be obtained via OAuth flow. Only used when use_twitchapi is true.</span>
+<span class="nt">twitch_access_token</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span>
+<span class="c1"># OAuth refresh token for TwitchAPI (https://twitchtokengenerator.com/9. Used to renew access tokens. Only used when use_twitchapi is true.</span>
+<span class="nt">twitch_refresh_token</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span>
+<span class="c1"># Log events by sending DEBUG messages. This will also set the log level to DEBUG, which may fill up the console with a lot of stuff. You can also do this through environment variable (DEBUG=1) if perferred.</span>
+<span class="nt">log_events</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="nt">messages</span><span class="p">:</span>
+<span class="c1"># Shown when /twitch is used with no arguments</span>
+<span class="w">  </span><span class="nt">no_subcommand</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">No subcommand was provided.</span>
+<span class="c1"># Shown when /twitch is used with an invalid subcommand</span>
+<span class="w">  </span><span class="nt">invalid_subcommand</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The subcommand provided isn&#39;t valid.</span>
+<span class="c1"># Generic error for commands</span>
+<span class="w">  </span><span class="nt">generic_error</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">A technical error has occurred. Please contact a server admin</span><span class="w"> </span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">or owner.</span>
 </code></pre></div>
-<div class="admonition tip">
-<p class="admonition-title">Updating</p>
-<p>If you want to update the plugin, you can run <code>pip install --upgrade endstone-chat-triggers</code>.</p>
+<p>This guide <strong>will not cover each field</strong>, as they are already described in comments within the configuration file.</p>
+<h2 id="after-configuring">After Configuring</h2>
+<p>Once we're done configuring the plugin, we won't see any errors when loading the plugin.</p>
+<pre><code>[01:45:41 INFO]: [ChatTriggers] Loading chat_triggers v1.0.1
+[01:45:41 INFO]: [ChatTriggers] Connecting to Streamlabs Socket API...
+[01:45:43 INFO]: [ChatTriggers] Connected to Streamlabs socket API
+<div class="doesntmatter">[01:45:43 INFO]: Waiting for Minecraft services...
+[01:45:43 INFO]: Server started.
+[01:45:43 INFO]: ================ TELEMETRY MESSAGE ===================
+[01:45:43 INFO]: Server Telemetry is currently not enabled. 
+[01:45:43 INFO]: Enabling this telemetry helps us improve the game.
+[01:45:43 INFO]: To enable this feature, add the line 'emit-server-telemetry=true'
+[01:45:43 INFO]: to the server.properties file in the handheld/src-server directory
+[01:45:43 INFO]: ======================================================
+[01:45:43 INFO]: Packet limit config updated
 </div>
-</blockquote>
-<!-- -->
-
-<blockquote>
-<p><details>
-<summary>
-<div class="animated-header-wrap">
-  <h4>Installation through PyPI (<code>.whl</code> file)</h4>
-</div>
-</summary></p>
-<p>If you'd prefer to install through a <code>.whl</code> file, you can just head over to our <a href="https://github.com/niko-at-chalupa/endstone-chat-triggers/releases/tag/v1.0.1">releases page</a> and download it from there.</p>
-<p>Go to the <a href="https://github.com/niko-at-chalupa/endstone-chat-triggers/releases/tag/v1.0.1">releases page</a> and download the <code>.whl</code> file at the top (the name of the file may vary):</p>
-<p><img alt="Screenshot depecting Chat Triggers' release page" src="../../assets/images/screenshot-releases.png" /></p>
-<p>...Then, take that <code>.whl</code> file and put it in your server's <code>plugins/</code> folder:</p>
-<p><img alt="Screenshot depecting the Chat Triggers WHL file placed within the plugins folder of an Endstone server" src="../../assets/images/screenshot-releases.png" /></p>
-<p>The plugin loader will automatically detect and load the <code>.whl</code> file.</p>
-</details>
-</blockquote>
-<h2 id="post-install">Post-Install</h2>
-<p>After you're done installing the plugin, you'll see it log some things in your server's console. Such logs will be similar to the following:</p>
-<pre><code><div class="doesntmatter">...
-[01:16:40 INFO]: This server is running Endstone version: 0.11.6 (Minecraft: 26.33)
-[01:16:40 INFO]: Loading packs from 'resource_packs' (Resources)
-[01:16:40 INFO]: Pack Stack - None
-[01:16:41 INFO]: IPv4 supported, port: 19132: Used for gameplay and LAN discovery
-[01:16:41 INFO]: IPv6 supported, port: 19133: Used for gameplay
-</div>
-[01:16:41 INFO]: [ChatTriggers] Loading chat_triggers v1.0.1
-[01:16:41 ERROR]: [ChatTriggers] ****************************************
-[01:16:41 ERROR]: [ChatTriggers] use_streamlabs is enabled but no streamlabs_socket_token was set! Disabling plugin.
-[01:16:41 ERROR]: [ChatTriggers] 
-[01:16:41 ERROR]: [ChatTriggers] Please check 
-[01:16:41 ERROR]: [ChatTriggers] /home/niko/Development/repositories/endstone-chat-triggers/bedrock_server/plugins/chat_triggers/config.yaml
-[01:16:41 ERROR]: [ChatTriggers] for more info!
-[01:16:41 ERROR]: [ChatTriggers] ****************************************
-<div class="doesntmatter">[01:16:41 INFO]: Waiting for Minecraft services...
-[01:16:41 INFO]: Server started.
-[01:16:41 INFO]: ================ TELEMETRY MESSAGE ===================
-[01:16:41 INFO]: Server Telemetry is currently not enabled. 
-[01:16:41 INFO]: Enabling this telemetry helps us improve the game.
-[01:16:41 INFO]: To enable this feature, add the line 'emit-server-telemetry=true'
-[01:16:41 INFO]: to the server.properties file in the handheld/src-server directory
-[01:16:41 INFO]: ======================================================
-[01:16:42 INFO]: Packet limit config updated
-</div>
-[01:16:42 INFO]: [ChatTriggers] Enabling chat_triggers v1.0.1
-[01:16:42 WARNING]: [ChatTriggers] No workflows were found in /home/niko/Development/repositories/endstone-chat-triggers/bedrock_server/plugins/chat_triggers/workflows.
+[01:45:43 INFO]: [ChatTriggers] Enabling chat_triggers v1.0.1
+[01:45:43 WARNING]: [ChatTriggers] No workflows were found in /home/niko/Development/repositories/endstone-chat-triggers/bedrock_server/plugins/chat_triggers/workflows.
 </code></pre>
 
-<p>If you do not see the special logs sent out by ChatTriggers, then that's a sign you've probably installed the plugin incorrectly. If you need assistance in setting this plugin up, you can ask for support in my <a href="https://discord.gg/rtFfPaYQFP">Discord server</a>.</p>
-<p>It's obvious that these logs are highlighting issues that the plugin has come across. The plugin is coming across issues because it still isn't configured.</p>
+<p>Notice the final line: "No workflows were found." Out-of-the-box, ChatTriggers doesn't actually do anything. ChatTriggers needs to recieve instructions on how it should respond to events, and the primary way of giving those instructions are through workflows. </p>
 <div class="grid cards">
 <ul>
 <li>
-<p><strong>Next: Configuring ChatTriggers On Your Endstone Server</strong></p>
+<p><strong>Next: Writing Our First Workflow</strong></p>
 <hr />
-<p>Now that we are done with installing the plugin, we can now move on to configuring it.</p>
-<p><a href="../configuration/"><strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Configuration</strong></a></p>
+<p>Finally, now that the plugin's fully set up, we can use it. The primary (and easiest) way to use the plugin is through workflows, which we lightly will cover in the following guide.</p>
+<p><a href="../first-workflow/"><strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> First Workflow</strong></a></p>
 </li>
 </ul>
 </div>
