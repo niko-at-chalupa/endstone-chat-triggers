@@ -30,3 +30,36 @@ messages:
 ```
 
 This guide **will not cover each field**, as they are already described in comments within the configuration file.
+
+## After Configuring
+
+Once we're done configuring the plugin, we won't see any errors when loading the plugin.
+
+<pre><code>[01:45:41 INFO]: [ChatTriggers] Loading chat_triggers v1.0.1
+[01:45:41 INFO]: [ChatTriggers] Connecting to Streamlabs Socket API...
+[01:45:43 INFO]: [ChatTriggers] Connected to Streamlabs socket API
+<div class="doesntmatter">[01:45:43 INFO]: Waiting for Minecraft services...
+[01:45:43 INFO]: Server started.
+[01:45:43 INFO]: ================ TELEMETRY MESSAGE ===================
+[01:45:43 INFO]: Server Telemetry is currently not enabled. 
+[01:45:43 INFO]: Enabling this telemetry helps us improve the game.
+[01:45:43 INFO]: To enable this feature, add the line 'emit-server-telemetry=true'
+[01:45:43 INFO]: to the server.properties file in the handheld/src-server directory
+[01:45:43 INFO]: ======================================================
+[01:45:43 INFO]: Packet limit config updated
+</div>
+[01:45:43 INFO]: [ChatTriggers] Enabling chat_triggers v1.0.1
+[01:45:43 WARNING]: [ChatTriggers] No workflows were found in /home/niko/Development/repositories/endstone-chat-triggers/bedrock_server/plugins/chat_triggers/workflows.
+</code></pre>
+
+<div class="grid cards" markdown>
+
+-   **Next: Configuring ChatTriggers On Your Endstone Server**
+  
+    ---
+  
+    Now that we are done with installing the plugin, we can now move on to configuring it.
+  
+    [**:octicons-arrow-right-24: First Workflow**](first-workflow.md)
+  
+</div>

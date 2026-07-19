@@ -68,8 +68,7 @@ After you're done installing the plugin, you'll see it log some things in your s
 [01:16:41 ERROR]: [ChatTriggers] /home/niko/Development/repositories/endstone-chat-triggers/bedrock_server/plugins/chat_triggers/config.yaml
 [01:16:41 ERROR]: [ChatTriggers] for more info!
 [01:16:41 ERROR]: [ChatTriggers] ****************************************
-<div class="doesntmatter">
-[01:16:41 INFO]: Waiting for Minecraft services...
+<div class="doesntmatter">[01:16:41 INFO]: Waiting for Minecraft services...
 [01:16:41 INFO]: Server started.
 [01:16:41 INFO]: ================ TELEMETRY MESSAGE ===================
 [01:16:41 INFO]: Server Telemetry is currently not enabled. 

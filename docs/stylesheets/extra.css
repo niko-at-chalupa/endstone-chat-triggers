@@ -378,5 +378,8 @@ p {
 }
 
 .doesntmatter {
-  color: #ffffff30
+  color: #ffffff30;
+  margin-top: 0px;
+  margin-bottom: 2px;
+  display: inline-block;
 }
