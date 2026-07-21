@@ -1,4 +1,5 @@
 import asyncio
+from concurrent.futures import Future
 from typing import Optional
 from twitchAPI.twitch import Twitch
 from twitchAPI.type import AuthScope, TwitchAPIException
@@ -39,7 +40,7 @@ class TwitchApiClient:
         self._twitch: Optional[Twitch] = None
         self._websocket: Optional[EventSubWebsocket] = None
         self._loop = endstone_asyncio.get_loop()
-        self._task: Optional[asyncio.Task] = None
+        self._task: Optional[Future] = None
         self._running = False
 
     def start(self):
@@ -77,6 +78,9 @@ class TwitchApiClient:
                 self._refresh_token
             )
             user = await first(self._twitch.get_users())
+            if user is None:
+                self._logger.error("Failed to fetch authenticated Twitch user.")
+                return
             user_id = user.id
             self._logger.info(f"Trying to connect as {user.display_name}")
             self._websocket = EventSubWebsocket(self._twitch)
@@ -175,8 +179,8 @@ class TwitchApiClient:
             "user_name": data.user_name,
             "user_login": data.user_login,
             "tier": data.tier,
-            "is_gift": False,
-            "cumulative_months": data.cumulative_months or 0,
+            "is_gift": data.is_gift,
+            "cumulative_months": 0,
         })
 
     async def _on_channel_subscription_gift(self, event: ChannelSubscriptionGiftEvent):
@@ -205,7 +209,7 @@ class TwitchApiClient:
             "tier": data.tier,
             "is_gift": False,
             "cumulative_months": data.cumulative_months or 0,
-            "streak_months": data.streak_months,
+            "streak_months": getattr(data, "streak_months", None),
         })
 
     async def _on_channel_cheer(self, event: ChannelCheerEvent):
