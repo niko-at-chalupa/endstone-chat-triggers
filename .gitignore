@@ -5,3 +5,4 @@ bedrock_server
 .devcontainer
 dist/
 .cache
+site/
