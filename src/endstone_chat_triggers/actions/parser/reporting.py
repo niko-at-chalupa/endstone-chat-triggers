@@ -32,7 +32,17 @@ def format_issue(issue: Issue) -> Text:
     text.append(f": {title}\n", style=bold)
 
     text.append(" --> ", style=blue_bold)
-    text.append(f"workflows/{issue.file.name}:{issue.source_line}\n")
+    if issue.source_line is not None:
+        text.append(f"workflows/{issue.file.name}:{issue.source_line}\n")
+    else:
+        text.append(f"workflows/{issue.file.name}\n")
+
+    # Nothing more to render if we have no line to point at — no
+    # gutter, no snippet, no caret. Just the help text, if any.
+    if issue.source_line is None:
+        if issue.help:
+            text.append(f" {issue.help}\n")
+        return text
 
     gutter_w = len(str(issue.source_line))
     pad = " " * gutter_w
@@ -124,16 +134,22 @@ def format_issue_mc(issue: Issue) -> str:
         f"{sev_color}{ColorFormat.BOLD}{label} {header_code}{ColorFormat.RESET}"
         f"{ColorFormat.BOLD}{title}{ColorFormat.RESET}"
     )
-    lines.append(
-        f"{ColorFormat.GRAY}in {ColorFormat.RESET}{ColorFormat.BOLD}"
-        f"workflows/{issue.file.name}{ColorFormat.RESET}"
-        f"{ColorFormat.GRAY}, line {issue.source_line}{ColorFormat.RESET}"
-    )
 
-    src = _source_line(issue.file, issue.source_line)
-    if src is not None:
-        stripped = src.strip()
-        lines.append(f"  {ColorFormat.ITALIC}\u201c{stripped}\u201d{ColorFormat.RESET}")
+    if issue.source_line is not None:
+        lines.append(
+            f"{ColorFormat.GRAY}in {ColorFormat.RESET}{ColorFormat.BOLD}"
+            f"workflows/{issue.file.name}{ColorFormat.RESET}"
+            f"{ColorFormat.GRAY}, line {issue.source_line}{ColorFormat.RESET}"
+        )
+        src = _source_line(issue.file, issue.source_line)
+        if src is not None:
+            stripped = src.strip()
+            lines.append(f"  {ColorFormat.ITALIC}\u201c{stripped}\u201d{ColorFormat.RESET}")
+    else:
+        lines.append(
+            f"{ColorFormat.GRAY}in {ColorFormat.RESET}{ColorFormat.BOLD}"
+            f"workflows/{issue.file.name}{ColorFormat.RESET}"
+        )
 
     if issue.help:
         lines.append(f"  {sev_color}-> {ColorFormat.RESET}{issue.help}")

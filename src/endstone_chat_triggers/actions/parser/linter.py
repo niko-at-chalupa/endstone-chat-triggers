@@ -29,6 +29,17 @@ def _get_line(node: Any) -> int | None:
     return None
 
 
+def _get_seq_item_line(seq: Any, index: int) -> int | None:
+    """Extract line number of a specific item in a ruamel.yaml sequence."""
+    if hasattr(seq, "lc"):
+        try:
+            line, _col = seq.lc.item(index)
+            return line + 1
+        except Exception:
+            pass
+    return None
+
+
 def _load_raw(path: Path) -> CommentedMap:
     """
     Load YAML for inspection only — deliberately independent of
@@ -77,7 +88,9 @@ class RuleRegistry:
 
 
 def _issue(file: Path, line: int | None, **kwargs) -> Issue:
-    return Issue(file=file, source_line=line or 1, **kwargs)
+    # Don't fabricate a line number — if we don't know where the
+    # problem is, source_line stays None and no code snippet is shown.
+    return Issue(file=file, source_line=line, **kwargs)
 
 
 def _load_error_issue(file: Path, error: WorkflowLoadError) -> Issue:
@@ -98,7 +111,7 @@ def check_missing_name(data: CommentedMap, file: Path) -> list[Issue]:
         return [
             _issue(
                 file,
-                _get_line(data),
+                None,
                 code="E001",
                 name="missing_workflow_name",
                 severity=Severity.ERROR,
@@ -267,26 +280,25 @@ def check_twitch_conditions(data: CommentedMap, file: Path) -> list[Issue]:
 
 @RuleRegistry.register()
 def check_unknown_events(data: CommentedMap, file: Path) -> list[Issue]:
-
     events = data.get("event", [])
     if isinstance(events, str):
         events = [events]
-    unknown = sorted(
-        {e for e in events if e and str(e).strip() and e not in VALID_EVENTS}
-    )
-    if unknown:
-        return [
-            _issue(
-                file,
-                _get_line(data),
-                code="W016",
-                name="unknown_event",
-                severity=Severity.WARNING,
-                help=f"Unrecognized event(s): {', '.join(unknown)}. "
-                     f"Valid events are: {', '.join(sorted(VALID_EVENTS))}.",
+
+    issues = []
+    for idx, e in enumerate(events):
+        if e and str(e).strip() and e not in VALID_EVENTS:
+            issues.append(
+                _issue(
+                    file,
+                    _get_seq_item_line(events, idx),
+                    code="W016",
+                    name="unknown_event",
+                    severity=Severity.WARNING,
+                    help=f"Unrecognized event '{e}'. "
+                         f"Valid events are: {', '.join(sorted(VALID_EVENTS))}.",
+                )
             )
-        ]
-    return []
+    return issues
 
 
 def lint_file(path: Path) -> list[Issue]:

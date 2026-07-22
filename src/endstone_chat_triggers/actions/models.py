@@ -43,7 +43,7 @@ class Severity(str, Enum):
 class Issue(BaseModel):
     name: str | None = None
     file: Path
-    source_line: int
+    source_line: int | None
     severity: Severity
     help: str | None = None
     code: str
