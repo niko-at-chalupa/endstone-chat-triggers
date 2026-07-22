@@ -63,6 +63,8 @@ Using an unknown event will print out a warning, so don't worry about accidental
 [20:44:36 WARNING]: [ChatTriggers]   |  ^^^^^^^^^^^^^^^^^^^^^^^ Unrecognized event 'EventThatDoesNotExist'. Valid events are: AlertPlayingEvent, DonationEvent, LoyaltyStoreRedemptionEvent, MerchEvent, StreamLabelsEvent, StreamLabelsUnderlyingEvent, TwitchBitsEvent, TwitchBitsEvent, TwitchChannelPointsEvent, TwitchFollowEvent, TwitchFollowEvent, TwitchHostEvent, TwitchPredictionEvent, TwitchRaidEvent, TwitchRaidEvent, TwitchSubscriptionEvent, TwitchSubscriptionEvent.
 ```
 
+For a list of all events, look at the [events](../workflows/events.md) page.
+
 ### Conditions
 
 Conditions run before any steps do, and are optional. They're a mapping of commands and their expected outcome (i.e., if it fails or not), and different things happen depending on if all the commands align their expected outcome. If **every command** aligns with their expected outcome, then `steps` will be ran. Otherwise, if defined, `fail_steps` will be ran.
