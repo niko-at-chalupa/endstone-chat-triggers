@@ -73,6 +73,14 @@ h2 {
   color: #ffffff;
 }
 
+h3 {
+  font-family: "Xanh Mono";
+  src: url("../fonts/xanh-mono-v19-latin-regular.woff2") format("woff2");
+  font-style: normal;
+  font-display: swap;
+  color: #ffffff;
+}
+
 
 h4 {
   font-family: "Xanh Mono";

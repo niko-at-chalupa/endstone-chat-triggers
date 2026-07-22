@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#workflows" class="md-skip">
+        <a href="#overview" class="md-skip">
           Skip to content
         </a>
       
@@ -326,13 +326,63 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#workflows" class="md-nav__link">
+  <a href="#overview" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Workflows
+        Overview
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Structure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Events
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conditions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conditions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -380,6 +430,88 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workflows/events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -405,13 +537,63 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#workflows" class="md-nav__link">
+  <a href="#overview" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Workflows
+        Overview
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Structure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Events
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conditions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conditions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -434,8 +616,8 @@
 
   <h1>First workflow</h1>
 
-<h2 id="workflows">Workflows</h2>
-<p>ChatTriggers, out-of-the-box, does not do anything. That is because you will need to instruct it how it should respond to events, and the primary (and easiest) way of doing this is through <em>workflows</em>. Workflows are tiny YAML files that define commands to be ran upon certain events and on certain conditions.</p>
+<h2 id="overview">Overview</h2>
+<p>The primary (and easiest) way to write instructions for ChatTriggers is through <em>workflows</em>. Workflows are tiny <a href="https://yaml.org/">YAML</a> files that define conditions and commands.</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># The name of the workflow. It can be anything.</span>
 <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Example Workflow</span>
 
@@ -469,6 +651,68 @@
 <span class="nt">fail_steps</span><span class="p">:</span>
 <span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;say</span><span class="nv"> </span><span class="s">I</span><span class="nv"> </span><span class="s">couldn&#39;t</span><span class="nv"> </span><span class="s">find</span><span class="nv"> </span><span class="s">anybody</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">server!!&quot;</span>
 <span class="w"> </span><span class="c1"># ...you can add more if you&#39;d like</span>
+</code></pre></div>
+<h2 id="structure">Structure</h2>
+<p>Workflows are composed of three primary parts: events, conditions, steps, and fail steps. Since almost everything is centered around commands, you may think of them as command blocks.</p>
+<p><img alt="Diagram showing a Minecraft command-block-style event flow: it goes from event, to conditions, and conditionally to steps. Fail steps are also shown, only running if conditions fail" src="../../assets/images/commandblocks.png" /></p>
+<h3 id="events">Events</h3>
+<p>Events are what trigger your workflows.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">event</span><span class="p">:</span><span class="w"> </span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TwitchFollowEvent</span>
+</code></pre></div>
+<p>You may have multiple events, and their order is arbitrary.</p>
+<p>Using an unknown event will print out a warning, so don't worry about accidentally messing up the name of an event and having your workflow silently fail.</p>
+<div class="highlight"><pre><span></span><code>[20:44:36 WARNING]: [ChatTriggers] warning[W016]: unknown_event
+[20:44:36 WARNING]: [ChatTriggers]  --&gt; workflows/bad_event.yaml:4
+[20:44:36 WARNING]: [ChatTriggers] 4 |  - EventThatDoesNotExist
+[20:44:36 WARNING]: [ChatTriggers]   |  ^^^^^^^^^^^^^^^^^^^^^^^ Unrecognized event &#39;EventThatDoesNotExist&#39;. Valid events are: AlertPlayingEvent, DonationEvent, LoyaltyStoreRedemptionEvent, MerchEvent, StreamLabelsEvent, StreamLabelsUnderlyingEvent, TwitchBitsEvent, TwitchBitsEvent, TwitchChannelPointsEvent, TwitchFollowEvent, TwitchFollowEvent, TwitchHostEvent, TwitchPredictionEvent, TwitchRaidEvent, TwitchRaidEvent, TwitchSubscriptionEvent, TwitchSubscriptionEvent.
+</code></pre></div>
+<p>For a list of all events, look at the <a href="../../workflows/events/">events</a> page.</p>
+<h3 id="conditions">Conditions</h3>
+<p>Conditions run before any steps do, and are optional. They're a mapping of commands and their expected outcome (i.e., if it fails or not), and different things happen depending on if all the commands align their expected outcome. If <strong>every command</strong> aligns with their expected outcome, then <code>steps</code> will be ran. Otherwise, if defined, <code>fail_steps</code> will be ran.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">conditions</span><span class="p">:</span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">testfor @p</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+<p><img alt="Flowchart showing how conditions choose which list of steps should be ran" src="../../assets/images/conditions-flowchart.png" /></p>
+<p>Let's pretend we're the parser reading your workflow. We'll evaluate the following workflow and choose which list of steps to run based off of the conditions.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Example Workflow</span>
+
+<span class="c1"># Disregard the event for now, that&#39;s not what we&#39;re focused on.</span>
+<span class="nt">event</span><span class="p">:</span><span class="w"> </span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TwitchFollowEvent</span>
+
+<span class="nt">conditions</span><span class="p">:</span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">testfor @p</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">steps</span><span class="p">:</span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;execute</span><span class="nv"> </span><span class="s">at</span><span class="nv"> </span><span class="s">@p</span><span class="nv"> </span><span class="s">run</span><span class="nv"> </span><span class="s">summon</span><span class="nv"> </span><span class="s">lightning_bolt&quot;</span>
+
+<span class="nt">fail_steps</span><span class="p">:</span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;say</span><span class="nv"> </span><span class="s">I</span><span class="nv"> </span><span class="s">couldn&#39;t</span><span class="nv"> </span><span class="s">find</span><span class="nv"> </span><span class="s">anybody</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">server!!&quot;</span>
+</code></pre></div>
+<p>In this example, there's only one condition: <code>testfor @p: true</code>. What we'll do is run the command <code>testfor @p</code>, and see the output.</p>
+<div class="highlight"><pre><span></span><code>&gt; testfor @p
+[21:04:53 ERROR]: No targets matched selector
+</code></pre></div>
+<p>Looks like the command failed! In this case, the outcome is <code>false</code>. The expected outcome is <code>true</code>, so we should run <code>fail_steps</code>.</p>
+<p>Now, let's try the same scenario but with a player in the game. Say we have a player spawned in, and we run the commmand again:</p>
+<div class="highlight"><pre><span></span><code>&gt; testfor @p
+[21:12:55 INFO]: Found Chalupa7235
+</code></pre></div>
+<p>This time, the command succeeded! The outcome is <code>true</code>, and since the expected outcome is also <code>true</code>, we should run <code>steps</code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">About Condition Commands</p>
+<p>Condition commands run as regular commands. Every command you run as a conditional command works functionally the same as if you had ran the command in the server console or in game chat.</p>
+</div>
+<p><strong>Conditions are optional</strong>, so you can just omit them from your workflow to just have the workflow run <code>steps</code> every single time.</p>
+<h3 id="steps">Steps</h3>
+<p>Steps define the main actions that your workflows run. Steps are just a list of commands, and are ran in the same order as they are defined.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">steps</span><span class="p">:</span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;say</span><span class="nv"> </span><span class="s">Steps</span><span class="nv"> </span><span class="s">ran&quot;</span>
+
+<span class="c1"># Optional. If your conditions fail, and you don&#39;t have `fail_steps`, then nothing happens.</span>
+<span class="nt">fail_steps</span><span class="p">:</span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;say</span><span class="nv"> </span><span class="s">Fail</span><span class="nv"> </span><span class="s">steps</span><span class="nv"> </span><span class="s">ran&quot;</span>
 </code></pre></div>
 
 
