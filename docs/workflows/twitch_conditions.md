@@ -19,58 +19,72 @@ You can use these placeholders inside your `steps`:
 
 ## Examples
 
-### Spawn a creeper on bits
+> <div class="animated-header-wrap">
+>   <h4>Spawn a charged creeper upon five bits donation</h4>
+> </div>
+>
+>```yaml
+>name: "charged creeper on bits"
+>event:
+>  - TwitchBitsEvent
+>twitch_conditions:
+>  target:
+>    - MakiTazo
+>  amount: 5
+>steps:
+>  - 'execute at {target} run summon creeper ~ ~ ~ ~ ~ minecraft:become_charged "{user_name}"'
+>```
 
-```yaml
-name: "charged creeper on bits"
-event:
-  - TwitchBitsEvent
-twitch_conditions:
-  target:
-    - MakiTazo
-  amount: 5
-steps:
-  - 'execute at {target} run summon creeper ~ ~ ~ ~ ~ minecraft:become_charged "{user_name}"'
-```
+<!-- -->
 
-### Invoke a wither on channel point redemption
+> <div class="animated-header-wrap">
+>   <h4>Spawn a wither on channel point redemption</h4>
+> </div>
+>
+>```yaml
+>name: "wither on redemption"
+>event:
+>  - TwitchChannelPointsEvent
+>twitch_conditions:
+>  target:
+>    - MakiTazo
+>  reward_title: "Summon me a Wither"
+>steps:
+>  - 'execute at {target} run summon wither ~ ~ ~'
+>```
 
-```yaml
-name: "wither on redemption"
-event:
-  - TwitchChannelPointsEvent
-twitch_conditions:
-  target:
-    - MakiTazo
-  reward_title: "Summon me a Wither"
-steps:
-  - 'execute at {target} run summon wither ~ ~ ~'
-```
+<!-- -->
 
-### TNT rain on raid
+> <div class="animated-header-wrap">
+>   <h4>TNT rain upon raid</h4>
+> </div>
+>
+>```yaml
+>name: "raid tnt"
+>event:
+>  - TwitchRaidEvent
+>twitch_conditions:
+>  target:
+>    - MakiTazo
+>  max_viewer_multiplier: 50
+>steps:
+>  - 'execute at {target} run summon tnt ~ ~2 ~'
+>```
 
-```yaml
-name: "raid tnt"
-event:
-  - TwitchRaidEvent
-twitch_conditions:
-  target:
-    - MakiTazo
-  max_viewer_multiplier: 50
-steps:
-  - 'execute at {target} run summon tnt ~ ~2 ~'
-```
+<!-- -->
 
-### TNT on Tiered Suscription
-
-```yaml
-name: "sub tnt barrage"
-event:
-  - TwitchSubscriptionEvent
-twitch_conditions:
-  target:
-    - MakiTazo
-  apply_tiers: true
-steps:
-  - 'execute at {target} run summon tnt ~ ~5 ~' # This will execute two times if sub was Tier 2
-```
+> <div class="animated-header-wrap">
+>   <h4>TNT upon tiered subscription</h4>
+> </div>
+>
+>```yaml
+>name: "sub tnt barrage"
+>event:
+>  - TwitchSubscriptionEvent
+>twitch_conditions:
+>  target:
+>    - MakiTazo
+>  apply_tiers: true
+>steps:
+>  - 'execute at {target} run summon tnt ~ ~5 ~' # This will execute two times if sub was Tier 2
+>```
