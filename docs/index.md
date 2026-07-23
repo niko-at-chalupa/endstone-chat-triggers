@@ -68,7 +68,7 @@
 > Other plugins can interact with ChatTriggers, which means you're not limited to workflows.
 >
 > ```python
-> from endstone_twitch_spawn import (
+> from endstone_chat_triggers import (
 >     get_chat_triggers_api, 
 >     TwitchFollowEvent, 
 >     streamlabs_event_handler, 
