@@ -49,23 +49,23 @@ class AlertPlayingEvent(StreamlabsBaseEvent):
     message: AlertPlayingMessage
 
 
-class TwitchFollowEvent(StreamlabsBaseEvent):
+class StreamlabsTwitchFollowEvent(StreamlabsBaseEvent):
     message: List[TwitchFollowMessage]
 
 
-class TwitchSubscriptionEvent(StreamlabsBaseEvent):
+class StreamlabsTwitchSubscriptionEvent(StreamlabsBaseEvent):
     message: List[TwitchSubscriptionMessage]
 
 
-class TwitchBitsEvent(StreamlabsBaseEvent):
+class StreamlabsTwitchBitsEvent(StreamlabsBaseEvent):
     message: List[TwitchBitsMessage]
 
 
-class TwitchHostEvent(StreamlabsBaseEvent):
+class StreamlabsTwitchHostEvent(StreamlabsBaseEvent):
     message: List[TwitchHostMessage]
 
 
-class TwitchRaidEvent(StreamlabsBaseEvent):
+class StreamlabsTwitchRaidEvent(StreamlabsBaseEvent):
     message: List[TwitchRaidMessage]
 
 
@@ -84,25 +84,25 @@ def parse_streamlabs_event(data: dict) -> Optional[StreamEvent]:
     elif event_type == "streamlabels.underlying":
         return StreamLabelsUnderlyingEvent.model_validate(data)
     elif event_type == "follow":
-        return TwitchFollowEvent.model_validate(data)
+        return StreamlabsTwitchFollowEvent.model_validate(data)
     elif event_type == "subscription":
-        return TwitchSubscriptionEvent.model_validate(data)
+        return StreamlabsTwitchSubscriptionEvent.model_validate(data)
     elif event_type == "bits":
-        return TwitchBitsEvent.model_validate(data)
+        return StreamlabsTwitchBitsEvent.model_validate(data)
     elif event_type == "host":
-        return TwitchHostEvent.model_validate(data)
+        return StreamlabsTwitchHostEvent.model_validate(data)
     elif event_type == "raid":
-        return TwitchRaidEvent.model_validate(data)
+        return StreamlabsTwitchRaidEvent.model_validate(data)
     else:
         return None
 
 
 EVENTS = [
-    TwitchFollowEvent,
-    TwitchSubscriptionEvent,
-    TwitchBitsEvent,
-    TwitchHostEvent,
-    TwitchRaidEvent,
+    StreamlabsTwitchFollowEvent,
+    StreamlabsTwitchSubscriptionEvent,
+    StreamlabsTwitchBitsEvent,
+    StreamlabsTwitchHostEvent,
+    StreamlabsTwitchRaidEvent,
     LoyaltyStoreRedemptionEvent,
     MerchEvent,
     DonationEvent,

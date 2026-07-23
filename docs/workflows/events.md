@@ -15,11 +15,11 @@ Use these when `use_twitchapi: true` is configured:
 ### Streamlabs Events
 Use these when `use_streamlabs: true` is configured:
 
-*   **`TwitchFollowEvent`**: Triggered when a user follows.
-*   **`TwitchSubscriptionEvent`**: Triggered when a user subscribes or resubscribes.
-*   **`TwitchBitsEvent`**: Triggered when bits are cheered.
-*   **`TwitchHostEvent`**: Triggered when another channel hosts the stream.
-*   **`TwitchRaidEvent`**: Triggered when the channel is raided.
+*   **`StreamlabsTwitchFollowEvent`**: Triggered when a user follows.
+*   **`StreamlabsTwitchSubscriptionEvent`**: Triggered when a user subscribes or resubscribes.
+*   **`StreamlabsTwitchBitsEvent`**: Triggered when bits are cheered.
+*   **`StreamlabsTwitchHostEvent`**: Triggered when another channel hosts the stream.
+*   **`StreamlabsTwitchRaidEvent`**: Triggered when the channel is raided.
 *   **`DonationEvent`**: Triggered when a monetary donation is received.
 *   **`LoyaltyStoreRedemptionEvent`**: Triggered when a viewer redeems an item from the Streamlabs Loyalty Store.
 *   **`MerchEvent`**: Triggered when merch is purchased.

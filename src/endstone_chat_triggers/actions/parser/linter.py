@@ -252,7 +252,7 @@ def check_twitch_conditions(data: CommentedMap, file: Path) -> list[Issue]:
 
     issues = []
 
-    has_twitch_event = any(isinstance(evt, str) and evt.startswith("Twitch") for evt in events)
+    has_twitch_event = any(isinstance(evt, str) and (evt.startswith("Twitch") or evt.startswith("StreamlabsTwitch")) for evt in events)
     if not has_twitch_event:
         issues.append(_issue(
             file,
@@ -348,6 +348,10 @@ def check_twitch_conditions(data: CommentedMap, file: Path) -> list[Issue]:
         "TwitchRaidEvent": {"target", "max_viewer_multiplier"},
         "TwitchFollowEvent": {"target"},
         "TwitchPredictionEvent": set(),
+        "StreamlabsTwitchBitsEvent": {"target", "amount"},
+        "StreamlabsTwitchSubscriptionEvent": {"target", "apply_tiers"},
+        "StreamlabsTwitchRaidEvent": {"target", "max_viewer_multiplier"},
+        "StreamlabsTwitchFollowEvent": {"target"},
     }
 
     for evt in events:
