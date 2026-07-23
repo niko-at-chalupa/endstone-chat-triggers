@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "endstone-chat-triggers"
-version = "1.0.1"
+version = "1.1.0"
 description = "A plugin for streamers!! Handles live events and such"
 authors = [
     { email = "nikolekrescendo@protonmail.com", name = "niko-at-chalupa" },
