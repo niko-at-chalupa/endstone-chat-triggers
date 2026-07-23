@@ -34,3 +34,14 @@ plugins:
       repository: niko-at-chalupa/endstone-chat-triggers
       branch: main
       enabled: true
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Configuration: getting-started/configuration.md
+      - First Workflow: getting-started/first-workflow.md
+      - Installation: getting-started/installation.md
+  - Plugin API:
+      - Introduction: plugin-api/introduction.md
+  - Workflows:
+      - Events: workflows/events.md
+      - Twitch Conditions: workflows/twitch_conditions.md
