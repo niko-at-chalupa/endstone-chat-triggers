@@ -1,3 +1,5 @@
+# Introduction
+
 There's a lot of advanced behavior you can achieve with [workflows](../getting-started/first-workflow.md). Despite that, it's still impossible to do things that involve logic and stuff beyond commands. If we desire this behavior, we shouldn't use workflows. Luckily--ChatTriggers offers a rich plugin API accessible through Endstone plugins written in Python.
 
 !!! warning

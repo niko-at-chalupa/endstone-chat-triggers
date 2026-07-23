@@ -1,3 +1,5 @@
+# Events
+
 ## List of Valid Events
 
 You can use the following event names in the `event` list of your workflows, depending on which event source is configured in your `config.yaml`. You can use events from any source, though **events from inactive sources will not run**.

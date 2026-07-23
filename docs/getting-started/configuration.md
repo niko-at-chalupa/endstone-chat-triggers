@@ -1,3 +1,5 @@
+# Configuration
+
 ## Configuration File
 
 The configuration file for the plugin is located at `plugins/chat_triggers/config.yaml`. This file (alongside its parent directories) are created every time the plugin is started (which includes plugin reloads). The configuration is in the [YAML](https://yaml.org/) format, and every field has a comment before it.

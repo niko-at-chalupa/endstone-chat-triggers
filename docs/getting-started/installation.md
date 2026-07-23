@@ -1,3 +1,5 @@
+# Installation
+
 ## Endstone
 
 ChatTriggers uses the [Endstone](https://github.com/EndstoneMC/endstone/) modloader for Minecraft bedrock.
