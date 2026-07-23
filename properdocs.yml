@@ -9,6 +9,7 @@ theme:
   favicon: assets/images/favicon.png
 extra_css:
   - stylesheets/extra.css
+  - stylesheets/badges.css
 extra:
   generator: false
 markdown_extensions:

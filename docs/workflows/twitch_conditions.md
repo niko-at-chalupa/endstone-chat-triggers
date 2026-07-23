@@ -1,5 +1,3 @@
-# Twitch Conditions
-
 `twitch_conditions` is an optional block in your workflow that adds Twitch-specific filtering and behavior on top of the standard `conditions`. Unlike `conditions`, these don't run commands — they filter based on event data directly.
 
 ## Fields
@@ -7,10 +5,10 @@
 | Field | Type | Description |
 |---|---|---|
 | `target` | `list[str]` | Player names in the server to apply steps to. Steps are skipped for players not online. If none are online, the workflow does nothing. |
-| `amount` | `int` | *(Bits only)* Only trigger if the cheered amount matches exactly. |
-| `reward_title` | `str` | *(Channel Points only)* Only trigger if the redeemed reward title matches. |
-| `apply_tiers` | `bool` | *(Subscription only)* If `true`, repeats steps once per tier level (Tier 1 = 1x, Tier 2 = 2x, Tier 3 = 3x). Default: `false`. |
-| `max_viewer_multiplier` | `int` | *(Raid only)* Repeats steps once per viewer, capped at this value. |
+| `amount` | `int` | <span class="badge badge-red">bits only</span> Only trigger if the cheered amount matches exactly. |
+| `reward_title` | `str` | <span class="badge badge-red">channel points only</span> Only trigger if the redeemed reward title matches. |
+| `apply_tiers` | `bool` | <span class="badge badge-red">subscription only</span> If `true`, repeats steps once per tier level (Tier 1 = 1x, Tier 2 = 2x, Tier 3 = 3x). Default: `false`. |
+| `max_viewer_multiplier` | `int` | <span class="badge badge-red">raid only</span> Repeats steps once per viewer, capped at this value. |
 
 ## Placeholders
 

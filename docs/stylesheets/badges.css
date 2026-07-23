@@ -1,0 +1,18 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 11px;
+  font-weight: normal;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 3px;
+  line-height: 1.4;
+}
+
+.badge-red    { background: #e05d44; }
+.badge-green  { background: #4c1;    }
+.badge-purple { background: #ddb9f8; color: #333; }
+.badge-blue   { background: #007ec6; }
+.badge-orange { background: #fe7d37; }
+.badge-grey   { background: #9f9f9f; }
