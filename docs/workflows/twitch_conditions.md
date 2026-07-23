@@ -63,10 +63,10 @@ steps:
   - 'execute at {target} run summon tnt ~ ~2 ~'
 ```
 
-### Double the effects on Tiered subscription
+### TNT on Tiered Suscription
 
 ```yaml
-name: "sub lightning effects"
+name: "sub tnt barrage"
 event:
   - TwitchSubscriptionEvent
 twitch_conditions:
@@ -74,5 +74,5 @@ twitch_conditions:
     - MakiTazo
   apply_tiers: true
 steps:
-  - 'execute at {target} run summon lightning_bolt'
+  - 'execute at {target} run summon tnt ~ ~5 ~' # This will execute two times if sub was Tier 2
 ```
