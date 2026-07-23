@@ -50,6 +50,7 @@ class ChatTriggersPlugin(Plugin):
 
                 self.logger.info("Connecting to Streamlabs Socket API...")
                 from .events.streamlabs.client import StreamlabsClient
+
                 self._client = StreamlabsClient(
                     self.logger,
                     self.config.streamlabs_socket_token,
@@ -57,7 +58,12 @@ class ChatTriggersPlugin(Plugin):
                 )
                 self._client.start()
             case (False, True):
-                if not self.config.twitch_client_id or not self.config.twitch_client_secret or not self.config.twitch_access_token or not self.config.twitch_refresh_token:
+                if (
+                    not self.config.twitch_client_id
+                    or not self.config.twitch_client_secret
+                    or not self.config.twitch_access_token
+                    or not self.config.twitch_refresh_token
+                ):
                     self.logger.error(
                         "*" * 40
                         + f"\nuse_twitchapi is enabled but twitch_client_id, twitch_client_secret, twitch_access_token, or twitch_refresh_token is missing! Disabling plugin.\n\nPlease check \n{self.data_folder / 'config.yaml'}\nfor more info!\n"
@@ -68,6 +74,7 @@ class ChatTriggersPlugin(Plugin):
 
                 self.logger.info("Connecting to Twitch via TwitchAPI...")
                 from .events.twitchapi.client import TwitchApiClient
+
                 self._client = TwitchApiClient(
                     self.logger,
                     self.config.twitch_client_id,
@@ -97,6 +104,7 @@ class ChatTriggersPlugin(Plugin):
         if self.config.log_events:
             self.logger.set_level(self.logger.Level.DEBUG)
             from .debug import Listener
+
             self._stream_event_handler.register_events(Listener(self.logger))
 
         self.workflow_executor = WorkflowExecutor(self)

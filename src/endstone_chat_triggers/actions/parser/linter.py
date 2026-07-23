@@ -240,6 +240,7 @@ def check_duplicate_conditions(data: CommentedMap, file: Path) -> list[Issue]:
         ]
     return []
 
+
 @RuleRegistry.register()
 def check_twitch_conditions(data: CommentedMap, file: Path) -> list[Issue]:
     raw_twitch = data.get("twitch_conditions")
@@ -252,94 +253,116 @@ def check_twitch_conditions(data: CommentedMap, file: Path) -> list[Issue]:
 
     issues = []
 
-    has_twitch_event = any(isinstance(evt, str) and (evt.startswith("Twitch") or evt.startswith("StreamlabsTwitch")) for evt in events)
+    has_twitch_event = any(
+        isinstance(evt, str)
+        and (evt.startswith("Twitch") or evt.startswith("StreamlabsTwitch"))
+        for evt in events
+    )
     if not has_twitch_event:
-        issues.append(_issue(
-            file,
-            _get_line(raw_twitch),
-            code="W018",
-            name="twitch_conditions_without_twitch_events",
-            severity=Severity.WARNING,
-            help="'twitch_conditions' is defined, but no Twitch-related events are declared in 'event'.",
-        ))
+        issues.append(
+            _issue(
+                file,
+                _get_line(raw_twitch),
+                code="W018",
+                name="twitch_conditions_without_twitch_events",
+                severity=Severity.WARNING,
+                help="'twitch_conditions' is defined, but no Twitch-related events are declared in 'event'.",
+            )
+        )
 
     if "amount" in raw_twitch:
         val = raw_twitch["amount"]
         if val is not None:
             if isinstance(val, bool) or not isinstance(val, int) or val <= 0:
-                issues.append(_issue(
-                    file,
-                    _get_line(raw_twitch),
-                    code="E004",
-                    name="invalid_twitch_condition_value",
-                    severity=Severity.ERROR,
-                    help="Field 'amount' must be a positive integer.",
-                ))
+                issues.append(
+                    _issue(
+                        file,
+                        _get_line(raw_twitch),
+                        code="E004",
+                        name="invalid_twitch_condition_value",
+                        severity=Severity.ERROR,
+                        help="Field 'amount' must be a positive integer.",
+                    )
+                )
 
     if "max_viewer_multiplier" in raw_twitch:
         val = raw_twitch["max_viewer_multiplier"]
         if val is not None:
             if isinstance(val, bool) or not isinstance(val, int) or val <= 0:
-                issues.append(_issue(
-                    file,
-                    _get_line(raw_twitch),
-                    code="E004",
-                    name="invalid_twitch_condition_value",
-                    severity=Severity.ERROR,
-                    help="Field 'max_viewer_multiplier' must be a positive integer.",
-                ))
+                issues.append(
+                    _issue(
+                        file,
+                        _get_line(raw_twitch),
+                        code="E004",
+                        name="invalid_twitch_condition_value",
+                        severity=Severity.ERROR,
+                        help="Field 'max_viewer_multiplier' must be a positive integer.",
+                    )
+                )
 
     if "apply_tiers" in raw_twitch:
         val = raw_twitch["apply_tiers"]
         if val is not None:
             if not isinstance(val, bool):
-                issues.append(_issue(
-                    file,
-                    _get_line(raw_twitch),
-                    code="E004",
-                    name="invalid_twitch_condition_value",
-                    severity=Severity.ERROR,
-                    help="Field 'apply_tiers' must be a boolean.",
-                ))
+                issues.append(
+                    _issue(
+                        file,
+                        _get_line(raw_twitch),
+                        code="E004",
+                        name="invalid_twitch_condition_value",
+                        severity=Severity.ERROR,
+                        help="Field 'apply_tiers' must be a boolean.",
+                    )
+                )
 
     if "target" in raw_twitch:
         val = raw_twitch["target"]
         if val is not None:
-            if not isinstance(val, list) or not val or any(not isinstance(item, (str, int)) for item in val):
-                issues.append(_issue(
-                    file,
-                    _get_line(raw_twitch),
-                    code="E004",
-                    name="invalid_twitch_condition_value",
-                    severity=Severity.ERROR,
-                    help="Field 'target' must be a non-empty list of strings or integers.",
-                ))
+            if (
+                not isinstance(val, list)
+                or not val
+                or any(not isinstance(item, (str, int)) for item in val)
+            ):
+                issues.append(
+                    _issue(
+                        file,
+                        _get_line(raw_twitch),
+                        code="E004",
+                        name="invalid_twitch_condition_value",
+                        severity=Severity.ERROR,
+                        help="Field 'target' must be a non-empty list of strings or integers.",
+                    )
+                )
 
     if "reward_id" in raw_twitch:
         val = raw_twitch["reward_id"]
         if val is not None:
             if isinstance(val, bool) or not isinstance(val, (str, int)):
-                issues.append(_issue(
-                    file,
-                    _get_line(raw_twitch),
-                    code="E004",
-                    name="invalid_twitch_condition_value",
-                    severity=Severity.ERROR,
-                    help="Field 'reward_id' must be a string or integer.",
-                ))
+                issues.append(
+                    _issue(
+                        file,
+                        _get_line(raw_twitch),
+                        code="E004",
+                        name="invalid_twitch_condition_value",
+                        severity=Severity.ERROR,
+                        help="Field 'reward_id' must be a string or integer.",
+                    )
+                )
 
     if "reward_title" in raw_twitch:
         val = raw_twitch["reward_title"]
         if val is not None:
             if isinstance(val, bool) or not isinstance(val, (str, int)):
-                issues.append(_issue(
-                    file,
-                    _get_line(raw_twitch),
-                    code="E004",
-                    name="invalid_twitch_condition_value",
-                    severity=Severity.ERROR,
-                    help="Field 'reward_title' must be a string or integer.",
-                ))
+                issues.append(
+                    _issue(
+                        file,
+                        _get_line(raw_twitch),
+                        code="E004",
+                        name="invalid_twitch_condition_value",
+                        severity=Severity.ERROR,
+                        help="Field 'reward_title' must be a string or integer.",
+                    )
+                )
 
     VALID_FIELDS = {
         "TwitchBitsEvent": {"target", "amount"},
@@ -360,16 +383,19 @@ def check_twitch_conditions(data: CommentedMap, file: Path) -> list[Issue]:
             continue
         for key in raw_twitch:
             if key not in allowed:
-                issues.append(_issue(
-                    file,
-                    _get_line(raw_twitch),
-                    code="W017",
-                    name="invalid_twitch_condition_field",
-                    severity=Severity.WARNING,
-                    help=f"Field '{key}' is not valid for event '{evt}'. Valid fields: {', '.join(sorted(allowed)) or 'none'}.",
-                ))
+                issues.append(
+                    _issue(
+                        file,
+                        _get_line(raw_twitch),
+                        code="W017",
+                        name="invalid_twitch_condition_field",
+                        severity=Severity.WARNING,
+                        help=f"Field '{key}' is not valid for event '{evt}'. Valid fields: {', '.join(sorted(allowed)) or 'none'}.",
+                    )
+                )
 
     return issues
+
 
 @RuleRegistry.register()
 def check_unknown_events(data: CommentedMap, file: Path) -> list[Issue]:
@@ -388,7 +414,7 @@ def check_unknown_events(data: CommentedMap, file: Path) -> list[Issue]:
                     name="unknown_event",
                     severity=Severity.WARNING,
                     help=f"Unrecognized event '{e}'. "
-                         f"Valid events are: {', '.join(sorted(VALID_EVENTS))}.",
+                    f"Valid events are: {', '.join(sorted(VALID_EVENTS))}.",
                 )
             )
     return issues

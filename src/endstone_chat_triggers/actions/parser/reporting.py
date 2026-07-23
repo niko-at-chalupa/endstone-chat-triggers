@@ -144,7 +144,9 @@ def format_issue_mc(issue: Issue) -> str:
         src = _source_line(issue.file, issue.source_line)
         if src is not None:
             stripped = src.strip()
-            lines.append(f"  {ColorFormat.ITALIC}\u201c{stripped}\u201d{ColorFormat.RESET}")
+            lines.append(
+                f"  {ColorFormat.ITALIC}\u201c{stripped}\u201d{ColorFormat.RESET}"
+            )
     else:
         lines.append(
             f"{ColorFormat.GRAY}in {ColorFormat.RESET}{ColorFormat.BOLD}"

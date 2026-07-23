@@ -55,7 +55,9 @@ def parse_workflow(workflow: str, source_file: Path | None = None) -> Workflow:
     raw_conditions = data.get("conditions") or []
 
     raw_twitch = data.get("twitch_conditions")
-    twitch_conditions = TwitchConditions(**raw_twitch) if isinstance(raw_twitch, dict) else None
+    twitch_conditions = (
+        TwitchConditions(**raw_twitch) if isinstance(raw_twitch, dict) else None
+    )
 
     workflow_obj = Workflow(
         name=data.get("name", ""),

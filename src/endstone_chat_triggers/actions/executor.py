@@ -20,17 +20,17 @@ class _CommandExecutor:
     def resolve_placeholders(command_line: str, event: Any) -> str:
         def get_path_val(obj: Any, path: str) -> Any:
             current = obj
-            
+
             field_pattern = re.compile(r"^([a-zA-Z_][a-zA-Z0-9_]*)(?:\[(-?\d+)\])?$")
 
-            for part in path.split('.'):
+            for part in path.split("."):
                 if current is None:
                     return None
-                
+
                 match = field_pattern.match(part)
                 if not match:
                     return None
-                
+
                 field_name, index_str = match.groups()
                 if isinstance(current, dict):
                     current = current.get(field_name)
@@ -40,10 +40,14 @@ class _CommandExecutor:
                 if isinstance(current, (list, tuple)):
                     if not current:
                         return None
-                    
+
                     if index_str is not None:
                         idx = int(index_str)
-                        current = current[idx] if -len(current) <= idx < len(current) else None
+                        current = (
+                            current[idx]
+                            if -len(current) <= idx < len(current)
+                            else None
+                        )
                     else:
                         current = current[-1]
 
@@ -73,6 +77,7 @@ class _CommandExecutor:
 
 def _get_multiplier(tc, event: StreamEvent) -> int:
     from ..events.twitchapi.events import TwitchSubscriptionEvent, TwitchRaidEvent
+
     if isinstance(event, TwitchSubscriptionEvent) and tc.apply_tiers:
         tier = event.message[0].tier
         return int(tier) // 1000
@@ -84,6 +89,7 @@ def _get_multiplier(tc, event: StreamEvent) -> int:
 
 def _check_twitch_conditions(tc, event: StreamEvent) -> bool:
     from ..events.twitchapi.events import TwitchBitsEvent, TwitchChannelPointsEvent
+
     if isinstance(event, TwitchBitsEvent) and tc.amount is not None:
         return event.message[0].amount == tc.amount
     if isinstance(event, TwitchChannelPointsEvent):
@@ -114,7 +120,16 @@ class WorkflowExecutor:
             TwitchChannelPointsEvent,
             TwitchSubscriptionEvent,
         )
-        if isinstance(event, (TwitchBitsEvent, TwitchFollowEvent, TwitchChannelPointsEvent, TwitchSubscriptionEvent)):
+
+        if isinstance(
+            event,
+            (
+                TwitchBitsEvent,
+                TwitchFollowEvent,
+                TwitchChannelPointsEvent,
+                TwitchSubscriptionEvent,
+            ),
+        ):
             return event.message[0].user_name
         return None
 
@@ -122,10 +137,17 @@ class WorkflowExecutor:
         condition_results: list[ResolvedCondition] = []
 
         for condition in workflow.conditions:
-            actual = self._command_executor.resolve_placeholders_and_run(condition.command, event)
+            actual = self._command_executor.resolve_placeholders_and_run(
+                condition.command, event
+            )
             condition_results.append(condition.resolve(actual))
             if actual != condition.expected:
-                self._run_sync(lambda: [self._command_executor.resolve_placeholders(step, event) for step in workflow.fail_steps])
+                self._run_sync(
+                    lambda: [
+                        self._command_executor.resolve_placeholders(step, event)
+                        for step in workflow.fail_steps
+                    ]
+                )
                 return ExecutionResult(
                     workflow_name=workflow.name,
                     triggered=False,
@@ -143,6 +165,7 @@ class WorkflowExecutor:
 
         ran_steps: list[str] = []
         user_name = self._get_user_name(event)
+
         def _task():
             multiplier = 1
             targets = []
@@ -161,7 +184,9 @@ class WorkflowExecutor:
                             command = step.replace("{target}", target.name)
                             if user_name:
                                 command = command.replace("{user_name}", user_name)
-                            self._command_executor.resolve_placeholders_and_run(command, event)
+                            self._command_executor.resolve_placeholders_and_run(
+                                command, event
+                            )
                             ran_steps.append(command)
             else:
                 for _ in range(multiplier):
@@ -169,7 +194,9 @@ class WorkflowExecutor:
                         command = step
                         if user_name:
                             command = command.replace("{user_name}", user_name)
-                        self._command_executor.resolve_placeholders_and_run(command, event)
+                        self._command_executor.resolve_placeholders_and_run(
+                            command, event
+                        )
                         ran_steps.append(command)
 
         self._plugin.server.scheduler.run_task(self._plugin, _task)

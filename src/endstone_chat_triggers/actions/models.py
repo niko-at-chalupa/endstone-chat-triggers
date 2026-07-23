@@ -16,6 +16,7 @@ class Condition(BaseModel):
     def resolve(self, actual: bool) -> ResolvedCondition:
         return ResolvedCondition(**self.model_dump(), actual=actual)
 
+
 class TwitchConditions(BaseModel):
     target: list[str] = Field(default_factory=list)
     amount: Optional[int] = None
@@ -23,6 +24,7 @@ class TwitchConditions(BaseModel):
     reward_title: Optional[str] = None
     apply_tiers: bool = False
     max_viewer_multiplier: Optional[int] = None
+
 
 class ResolvedCondition(Condition):
     actual: bool

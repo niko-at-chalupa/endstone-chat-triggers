@@ -51,7 +51,7 @@ class WorkflowManager:
                 if player.is_op:
                     player.send_message("More details in the server console.")
 
-        for workflow in self.workflows:     
+        for workflow in self.workflows:
             if len(workflow.warnings) > 0:
                 self._plugin.server.broadcast(
                     f"{ColorFormat.YELLOW}Workflow {ColorFormat.BOLD}{workflow.name}{ColorFormat.RESET}{ColorFormat.YELLOW} emitted warnings, but succeeded load",
