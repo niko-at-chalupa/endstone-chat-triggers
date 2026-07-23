@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from .models import Workflow, ResolvedCondition
 from endstone.plugin import Plugin
 from .models import ExecutionResult
@@ -6,6 +6,7 @@ from endstone import Logger
 from ..events.base import StreamEvent, stream_event_handler
 from ..events.streamlabs import EVENTS as STREAMLABS_EVENTS
 from ..events.twitchapi import EVENTS as TWITCHAPI_EVENTS
+import re
 
 if TYPE_CHECKING:
     from . import WorkflowManager
@@ -14,6 +15,46 @@ if TYPE_CHECKING:
 class _CommandExecutor:
     def __init__(self, plugin: Plugin):
         self._plugin = plugin
+
+    @staticmethod
+    def resolve_placeholders(command_line: str, event: Any) -> str:
+        def get_path_val(obj: Any, path: str) -> Any:
+            current = obj
+            
+            field_pattern = re.compile(r"^([a-zA-Z_][a-zA-Z0-9_]*)(?:\[(-?\d+)\])?$")
+
+            for part in path.split('.'):
+                if current is None:
+                    return None
+                
+                match = field_pattern.match(part)
+                if not match:
+                    return None
+                
+                field_name, index_str = match.groups()
+                if isinstance(current, dict):
+                    current = current.get(field_name)
+                else:
+                    current = getattr(current, field_name, None)
+
+                if isinstance(current, (list, tuple)):
+                    if not current:
+                        return None
+                    
+                    if index_str is not None:
+                        idx = int(index_str)
+                        current = current[idx] if -len(current) <= idx < len(current) else None
+                    else:
+                        current = current[-1]
+
+            return current
+
+        def replacer(match: re.Match) -> str:
+            path = match.group(1)
+            val = get_path_val(event, path)
+            return str(val) if val is not None else match.group(0)
+
+        return re.sub(r"\{([a-zA-Z0-9_.[\]-]+)\}", replacer, command_line)
 
     def run(self, command_line: str) -> bool:
         result = {}
@@ -25,6 +66,9 @@ class _CommandExecutor:
 
         self._plugin.server.scheduler.run_task(self._plugin, _task)
         return result.get("value", False)
+
+    def resolve_placeholders_and_run(self, command_line: str, event: StreamEvent):
+        self.run(self.resolve_placeholders(command_line, event))
 
 
 def _get_multiplier(tc, event: StreamEvent) -> int:
@@ -78,19 +122,19 @@ class WorkflowExecutor:
         condition_results: list[ResolvedCondition] = []
 
         for condition in workflow.conditions:
-            actual = self._command_executor.run(condition.command)
+            actual = self._command_executor.resolve_placeholders_and_run(condition.command, event)
             condition_results.append(condition.resolve(actual))
             if actual != condition.expected:
-                self._run_sync(lambda: [self._command_executor.run(step) for step in workflow.fail_steps])
+                self._run_sync(lambda: [self._command_executor.resolve_placeholders(step, event) for step in workflow.fail_steps])
                 return ExecutionResult(
                     workflow_name=workflow.name,
                     triggered=False,
                     condition_results=condition_results,
                 )
 
-        tc = workflow.twitch_conditions
+        twitch_conditions = workflow.twitch_conditions
 
-        if tc and not _check_twitch_conditions(tc, event):
+        if twitch_conditions and not _check_twitch_conditions(twitch_conditions, event):
             return ExecutionResult(
                 workflow_name=workflow.name,
                 triggered=False,
@@ -103,12 +147,12 @@ class WorkflowExecutor:
             multiplier = 1
             targets = []
 
-            if tc:
-                if tc.target:
-                    targets = self._resolve_targets(tc.target)
+            if twitch_conditions:
+                if twitch_conditions.target:
+                    targets = self._resolve_targets(twitch_conditions.target)
                     if not targets:
                         return
-                multiplier = _get_multiplier(tc, event)
+                multiplier = _get_multiplier(twitch_conditions, event)
 
             if targets:
                 for target in targets:
@@ -117,7 +161,7 @@ class WorkflowExecutor:
                             command = step.replace("{target}", target.name)
                             if user_name:
                                 command = command.replace("{user_name}", user_name)
-                            self._command_executor.run(command)
+                            self._command_executor.resolve_placeholders_and_run(command, event)
                             ran_steps.append(command)
             else:
                 for _ in range(multiplier):
@@ -125,7 +169,7 @@ class WorkflowExecutor:
                         command = step
                         if user_name:
                             command = command.replace("{user_name}", user_name)
-                        self._command_executor.run(command)
+                        self._command_executor.resolve_placeholders_and_run(command, event)
                         ran_steps.append(command)
 
         self._plugin.server.scheduler.run_task(self._plugin, _task)
