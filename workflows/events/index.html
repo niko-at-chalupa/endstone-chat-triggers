@@ -9,8 +9,10 @@
       
       
       
-        <link rel="prev" href="../../getting-started/installation/">
+        <link rel="prev" href="../../plugin-api/introduction/">
       
+      
+        <link rel="next" href="../twitch_conditions/">
       
       
         
@@ -49,6 +51,8 @@
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
+      <link rel="stylesheet" href="../../stylesheets/badges.css">
+    
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -72,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#list-of-valid-events" class="md-skip">
+        <a href="#events" class="md-skip">
           Skip to content
         </a>
       
@@ -209,7 +213,7 @@
   <span class="md-ellipsis">
     
   
-    Getting started
+    Getting Started
   
 
     
@@ -225,7 +229,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Getting started
+    Getting Started
   
 
           </label>
@@ -273,7 +277,7 @@
   <span class="md-ellipsis">
     
   
-    First workflow
+    First Workflow
   
 
     
@@ -326,6 +330,88 @@
       
   
   
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Plugin API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugin-api/introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -339,10 +425,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
@@ -360,8 +446,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -383,6 +469,8 @@
       
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
+      
+        
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
@@ -426,6 +514,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -472,10 +562,77 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#placeholders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Placeholders
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Placeholders">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resolve-placeholders-via-event-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolve Placeholders via Event Properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#special-placeholders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Special Placeholders
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../twitch_conditions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Conditions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -505,6 +662,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -551,6 +710,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#placeholders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Placeholders
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Placeholders">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resolve-placeholders-via-event-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolve Placeholders via Event Properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#special-placeholders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Special Placeholders
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -568,34 +766,299 @@
 
 
 
-  <h1>Events</h1>
-
+<h1 id="events">Events</h1>
 <h2 id="list-of-valid-events">List of Valid Events</h2>
 <p>You can use the following event names in the <code>event</code> list of your workflows, depending on which event source is configured in your <code>config.yaml</code>. You can use events from any source, though <strong>events from inactive sources will not run</strong>.</p>
 <h3 id="twitch-api-events">Twitch API Events</h3>
-<p>Use these when <code>use_twitchapi: true</code> is configured:</p>
+<p>Use these when <code>use_twitchapi: true</code> is configured. Every event has standard fields:</p>
 <ul>
-<li><strong><code>TwitchFollowEvent</code></strong>: Triggered when a user follows the channel.</li>
-<li><strong><code>TwitchSubscriptionEvent</code></strong>: Triggered when a user subscribes or resubscribes.</li>
-<li><strong><code>TwitchBitsEvent</code></strong>: Triggered when bits are cheered.</li>
-<li><strong><code>TwitchRaidEvent</code></strong>: Triggered when the channel is raided.</li>
-<li><strong><code>TwitchChannelPointsEvent</code></strong>: Triggered when custom channel points rewards are redeemed.</li>
-<li><strong><code>TwitchPredictionEvent</code></strong>: Triggered when a prediction status updates.</li>
+<li><code>type</code>: <code>str</code> (the event type string)</li>
+<li><code>event_id</code>: <code>str | None</code></li>
+</ul>
+<p>The event-specific structures are:</p>
+<ul>
+<li><strong><code>TwitchFollowEvent</code></strong>: Triggered when a user follows the channel.<ul>
+<li><code>message</code>: <code>List</code> of items containing:<ul>
+<li><code>user_id</code>: <code>str</code></li>
+<li><code>user_name</code>: <code>str</code></li>
+<li><code>user_login</code>: <code>str</code></li>
+<li><code>followed_at</code>: <code>str</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>TwitchSubscriptionEvent</code></strong>: Triggered when a user subscribes or resubscribes.<ul>
+<li><code>message</code>: <code>List</code> of items containing:<ul>
+<li><code>user_id</code>: <code>str</code></li>
+<li><code>user_name</code>: <code>str</code></li>
+<li><code>user_login</code>: <code>str</code></li>
+<li><code>tier</code>: <code>str</code></li>
+<li><code>is_gift</code>: <code>bool</code> (default: <code>false</code>)</li>
+<li><code>cumulative_months</code>: <code>int</code> (default: <code>0</code>)</li>
+<li><code>streak_months</code>: <code>int | None</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>TwitchBitsEvent</code></strong>: Triggered when bits are cheered.<ul>
+<li><code>message</code>: <code>List</code> of items containing:<ul>
+<li><code>user_id</code>: <code>str</code></li>
+<li><code>user_name</code>: <code>str</code></li>
+<li><code>user_login</code>: <code>str</code></li>
+<li><code>amount</code>: <code>int</code></li>
+<li><code>message</code>: <code>str | None</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>TwitchRaidEvent</code></strong>: Triggered when the channel is raided.<ul>
+<li><code>message</code>: <code>List</code> of items containing:<ul>
+<li><code>from_broadcaster_id</code>: <code>str</code></li>
+<li><code>from_broadcaster_name</code>: <code>str</code></li>
+<li><code>from_broadcaster_login</code>: <code>str</code></li>
+<li><code>viewers</code>: <code>int</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>TwitchChannelPointsEvent</code></strong>: Triggered when custom channel points rewards are redeemed.<ul>
+<li><code>message</code>: <code>List</code> of items containing:<ul>
+<li><code>user_id</code>: <code>str</code></li>
+<li><code>user_name</code>: <code>str</code></li>
+<li><code>user_login</code>: <code>str</code></li>
+<li><code>reward_id</code>: <code>str</code></li>
+<li><code>reward_title</code>: <code>str</code></li>
+<li><code>reward_cost</code>: <code>int</code></li>
+<li><code>user_input</code>: <code>str | None</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>TwitchPredictionEvent</code></strong>: Triggered when a prediction status updates.<ul>
+<li><code>message</code>: <code>List</code> of items containing:<ul>
+<li><code>prediction_id</code>: <code>str</code></li>
+<li><code>title</code>: <code>str</code></li>
+<li><code>outcomes</code>: <code>List[Any]</code></li>
+<li><code>started_at</code>: <code>str</code></li>
+<li><code>ended_at</code>: <code>str | None</code></li>
+<li><code>status</code>: <code>str</code></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <h3 id="streamlabs-events">Streamlabs Events</h3>
-<p>Use these when <code>use_streamlabs: true</code> is configured:</p>
+<p>Use these when <code>use_streamlabs: true</code> is configured. Every Streamlabs event has standard fields:
+*   <code>type</code>: <code>str</code> (the event type string)
+*   <code>event_id</code>: <code>str | None</code>
+*   <code>for</code>: <code>str | None</code> (aliased from <code>for_</code>)</p>
+<p>The event-specific structures are:</p>
 <ul>
-<li><strong><code>TwitchFollowEvent</code></strong>: Triggered when a user follows.</li>
-<li><strong><code>TwitchSubscriptionEvent</code></strong>: Triggered when a user subscribes or resubscribes.</li>
-<li><strong><code>TwitchBitsEvent</code></strong>: Triggered when bits are cheered.</li>
-<li><strong><code>TwitchHostEvent</code></strong>: Triggered when another channel hosts the stream.</li>
-<li><strong><code>TwitchRaidEvent</code></strong>: Triggered when the channel is raided.</li>
-<li><strong><code>DonationEvent</code></strong>: Triggered when a monetary donation is received.</li>
-<li><strong><code>LoyaltyStoreRedemptionEvent</code></strong>: Triggered when a viewer redeems an item from the Streamlabs Loyalty Store.</li>
-<li><strong><code>MerchEvent</code></strong>: Triggered when merch is purchased.</li>
-<li><strong><code>AlertPlayingEvent</code></strong>: Triggered when an alert starts playing on the overlay.</li>
-<li><strong><code>StreamLabelsEvent</code></strong>: Triggered when session labels/stats update.</li>
-<li><strong><code>StreamLabelsUnderlyingEvent</code></strong>: Triggered when underlying session data updates.</li>
+<li><strong><code>StreamlabsTwitchFollowEvent</code></strong>: Triggered when a user follows.<ul>
+<li><code>message</code>: <code>List</code> of items containing:<ul>
+<li><code>id</code>: <code>str | int | None</code> (aliased from <code>_id</code>)</li>
+<li><code>name</code>: <code>str</code></li>
+<li><code>isTest</code>: <code>bool</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>StreamlabsTwitchSubscriptionEvent</code></strong>: Triggered when a user subscribes or resubscribes.<ul>
+<li><code>message</code>: <code>List</code> of items containing:<ul>
+<li><code>id</code>: <code>str | int | None</code> (aliased from <code>_id</code>)</li>
+<li><code>name</code>: <code>str</code></li>
+<li><code>months</code>: <code>int</code> (default: <code>1</code>)</li>
+<li><code>sub_plan</code>: <code>str</code></li>
+<li><code>message</code>: <code>str | None</code></li>
+<li><code>isTest</code>: <code>bool</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>StreamlabsTwitchBitsEvent</code></strong>: Triggered when bits are cheered.<ul>
+<li><code>message</code>: <code>List</code> of items containing:<ul>
+<li><code>id</code>: <code>str | int | None</code> (aliased from <code>_id</code>)</li>
+<li><code>name</code>: <code>str</code></li>
+<li><code>amount</code>: <code>int</code></li>
+<li><code>message</code>: <code>str | None</code></li>
+<li><code>emotes</code>: <code>Any | None</code></li>
+<li><code>isTest</code>: <code>bool</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>StreamlabsTwitchHostEvent</code></strong>: Triggered when another channel hosts the stream.<ul>
+<li><code>message</code>: <code>List</code> of items containing:<ul>
+<li><code>id</code>: <code>str | int | None</code> (aliased from <code>_id</code>)</li>
+<li><code>name</code>: <code>str</code></li>
+<li><code>viewers</code>: <code>int</code> (default: <code>0</code>)</li>
+<li><code>isTest</code>: <code>bool</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>StreamlabsTwitchRaidEvent</code></strong>: Triggered when the channel is raided.<ul>
+<li><code>message</code>: <code>List</code> of items containing:<ul>
+<li><code>id</code>: <code>str | int | None</code> (aliased from <code>_id</code>)</li>
+<li><code>name</code>: <code>str</code></li>
+<li><code>raiders</code>: <code>int</code> (default: <code>0</code>)</li>
+<li><code>amount</code>: <code>int</code> (default: <code>0</code>)</li>
+<li><code>isTest</code>: <code>bool</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>DonationEvent</code></strong>: Triggered when a monetary donation is received.<ul>
+<li><code>message</code>: <code>List</code> of items containing:<ul>
+<li><code>id</code>: <code>str</code> (aliased from <code>_id</code>)</li>
+<li><code>name</code>: <code>str</code></li>
+<li><code>message</code>: <code>str | None</code></li>
+<li><code>from</code>: <code>str</code></li>
+<li><code>to</code>: <code>StreamlabsRecipient | str</code> (where <code>StreamlabsRecipient</code> has a <code>name: str</code> field)</li>
+<li><code>from_user_id</code>: <code>int | str | None</code></li>
+<li><code>amount</code>: <code>float</code></li>
+<li><code>formattedAmount</code>: <code>str | None</code></li>
+<li><code>currency</code>: <code>str</code></li>
+<li><code>recurring</code>: <code>bool</code></li>
+<li><code>isTest</code>: <code>bool</code></li>
+<li><code>freeze</code>: <code>bool</code></li>
+<li><code>priority</code>: <code>int</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>LoyaltyStoreRedemptionEvent</code></strong>: Triggered when a viewer redeems an item from the Streamlabs Loyalty Store.<ul>
+<li><code>message</code>: <code>List</code> of items containing:<ul>
+<li><code>id</code>: <code>str</code> (aliased from <code>_id</code>)</li>
+<li><code>name</code>: <code>str</code></li>
+<li><code>message</code>: <code>str | None</code></li>
+<li><code>from</code>: <code>str</code></li>
+<li><code>to</code>: <code>StreamlabsRecipient | str</code></li>
+<li><code>product</code>: <code>str</code></li>
+<li><code>imageHref</code>: <code>str | None</code></li>
+<li><code>isTest</code>: <code>bool</code></li>
+<li><code>freeze</code>: <code>bool</code></li>
+<li><code>priority</code>: <code>int</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>MerchEvent</code></strong>: Triggered when merch is purchased.<ul>
+<li><code>message</code>: <code>List</code> of items containing:<ul>
+<li><code>id</code>: <code>str</code> (aliased from <code>_id</code>)</li>
+<li><code>name</code>: <code>str</code></li>
+<li><code>message</code>: <code>str | None</code></li>
+<li><code>from</code>: <code>str</code></li>
+<li><code>to</code>: <code>StreamlabsRecipient | str</code></li>
+<li><code>product</code>: <code>str</code></li>
+<li><code>imageHref</code>: <code>str | None</code></li>
+<li><code>condition</code>: <code>str | None</code></li>
+<li><code>isTest</code>: <code>bool</code></li>
+<li><code>freeze</code>: <code>bool</code></li>
+<li><code>priority</code>: <code>int</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>AlertPlayingEvent</code></strong>: Triggered when an alert starts playing on the overlay.<ul>
+<li><code>message</code>: Object containing:<ul>
+<li><code>id</code>: <code>str | None</code> (aliased from <code>_id</code>)</li>
+<li><code>priority</code>: <code>int</code></li>
+<li><code>from</code>: <code>str | None</code></li>
+<li><code>fromId</code>: <code>str | None</code></li>
+<li><code>to</code>: <code>StreamlabsRecipient | str | None</code></li>
+<li><code>message</code>: <code>str | None</code></li>
+<li><code>payload</code>: <code>dict</code></li>
+<li><code>imageHref</code>: <code>str | None</code></li>
+<li><code>soundHref</code>: <code>str | None</code></li>
+<li><code>duration</code>: <code>int | None</code></li>
+<li><code>isTest</code>: <code>bool</code></li>
+<li><code>repeat</code>: <code>bool</code></li>
+<li><code>type</code>: <code>str</code></li>
+<li><code>for</code>: <code>str | None</code> (aliased from <code>for_</code>)</li>
+<li><code>product</code>: <code>str | None</code></li>
+<li><code>condition</code>: <code>str | None</code></li>
+<li><code>name</code>: <code>str | None</code></li>
+<li><code>amount</code>: <code>float | str | None</code></li>
+<li><code>rawAmount</code>: <code>float | None</code></li>
+<li><code>currency</code>: <code>str | None</code></li>
+<li><code>source</code>: <code>str | None</code></li>
+<li><code>donation_id</code>: <code>str | None</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>StreamLabelsEvent</code></strong>: Triggered when session labels/stats update.<ul>
+<li><code>message</code>: Object containing:<ul>
+<li><code>hash</code>: <code>str | None</code></li>
+<li><code>data</code>: Object containing:<ul>
+<li><code>id</code>: <code>str</code> (aliased from <code>_id</code>)</li>
+<li><code>priority</code>: <code>int</code></li>
+<li><code>donation_goal</code>: <code>str | None</code></li>
+<li><code>most_recent_donator</code>: <code>str | None</code></li>
+<li><code>session_most_recent_donator</code>: <code>str | None</code></li>
+<li><code>session_donators</code>: <code>str | None</code></li>
+<li><code>total_donation_amount</code>: <code>str | None</code></li>
+<li><code>monthly_donation_amount</code>: <code>str | None</code></li>
+<li><code>weekly_donation_amount</code>: <code>str | None</code></li>
+<li><code>thirtyday_donation_amount</code>: <code>str | None</code></li>
+<li><code>session_donation_amount</code>: <code>str | None</code></li>
+<li><code>all_time_top_donator</code>: <code>str | None</code></li>
+<li><code>session_top_donator</code>: <code>str | None</code></li>
+<li><code>session_top_donators</code>: <code>str | None</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>StreamLabelsUnderlyingEvent</code></strong>: Triggered when underlying session data updates.<ul>
+<li><code>message</code>: Object containing:<ul>
+<li><code>hash</code>: <code>str | None</code></li>
+<li><code>data</code>: Object containing:<ul>
+<li><code>id</code>: <code>str</code> (aliased from <code>_id</code>)</li>
+<li><code>priority</code>: <code>int</code></li>
+<li><code>donation_goal</code>: <code>str | None</code></li>
+<li><code>most_recent_donator</code>: <code>str | None</code></li>
+<li><code>session_most_recent_donator</code>: <code>str | None</code></li>
+<li><code>session_donators</code>: <code>str | None</code></li>
+<li><code>total_donation_amount</code>: <code>StreamLabelsAmount | str | None</code> (where <code>StreamLabelsAmount</code> has <code>amount: str</code>)</li>
+<li><code>monthly_donation_amount</code>: <code>StreamLabelsAmount | str | None</code></li>
+<li><code>weekly_donation_amount</code>: <code>StreamLabelsAmount | str | None</code></li>
+<li><code>thirtyday_donation_amount</code>: <code>StreamLabelsAmount | str | None</code></li>
+<li><code>session_donation_amount</code>: <code>StreamLabelsAmount | str | None</code></li>
+<li><code>all_time_top_donator</code>: <code>str | None</code></li>
+<li><code>session_top_donator</code>: <code>str | None</code></li>
+<li><code>session_top_donators</code>: <code>Union[List[Any], str] | None</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="placeholders">Placeholders</h2>
+<p>You can dynamically insert event data into your command lines using placeholders. The plugin parses placeholders wrapped in curly braces (e.g. <code>{placeholder}</code>).</p>
+<h3 id="resolve-placeholders-via-event-properties">Resolve Placeholders via Event Properties</h3>
+<p>The placeholder resolver traverses the attributes and dictionaries of the triggering event. Paths are dotted, representing attribute/key lookups on the event structure:</p>
+<ul>
+<li><strong>Simple Fields:</strong> <code>{message[0].user_name}</code> resolves by checking the <code>message</code> list (or tuple) at index <code>0</code>, then fetching the <code>user_name</code> field/attribute.</li>
+<li><strong>List/Tuple Access:</strong><ul>
+<li><strong>Specific index:</strong> Access an item by index, e.g., <code>{message[0]}</code>.</li>
+<li><strong>Last element (Default):</strong> If no index is specified, e.g., <code>{message}</code>, it defaults to retrieving the <strong>last</strong> item in the list (<code>message[-1]</code>).</li>
+</ul>
+</li>
+<li><strong>Nested dictionaries or objects:</strong> Evaluated recursively (e.g. <code>{event_data.user.name}</code>).</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">About using indexes</p>
+<p>Most of the time, it's better to just use the last item in the list (i.e., don't specify an index at all). </p>
+</div>
+<h3 id="special-placeholders">Special Placeholders</h3>
+<p>In addition to referencing raw event fields, some special placeholders are resolved during workflow steps:</p>
+<ul>
+<li><strong><code>{target}</code></strong>: Replaced by target player names configured under <code>twitch_conditions.target</code>.</li>
+<li><strong><code>{user_name}</code></strong>: Replaced by the username from the triggering Twitch event (<code>TwitchBitsEvent</code>, <code>TwitchFollowEvent</code>, <code>TwitchChannelPointsEvent</code>, or <code>TwitchSubscriptionEvent</code>), if available.</li>
 </ul>
 
 
