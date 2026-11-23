@@ -86,17 +86,17 @@
 >         # is little-to-no reason that this should 
 >         # return None.
 >         assert api, "`get_chat_triggers_api` returned `None`"
->         self.api: TwitchSpawnApi = api
+>         self.api: ChatTriggersApi = api
 >         
 >         # Just like Endstone's register_events, you
->         # can make a sperate listener class in a
->         # different module to make >everything cleaner.
+>         # can make a separate listener class in a
+>         # different module to make everything cleaner.
 >         self.api.register_events(self)
 >
 >     @streamlabs_event_handler
 >     def on_twitch_follow(self, event: TwitchFollowEvent):
 >         # Simple test log so you can see that the 
->         # plugin's API is funcitonal.
+>         # plugin's API is functional.
 >         self.logger.info("Somebody followed!!")
 > ```
 

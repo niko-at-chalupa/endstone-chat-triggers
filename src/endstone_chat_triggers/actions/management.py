@@ -55,7 +55,7 @@ class WorkflowManager:
             if len(workflow.warnings) > 0:
                 self._plugin.server.broadcast(
                     f"{ColorFormat.YELLOW}Workflow {ColorFormat.BOLD}{workflow.name}{ColorFormat.RESET}{ColorFormat.YELLOW} emitted warnings, but succeeded load",
-                    "twitch_spawn.command.twitch",
+                    "chat_triggers.command.chattriggers",
                 )
                 print_issues(workflow.warnings, self._logger)
                 for player in self._plugin.server.online_players:
@@ -64,5 +64,5 @@ class WorkflowManager:
             else:
                 self._plugin.server.broadcast(
                     f"{ColorFormat.GREEN}Workflow {ColorFormat.BOLD}{workflow.name}{ColorFormat.RESET}{ColorFormat.GREEN} succeeded load",
-                    "twitch_spawn.command.twitch",
+                    "chat_triggers.command.chattriggers",
                 )
