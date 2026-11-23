@@ -59,7 +59,7 @@ The full documentation can be found [here](https://niko-at-chalupa.github.io/end
 >
 > Other plugins can interact with ChatTriggers, which means you're not limited to workflows.
 > ```py
->from endstone_twitch_spawn import (
+>from endstone_chat_triggers import (
 >    get_chat_triggers_api, 
 >    TwitchFollowEvent, 
 >    streamlabs_event_handler, 
@@ -77,7 +77,7 @@ The full documentation can be found [here](https://niko-at-chalupa.github.io/end
 >        # is little-to-no reason that this should 
 >        # return None.
 >        assert api, "`get_chat_triggers_api` returned `None`"
->        self.api: TwitchSpawnApi = api
+>        self.api: ChatTriggersApi = api
 >        
 >        # Just like Endstone's register_events, you
 >        # can make a sperate listener class in a

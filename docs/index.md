@@ -86,7 +86,7 @@
 >         # is little-to-no reason that this should 
 >         # return None.
 >         assert api, "`get_chat_triggers_api` returned `None`"
->         self.api: TwitchSpawnApi = api
+>         self.api: ChatTriggersApi = api
 >         
 >         # Just like Endstone's register_events, you
 >         # can make a sperate listener class in a
